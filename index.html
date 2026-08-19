@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>สนุกเรียนรู้ — ไทย & อังกฤษ 🎈</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@700;800;900&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  :root{
+    /* rainbow-purple palette */
+    --cream:#F6F1FF; --cream-2:#EFE7FF; --paper:#FDFCFF;
+    --ink:#3D2C5E; --ink-soft:#9B8BC0;
+    --coral:#FF7A8A; --coral-d:#E9445E;
+    --sun:#FFC24B;  --sun-d:#EC9E17;
+    --mint:#46D6A6; --mint-d:#1BB585;
+    --sky:#57B9FF;  --sky-d:#2C93E8;
+    --grape:#A98BFF;--grape-d:#7C5BEE;
+    --pink:#FF9EC0;
+    /* clay recipe pieces */
+    --r-xl:38px; --r-lg:30px; --r-md:22px; --r-sm:16px;
+    --drop:0 18px 34px -10px rgba(90,58,160,.32);
+    --drop-sm:0 12px 22px -8px rgba(90,58,160,.28);
+    /* clean, professional soft-button shadows */
+    --soft:0 8px 18px -6px rgba(96,66,170,.24),0 2px 5px rgba(96,66,170,.10),inset 0 1px 0 rgba(255,255,255,.9);
+    --soft-press:0 3px 8px -4px rgba(96,66,170,.24),inset 0 1px 0 rgba(255,255,255,.8);
+    --edge:1px solid rgba(61,44,94,.07);
+  }
+  html,body{height:100%;}
+  body{
+    font-family:'Nunito','Baloo 2',sans-serif;color:var(--ink);
+    min-height:100%;position:relative;overflow-x:hidden;
+    background:
+      radial-gradient(900px 640px at 8% -6%, #E4D6FF 0%, transparent 58%),
+      radial-gradient(900px 640px at 110% 2%, #FFDCEE 0%, transparent 55%),
+      radial-gradient(800px 600px at -8% 60%, #D6F3FF 0%, transparent 55%),
+      radial-gradient(1000px 760px at 55% 122%, #DFF8E9 0%, transparent 58%),
+      linear-gradient(165deg,#F6F0FF 0%,#F1E9FF 50%,#F8F3FF 100%);
+  }
+  h1,h2,.title,.label,.flash-char,.screen-title,.lang-btn,.speak-btn,.nav-btn{font-family:'Baloo 2','Nunito',sans-serif;}
+
+  /* floating clay decorations */
+  .bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .blob{position:absolute;border-radius:46% 54% 52% 48%/48% 46% 54% 52%;
+    box-shadow:inset 0 -10px 18px rgba(0,0,0,.10),inset 0 8px 14px rgba(255,255,255,.5),0 16px 30px -12px rgba(96,66,170,.3);
+    animation:floaty 12s ease-in-out infinite;}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-20px) rotate(8deg)}}
+  .cloud{position:absolute;opacity:.5;animation:floaty 11s ease-in-out infinite;filter:drop-shadow(0 6px 6px rgba(96,66,170,.15));}
+
+  .app{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 18px 10px;min-height:100vh;}
+
+  /* clay button base */
+  .clay{
+    border:none;cursor:pointer;font-family:inherit;color:#fff;position:relative;
+    box-shadow:var(--drop),inset 0 -5px 8px rgba(0,0,0,.16),inset 0 5px 8px rgba(255,255,255,.45);
+    transition:transform .16s cubic-bezier(.34,1.56,.5,1),box-shadow .16s,filter .16s;
+  }
+  .clay:hover{transform:translateY(-4px);filter:saturate(1.05);}
+  .clay:active{transform:translateY(2px) scale(.98);box-shadow:var(--drop-sm),inset 0 -3px 6px rgba(0,0,0,.18),inset 0 3px 6px rgba(255,255,255,.4);}
+
+  /* Top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .btn-back{
+    font-weight:800;font-size:16px;padding:12px 20px;border-radius:var(--r-md);color:var(--ink);
+    background:#fff;border:var(--edge);
+    box-shadow:var(--soft);
+    transition:transform .16s,box-shadow .16s;
+  }
+  .btn-back:hover{transform:translateY(-3px);}
+  .btn-back:active{transform:translateY(1px);box-shadow:var(--soft-press);}
+  .stars-box{
+    display:flex;align-items:center;gap:8px;font-weight:900;font-size:20px;color:#7a4a00;
+    padding:11px 20px;border-radius:var(--r-md);
+    background:linear-gradient(180deg,#FFD86B,#FFC24B);border:1px solid rgba(220,150,20,.30);
+    box-shadow:0 8px 18px -6px rgba(230,150,20,.42),inset 0 1px 0 rgba(255,255,255,.55);
+  }
+  .stars-box::before{content:"⭐";font-size:19px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15));}
+  .stars-box span{min-width:16px;text-align:center;}
+  .hidden{display:none !important;}
+
+  /* ===== HOME / HERO ===== */
+  #home{text-align:center;}
+  .hero{display:flex;flex-direction:column;align-items:center;gap:2px;margin:2px 0 20px;position:relative;}
+  .hero::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:-1;
+    width:min(360px,86vw);height:min(180px,43vw);border-radius:50% 50% 0 0/100% 100% 0 0;
+    background:radial-gradient(closest-side at 50% 100%, transparent 52%, #FF5757 53% 59%, #FF9F45 59% 65%, #FFD93D 65% 71%, #3ED598 71% 77%, #57B9FF 77% 83%, #A98BFF 83% 89%, transparent 90%);
+    opacity:.4;}
+  .mascot{width:clamp(120px,26vw,168px);height:auto;filter:drop-shadow(0 16px 20px rgba(233,85,62,.32));
+    animation:bob 3.6s ease-in-out infinite;transform-origin:bottom center;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-10px) rotate(1.5deg)}}
+  .mascot .eye{transform-origin:center;animation:blink 5s infinite;}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  .title{
+    font-size:clamp(42px,9vw,72px);font-weight:800;line-height:1;letter-spacing:.5px;margin-top:6px;
+    background:linear-gradient(100deg,#FF5757 0%,#FF9F45 20%,#FFD93D 38%,#3ED598 55%,#57B9FF 72%,#A98BFF 88%,#E45DD0 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 6px 10px rgba(169,139,255,.35));
+  }
+  .subtitle{
+    display:inline-block;font-size:clamp(14px,3.4vw,18px);color:#6E5A9E;font-weight:800;margin-top:12px;
+    padding:9px 20px;border-radius:999px;background:#fff;border:var(--edge);
+    box-shadow:var(--soft);
+  }
+
+  .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:700px;margin:26px auto 0;}
+  .card{
+    border:none;cursor:pointer;font-family:inherit;color:#fff;position:relative;overflow:hidden;
+    border-radius:var(--r-xl);padding:30px 16px 26px;text-align:center;isolation:isolate;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    box-shadow:var(--drop),inset 0 -8px 14px rgba(0,0,0,.16),inset 0 8px 14px rgba(255,255,255,.4);
+    transition:transform .18s cubic-bezier(.34,1.56,.5,1),box-shadow .18s;
+  }
+  .card::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+    background:linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,0) 44%);}
+  .card:hover{transform:translateY(-7px) rotate(-.5deg);}
+  .card:active{transform:translateY(1px) scale(.985);box-shadow:var(--drop-sm),inset 0 -5px 10px rgba(0,0,0,.18),inset 0 5px 10px rgba(255,255,255,.4);}
+  .icon-badge{ /* 3D clay circle holding the emoji */
+    width:clamp(78px,17vw,100px);height:clamp(78px,17vw,100px);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.18));
+    box-shadow:inset 0 -6px 10px rgba(0,0,0,.16),inset 0 6px 10px rgba(255,255,255,.6),0 10px 18px -8px rgba(0,0,0,.25);
+  }
+  .card .emoji{font-size:clamp(42px,10vw,58px);line-height:1;filter:drop-shadow(0 5px 6px rgba(0,0,0,.2));}
+  .card .label{font-size:clamp(22px,4.8vw,28px);font-weight:800;letter-spacing:.3px;text-shadow:0 3px 6px rgba(0,0,0,.18);}
+  .card .sub{font-size:14px;font-weight:800;opacity:.95;letter-spacing:.2px;}
+  .c1{background:linear-gradient(165deg,#FF9E7A,#FF6F61 55%,#F0533F);}
+  .c2{background:linear-gradient(165deg,#7AC8FF,#54A9FF 55%,#2F8DEA);}
+  .c3{background:linear-gradient(165deg,#63E6B4,#38D29A 55%,#16B583);}
+  .c4{background:linear-gradient(165deg,#C1A6FF,#9E7DFF 55%,#7C5BEE);}
+  .c5{background:linear-gradient(165deg,#FFB3D1,#FF87B4 55%,#F45E96);}
+  .c6{background:linear-gradient(165deg,#7BE3E0,#3FCBC7 55%,#1AAAA6);}
+  .c7{background:linear-gradient(120deg,#FFCf6B,#FF9F45 55%,#FB7E2C);}
+  .c8{background:linear-gradient(165deg,#FFA8E0,#F571C9 55%,#D944A8);}
+  .c9{background:linear-gradient(165deg,#A6E4FF,#63C6FF 55%,#2E9DE0);}
+  .c10{background:linear-gradient(165deg,#B9F0A8,#7ED957 55%,#4CAF3E);}
+  .c11{background:linear-gradient(165deg,#FFD3A6,#FFAA5C 55%,#F08324);}
+  .c12{background:linear-gradient(120deg,#8FD9FF,#7AA7FF 55%,#6E6EF0);}
+  .card-wide{grid-column:1 / -1;}
+
+  .home-tools{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+
+  /* ===== SCREENS ===== */
+  .screen{display:none;animation:pop .32s cubic-bezier(.34,1.56,.5,1);}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+  .screen-title{text-align:center;font-size:clamp(26px,6vw,38px);font-weight:800;margin:6px 0 18px;
+    background:linear-gradient(100deg,#E45DD0,#A98BFF 45%,#57B9FF 80%,#3ED598);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+  .lang-toggle{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+  .lang-btn{
+    font-weight:800;font-size:17px;padding:12px 26px;border-radius:var(--r-md);cursor:pointer;color:var(--ink);
+    background:#fff;border:var(--edge);
+    box-shadow:var(--soft);
+    transition:transform .16s,box-shadow .16s;
+  }
+  .lang-btn:hover{transform:translateY(-3px);}
+  .lang-btn:active{transform:translateY(1px);box-shadow:var(--soft-press);}
+  .lang-btn.on{color:#7a4a00;background:linear-gradient(180deg,#FFD86B,#FFC24B);border:1px solid rgba(220,150,20,.30);
+    box-shadow:0 8px 18px -6px rgba(230,150,20,.42),inset 0 1px 0 rgba(255,255,255,.55);}
+
+  /* FLASHCARD */
+  .flash-wrap{display:flex;flex-direction:column;align-items:center;gap:22px;}
+  .flashcard{
+    background:linear-gradient(180deg,#FFFFFF,#F5EFFF);border-radius:var(--r-xl);
+    width:min(90vw,404px);padding:32px 24px;text-align:center;cursor:pointer;position:relative;overflow:hidden;
+    box-shadow:0 34px 60px -24px rgba(96,66,170,.5),inset 0 -8px 14px rgba(96,66,170,.10),inset 0 8px 14px rgba(255,255,255,.9);
+    transition:transform .18s cubic-bezier(.34,1.56,.5,1);
+  }
+  .flashcard:hover{transform:translateY(-5px);}
+  .flashcard:active{transform:scale(.98);}
+  .flash-char{font-size:clamp(96px,25vw,158px);font-weight:800;line-height:1.32;padding:0.12em 0.1em 0.02em;
+    background:linear-gradient(150deg,#FF7A66,#A98BFF 55%,#57B9FF);
+    -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 16px rgba(169,139,255,.3));}
+  .flash-emoji{font-size:clamp(70px,18vw,104px);margin:10px 0;filter:drop-shadow(0 10px 12px rgba(0,0,0,.14));animation:bob 3.6s ease-in-out infinite;}
+  .flash-word{font-size:clamp(24px,6vw,36px);font-weight:800;color:var(--ink);}
+  .flash-read{font-size:clamp(16px,4vw,20px);color:var(--sky-d);font-weight:800;margin-top:2px;}
+  .tone-row{display:flex;justify-content:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+  .tone-cell{font-size:clamp(34px,9vw,54px);font-weight:800;padding:6px 10px;border-radius:16px;
+    background:linear-gradient(150deg,#FF7A66,#A98BFF 55%,#57B9FF);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .phonics-emoji{font-size:clamp(56px,14vw,84px);margin-bottom:6px;filter:drop-shadow(0 10px 12px rgba(0,0,0,.14));}
+  .fill-sentence{font-size:clamp(20px,5.5vw,28px);font-weight:800;color:var(--ink);text-align:center;margin:10px 0 16px;line-height:1.7;}
+  .vowel-chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px;}
+  .vowel-chip{border:var(--edge);cursor:pointer;font-family:inherit;font-weight:800;font-size:16px;color:var(--grape-d);
+    background:var(--cream-2);border-radius:999px;padding:7px 15px;box-shadow:var(--soft);transition:transform .14s;}
+  .vowel-chip:active{transform:scale(.94);box-shadow:var(--soft-press);}
+  .ord-race{display:flex;justify-content:center;gap:6px;font-size:30px;margin:8px 0;flex-wrap:wrap;}
+  .ord-race .ord-me{font-size:40px;filter:drop-shadow(0 4px 8px rgba(255,190,40,.6));animation:bob 1.6s ease-in-out infinite;display:inline-block;}
+  .ord-lineup{display:flex;justify-content:center;gap:10px;margin:14px 0 18px;flex-wrap:wrap;}
+  .ord-runner{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .ord-emoji{font-size:clamp(30px,8vw,44px);filter:drop-shadow(0 5px 6px rgba(0,0,0,.14));}
+  .ord-tag{font-size:13px;font-weight:900;color:var(--grape-d);background:var(--cream-2);border-radius:999px;padding:2px 9px;}
+  .fill-blank{display:inline-block;min-width:84px;border-bottom:4px dotted var(--sky-d);color:var(--sky-d);text-align:center;padding:0 6px;}
+  .story-picker{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .story-pick-btn{border:var(--edge);cursor:pointer;border-radius:var(--r-lg);padding:18px 14px;text-align:center;font-family:'Baloo 2','Nunito',sans-serif;
+    font-weight:800;font-size:16px;color:var(--ink);background:#fff;box-shadow:var(--soft);transition:transform .15s;}
+  .story-pick-btn:active{transform:scale(.97);box-shadow:var(--soft-press);}
+  .story-pick-btn .spe{font-size:36px;display:block;margin-bottom:6px;}
+  .story-title{font-size:clamp(20px,5.5vw,26px);font-weight:800;text-align:center;color:var(--grape-d);margin-bottom:10px;}
+  .story-text{font-size:clamp(17px,4.6vw,21px);font-weight:600;line-height:1.9;color:var(--ink);}
+  .tap-hint{font-size:14px;color:var(--ink-soft);font-weight:800;margin-top:12px;}
+  .nav-row{display:flex;align-items:center;gap:18px;}
+  .nav-btn{
+    font-size:26px;font-weight:800;width:68px;height:68px;border-radius:50%;cursor:pointer;color:var(--coral-d);
+    background:#fff;border:var(--edge);
+    box-shadow:var(--soft);
+    transition:transform .16s cubic-bezier(.34,1.56,.5,1),box-shadow .16s;
+  }
+  .nav-btn:hover{transform:translateY(-4px) scale(1.05);}
+  .nav-btn:active{transform:translateY(1px) scale(.95);box-shadow:var(--soft-press);}
+  .speak-btn{
+    font-weight:800;font-size:19px;padding:15px 30px;border-radius:var(--r-md);cursor:pointer;color:#fff;
+    display:flex;align-items:center;gap:9px;
+    background:linear-gradient(180deg,#FF9166,#FF6F52);border:1px solid rgba(200,70,40,.22);
+    box-shadow:0 12px 24px -8px rgba(255,110,80,.55),0 3px 6px rgba(200,70,40,.18),inset 0 1px 0 rgba(255,255,255,.42);
+    transition:transform .16s cubic-bezier(.34,1.56,.5,1),box-shadow .16s;
+  }
+  .speak-btn:hover{transform:translateY(-4px);box-shadow:0 18px 30px -10px rgba(255,110,80,.6),inset 0 1px 0 rgba(255,255,255,.42);}
+  .speak-btn:active{transform:translateY(1px) scale(.98);box-shadow:0 5px 12px -6px rgba(255,110,80,.5),inset 0 1px 0 rgba(255,255,255,.4);}
+  .progress-dots{font-size:14px;color:#6E5A9E;font-weight:900;letter-spacing:.5px;
+    background:#fff;border:var(--edge);padding:8px 18px;border-radius:999px;
+    box-shadow:var(--soft);}
+
+  /* NUMBERS */
+  .count-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:330px;margin:8px auto;}
+  .count-row span{font-size:38px;animation:pop2 .36s cubic-bezier(.34,1.7,.5,1) backwards;filter:drop-shadow(0 5px 6px rgba(0,0,0,.12));}
+  @keyframes pop2{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
+
+  /* MATCH */
+  .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;margin:0 auto;}
+  .match-col{display:flex;flex-direction:column;gap:14px;}
+  .match-item{
+    font-family:inherit;font-size:26px;font-weight:800;cursor:pointer;color:var(--ink);
+    background:#fff;border:var(--edge);border-radius:var(--r-md);padding:16px;
+    min-height:70px;display:flex;align-items:center;justify-content:center;text-align:center;
+    box-shadow:var(--soft);
+    transition:transform .15s cubic-bezier(.34,1.56,.5,1),box-shadow .2s,background .25s;
+  }
+  .match-item .big{font-size:44px;filter:drop-shadow(0 5px 7px rgba(0,0,0,.14));}
+  .match-item:hover{transform:translateY(-3px);}
+  .match-item:active{transform:translateY(1px);box-shadow:var(--soft-press);}
+  .match-item.sel{background:linear-gradient(180deg,#FFD86B,#FFC24B);color:#7a4a00;transform:scale(1.05);border-color:rgba(220,150,20,.3);
+    box-shadow:0 10px 22px -8px rgba(230,150,20,.5),inset 0 1px 0 rgba(255,255,255,.55);}
+  .match-item.done{background:linear-gradient(180deg,#6FE6AC,#3ECF8E);color:#0a5c34;cursor:default;border-color:rgba(20,150,90,.3);
+    box-shadow:0 10px 20px -8px rgba(30,180,120,.45),inset 0 1px 0 rgba(255,255,255,.5);}
+  .match-item.wrong{animation:shake .42s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}60%{transform:translateX(10px)}}
+
+  /* QUIZ */
+  .quiz-card{
+    background:linear-gradient(180deg,#FFFFFF,#F5EFFF);border-radius:var(--r-xl);padding:28px 24px;max-width:560px;margin:0 auto;text-align:center;
+    box-shadow:0 34px 60px -24px rgba(90,130,200,.42),inset 0 -8px 14px rgba(120,120,180,.10),inset 0 8px 14px rgba(255,255,255,.9);
+  }
+  .quiz-q{font-size:clamp(21px,5vw,28px);font-weight:800;margin-bottom:6px;color:var(--ink);}
+  .quiz-big{font-size:clamp(60px,16vw,100px);margin:8px 0;line-height:1.1;filter:drop-shadow(0 6px 8px rgba(0,0,0,.12));}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+  .quiz-opt{
+    font-family:inherit;font-size:25px;font-weight:800;cursor:pointer;color:var(--ink);
+    background:#fff;border:var(--edge);border-radius:var(--r-md);padding:18px 8px;min-height:66px;
+    box-shadow:var(--soft);
+    transition:transform .15s cubic-bezier(.34,1.56,.5,1),box-shadow .16s;
+  }
+  .quiz-opt:hover{transform:translateY(-3px);}
+  .quiz-opt:active{transform:translateY(1px) scale(.98);box-shadow:var(--soft-press);}
+  .quiz-opt.right{background:linear-gradient(180deg,#6FE6AC,#3ECF8E);color:#0a5c34;border-color:rgba(20,150,90,.3);
+    box-shadow:0 12px 24px -8px rgba(30,180,120,.5),inset 0 1px 0 rgba(255,255,255,.5);}
+  .quiz-opt.wrong{background:linear-gradient(180deg,#FFB0B0,#FF8080);color:#7a1a1a;border-color:rgba(200,60,60,.3);
+    box-shadow:0 12px 24px -8px rgba(230,80,80,.5),inset 0 1px 0 rgba(255,255,255,.4);}
+  .quiz-feedback{font-size:22px;font-weight:900;height:30px;margin-top:16px;}
+
+  /* MATH */
+  .math-story{font-size:clamp(16px,4vw,20px);font-weight:700;color:var(--ink);background:linear-gradient(180deg,#FFF9F0,#FFF1DC);
+    border-radius:var(--r-sm);padding:12px 16px;margin-bottom:10px;line-height:1.5;display:none;}
+  .math-story.show{display:block;}
+  .math-visual{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px 14px;min-height:70px;margin:4px 0 8px;}
+  .math-group{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;max-width:230px;}
+  .math-group span{font-size:32px;animation:pop2 .34s cubic-bezier(.34,1.7,.5,1) backwards;filter:drop-shadow(0 4px 5px rgba(0,0,0,.12));}
+  .math-group span.gone{opacity:.28;filter:grayscale(1);position:relative;}
+  .math-group span.gone::after{content:"✕";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:22px;color:#E9553E;}
+  .math-op{font-size:44px;font-weight:800;color:var(--coral-d);}
+  .math-eq{font-size:clamp(30px,8vw,46px);font-weight:800;color:var(--ink);margin:6px 0 2px;letter-spacing:1px;}
+  /* place-value blocks for bigger numbers (tens = square, ones = dot) */
+  .pv-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .pv-num{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .pv-label{font-size:15px;font-weight:800;color:var(--ink-soft);}
+  .pv-blocks{display:flex;flex-wrap:wrap;gap:4px;max-width:180px;justify-content:center;}
+  .pv-ten{width:16px;height:26px;border-radius:4px;background:linear-gradient(180deg,#7AC8FF,#3F9EEF);box-shadow:inset 0 2px 3px rgba(255,255,255,.5);}
+  .pv-one{width:11px;height:11px;border-radius:50%;background:linear-gradient(180deg,#FFCf6B,#FF9F45);box-shadow:inset 0 1px 2px rgba(255,255,255,.5);}
+  .compare-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0;}
+  .compare-num{font-size:clamp(44px,12vw,68px);font-weight:800;color:var(--ink);background:linear-gradient(150deg,#FF7A66,#A98BFF 55%,#57B9FF);
+    -webkit-background-clip:text;background-clip:text;color:transparent;padding:0.1em;}
+  .compare-q{font-size:40px;font-weight:800;color:var(--ink-soft);}
+  .level-badge{font-size:14px;font-weight:900;color:#7a4a00;background:linear-gradient(180deg,#FFE07A,#FFC24B);
+    padding:6px 16px;border-radius:999px;box-shadow:0 8px 16px -6px rgba(230,150,20,.4);display:inline-block;margin-bottom:6px;}
+
+  /* toast */
+  .toast{
+    position:fixed;left:50%;top:19%;transform:translateX(-50%) scale(.55);opacity:0;z-index:50;pointer-events:none;
+    padding:22px 40px;font-size:34px;font-weight:900;color:#0f7a48;text-align:center;
+    background:linear-gradient(180deg,#FFFFFF,#F5EFFF);border-radius:var(--r-xl);
+    box-shadow:0 28px 64px -18px rgba(0,0,0,.32),inset 0 6px 12px rgba(255,255,255,.9);
+    transition:transform .34s cubic-bezier(.34,1.7,.5,1),opacity .34s;
+  }
+  .toast.show{transform:translateX(-50%) scale(1);opacity:1;}
+
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:40;}
+
+  .foot{text-align:center;color:var(--ink-soft);font-size:13px;font-weight:800;margin:22px 0 12px;}
+  @media(max-width:440px){ .menu{gap:14px;} .card{padding:24px 12px 22px;} }
+
+  /* On touch devices :hover "sticks" after a tap and looks frozen.
+     Disable hover-only movement there; :active still gives tap feedback. */
+  @media (hover:none){
+    .card:hover,.btn-back:hover,.lang-btn:hover,.nav-btn:hover,.speak-btn:hover,
+    .match-item:hover,.quiz-opt:hover,.flashcard:hover{
+      transform:none;
+    }
+    .card:hover{box-shadow:var(--drop),inset 0 -8px 14px rgba(0,0,0,.16),inset 0 8px 14px rgba(255,255,255,.4);}
+    .card:hover::after{transform:none;}
+  }
+  /* be kind to kids who prefer reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important;}
+  }
+
+</style>
+</head>
+<body>
+<div class="bg-deco" id="bgDeco"></div>
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"></div>
+
+<div class="app">
+  <div class="topbar">
+    <button class="btn-back hidden" id="backBtn" onclick="goHome()">🏠 หน้าหลัก</button>
+    <div style="flex:1"></div>
+    <div class="stars-box">⭐ <span id="starCount">0</span></div>
+  </div>
+
+  <!-- HOME -->
+  <section id="home">
+    <div class="hero">
+      <svg class="mascot" viewBox="0 0 220 220" role="img" aria-label="มาสคอตดาวน้อย">
+        <defs>
+          <radialGradient id="mg" cx="38%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#FFE38A"/>
+            <stop offset="55%" stop-color="#FFC24B"/>
+            <stop offset="100%" stop-color="#F5A21C"/>
+          </radialGradient>
+        </defs>
+        <!-- little arms -->
+        <path d="M40 128 q-24 6 -30 30" fill="none" stroke="#F5A21C" stroke-width="13" stroke-linecap="round"/>
+        <path d="M180 128 q24 6 30 30" fill="none" stroke="#F5A21C" stroke-width="13" stroke-linecap="round"/>
+        <!-- star body -->
+        <path d="M110 16 l24 46 51 8 -37 36 9 51 -47 -25 -47 25 9 -51 -37 -36 51 -8 z"
+              fill="url(#mg)" stroke="#F19309" stroke-width="5" stroke-linejoin="round"/>
+        <!-- cheeks -->
+        <ellipse cx="82" cy="118" rx="12" ry="8" fill="#FF9EC0" opacity=".8"/>
+        <ellipse cx="138" cy="118" rx="12" ry="8" fill="#FF9EC0" opacity=".8"/>
+        <!-- eyes -->
+        <g class="eye"><ellipse cx="90" cy="100" rx="10" ry="13" fill="#4A3A2E"/><circle cx="93" cy="95" r="3.4" fill="#fff"/></g>
+        <g class="eye"><ellipse cx="130" cy="100" rx="10" ry="13" fill="#4A3A2E"/><circle cx="133" cy="95" r="3.4" fill="#fff"/></g>
+        <!-- smile -->
+        <path d="M95 126 q15 16 30 0" fill="none" stroke="#4A3A2E" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <h1 class="title">สนุกเรียนรู้</h1>
+      <p class="subtitle">🌈 ไทย &amp; อังกฤษ ตามบทเรียนที่โรงเรียน</p>
+    </div>
+    <div class="menu">
+      <button class="card c1" onclick="openLetters()">
+        <span class="icon-badge"><span class="emoji">🔤</span></span>
+        <span class="label">ตัวอักษร</span>
+        <span class="sub">ก-ฮ &amp; A-Z</span>
+      </button>
+      <button class="card c2" onclick="openOrdinals()">
+        <span class="icon-badge"><span class="emoji">🏁</span></span>
+        <span class="label">ลำดับที่</span>
+        <span class="sub">first, second, third...</span>
+      </button>
+      <button class="card c3" onclick="openMatch()">
+        <span class="icon-badge"><span class="emoji">🧩</span></span>
+        <span class="label">จับคู่</span>
+        <span class="sub">รูปกับคำ</span>
+      </button>
+      <button class="card c4" onclick="openQuiz()">
+        <span class="icon-badge"><span class="emoji">🎯</span></span>
+        <span class="label">ตอบคำถาม</span>
+        <span class="sub">ควิซสนุก</span>
+      </button>
+      <button class="card c5" onclick="openVowels()">
+        <span class="icon-badge"><span class="emoji">🗣️</span></span>
+        <span class="label">สระไทย</span>
+        <span class="sub">สั้น + ยาว</span>
+      </button>
+      <button class="card c6" onclick="openWords()">
+        <span class="icon-badge"><span class="emoji">📚</span></span>
+        <span class="label">คำศัพท์</span>
+        <span class="sub">English words</span>
+      </button>
+      <button class="card c7" onclick="openMath()">
+        <span class="icon-badge"><span class="emoji">➕</span></span>
+        <span class="label">คณิตคิดเลข</span>
+        <span class="sub">บวก + ลบ −</span>
+      </button>
+      <button class="card c8" onclick="openTone()">
+        <span class="icon-badge"><span class="emoji">🎵</span></span>
+        <span class="label">วรรณยุกต์</span>
+        <span class="sub">เอก โท ่ ้</span>
+      </button>
+      <button class="card c9" onclick="openPhonics()">
+        <span class="icon-badge"><span class="emoji">🔤</span></span>
+        <span class="label">Phonics</span>
+        <span class="sub">Silent E</span>
+      </button>
+      <button class="card c10" onclick="openStory()">
+        <span class="icon-badge"><span class="emoji">📖</span></span>
+        <span class="label">อ่านจับใจความ</span>
+        <span class="sub">เรื่องสั้น + ตอบคำถาม</span>
+      </button>
+      <button class="card c11" onclick="openEngSent()">
+        <span class="icon-badge"><span class="emoji">💬</span></span>
+        <span class="label">ประโยคอังกฤษ</span>
+        <span class="sub">พูดทุกวัน 10 ประโยค</span>
+      </button>
+      <button class="card c12 card-wide" onclick="openReadTh()">
+        <span class="icon-badge"><span class="emoji">🇹🇭</span></span>
+        <span class="label">ฝึกอ่านไทย</span>
+        <span class="sub">คำ + ประโยค จากสมุดโรงเรียน</span>
+      </button>
+    </div>
+    <div class="home-tools">
+      <button class="speak-btn" onclick="testSound()">🔊 ทดสอบเสียง</button>
+      <p class="foot" id="soundStatus" style="min-height:18px;">แตะ "ทดสอบเสียง" เพื่อเช็กว่าเสียงอ่านทำงาน</p>
+    </div>
+  </section>
+
+  <!-- LETTERS -->
+  <section id="letters" class="screen">
+    <h2 class="screen-title">เรียนตัวอักษร ✏️</h2>
+    <div class="lang-toggle">
+      <button class="lang-btn on" id="letTH" onclick="setLetterLang('th')">🇹🇭 ก-ฮ</button>
+      <button class="lang-btn" id="letEN" onclick="setLetterLang('en')">🇬🇧 A-Z</button>
+    </div>
+    <div class="flash-wrap">
+      <div class="flashcard" id="letterCard" onclick="speakLetter()">
+        <div class="flash-char" id="lChar">ก</div>
+        <div class="flash-emoji" id="lEmoji">🐔</div>
+        <div class="flash-word" id="lWord">ก ไก่</div>
+        <div class="flash-read" id="lRead">gor kai</div>
+        <div class="tap-hint">👆 แตะการ์ดเพื่อฟังเสียง</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevLetter()">◀</button>
+        <button class="speak-btn" onclick="speakLetter()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextLetter()">▶</button>
+      </div>
+      <div class="progress-dots" id="lProg">1 / 44</div>
+    </div>
+  </section>
+
+  <!-- THAI VOWELS -->
+  <section id="vowels" class="screen">
+    <h2 class="screen-title">สระไทย 🗣️</h2>
+    <div class="lang-toggle" id="vowelSetToggle">
+      <button class="lang-btn on" id="vShort" onclick="setVowelSet('short')">🌱 เสียงสั้น</button>
+      <button class="lang-btn" id="vLong" onclick="setVowelSet('long')">📘 เสียงยาว</button>
+      <button class="lang-btn" id="vSpecial" onclick="setVowelSet('special')">🌟 สระพิเศษ</button>
+    </div>
+    <div class="flash-wrap">
+      <div class="flashcard" id="vowelCard" onclick="speakVowel()">
+        <div class="flash-char" id="vChar">อะ</div>
+        <div class="flash-emoji" id="vEmoji">🌊</div>
+        <div class="flash-word" id="vWord">ทะเล</div>
+        <div class="flash-read" id="vRead">อะ (a)</div>
+        <div class="vowel-chips" id="vChips"></div>
+        <div class="tap-hint">👆 แตะการ์ดเพื่อฟังเสียงสระและคำ · แตะคำข้างบนเพื่อฟังทีละคำ</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevVowel()">◀</button>
+        <button class="speak-btn" onclick="speakVowel()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextVowel()">▶</button>
+      </div>
+      <div class="progress-dots" id="vProg">1 / 9</div>
+    </div>
+  </section>
+
+  <!-- ENGLISH WORDS -->
+  <section id="words" class="screen">
+    <h2 class="screen-title">คำศัพท์อังกฤษ 📚</h2>
+    <div class="flash-wrap">
+      <div class="flashcard" id="wordCard" onclick="speakWord()">
+        <div class="flash-emoji" id="wEmoji" style="margin-top:6px;">🐱</div>
+        <div class="flash-char" id="wChar" style="font-size:clamp(52px,13vw,88px);">Cat</div>
+        <div class="flash-word" id="wThai">แมว</div>
+        <div class="tap-hint">🗣️ ลองออกเสียงเองก่อน แล้วแตะเพื่อฟังเฉลย</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevWord()">◀</button>
+        <button class="speak-btn" onclick="speakWord()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextWord()">▶</button>
+      </div>
+      <div class="progress-dots" id="wProg">1 / 32</div>
+    </div>
+  </section>
+
+  <!-- MATH -->
+  <section id="math" class="screen">
+    <h2 class="screen-title">คณิตคิดเลข ➕➖</h2>
+    <div class="lang-toggle" id="mathLevelToggle">
+      <button class="lang-btn" data-lvl="0" onclick="setMathLevel(0)">🌱 ง่าย</button>
+      <button class="lang-btn on" data-lvl="1" onclick="setMathLevel(1)">📘 ปานกลาง</button>
+      <button class="lang-btn" data-lvl="3" onclick="setMathLevel(3)">🔥 ยาก</button>
+    </div>
+    <div class="quiz-card">
+      <div class="math-story" id="mathStory"></div>
+      <div class="math-visual" id="mathVisual"></div>
+      <div class="math-eq" id="mathEq">2 + 1 = ?</div>
+      <div class="quiz-opts" id="mathOpts"></div>
+      <div class="quiz-feedback" id="mathFb"></div>
+    </div>
+    <div style="text-align:center;margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <button class="speak-btn" onclick="speakMath()">🔊 ฟังโจทย์</button>
+      <div class="progress-dots" id="mathProg"></div>
+    </div>
+  </section>
+
+  <!-- ORDINALS (first, second, third...) -->
+  <section id="numbers" class="screen">
+    <h2 class="screen-title">ลำดับที่ 1st 2nd 3rd 🏁</h2>
+    <div class="lang-toggle" id="ordModeToggle">
+      <button class="lang-btn on" data-mode="read" onclick="setOrdMode('read')">📖 เรียนรู้</button>
+      <button class="lang-btn" data-mode="quiz" onclick="setOrdMode('quiz')">🎯 ใครอยู่ลำดับไหน?</button>
+    </div>
+    <div id="ordReadWrap" class="flash-wrap">
+      <div class="flashcard" id="numCard" onclick="speakOrdinal()">
+        <div class="flash-char" id="ordBig" style="font-size:clamp(60px,16vw,104px);">1st</div>
+        <div class="ord-race" id="ordRace"></div>
+        <div class="flash-word" id="ordEn">first</div>
+        <div class="flash-read" id="ordTh">ลำดับที่หนึ่ง</div>
+        <div class="tap-hint">👆 แตะเพื่อฟังเสียง</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevOrdinal()">◀</button>
+        <button class="speak-btn" onclick="speakOrdinal()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextOrdinal()">▶</button>
+      </div>
+      <div class="progress-dots" id="ordProg">1 / 10</div>
+    </div>
+    <div id="ordQuizWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q" id="ordQPrompt"></div>
+      <div class="ord-lineup" id="ordLineup"></div>
+      <div class="quiz-opts" id="ordQOpts"></div>
+      <div class="quiz-feedback" id="ordQFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="ordQProg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATCH -->
+  <section id="match" class="screen">
+    <h2 class="screen-title">จับคู่รูปกับคำ 🧩</h2>
+    <p style="text-align:center;color:var(--grape-d);font-weight:600;margin-bottom:10px;">แตะรูป แล้วแตะคำที่ตรงกัน!</p>
+    <div class="lang-toggle" id="matchSizeToggle">
+      <button class="lang-btn" data-size="4" onclick="setMatchSize(4)">🌱 4 คู่</button>
+      <button class="lang-btn on" data-size="6" onclick="setMatchSize(6)">🔥 6 คู่</button>
+    </div>
+    <div class="lang-toggle" id="matchLangToggle">
+      <button class="lang-btn on" data-lang="th" onclick="setMatchLang('th')">🇹🇭 คำไทย</button>
+      <button class="lang-btn" data-lang="en" onclick="setMatchLang('en')">🇬🇧 English</button>
+    </div>
+    <div class="match-grid">
+      <div class="match-col" id="matchLeft"></div>
+      <div class="match-col" id="matchRight"></div>
+    </div>
+    <div style="text-align:center;margin-top:18px;">
+      <button class="speak-btn" style="margin:0 auto;" onclick="newMatchRound()">🔄 ชุดใหม่</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+    <h2 class="screen-title">ตอบคำถามสนุก 🎯</h2>
+    <div class="quiz-card">
+      <div class="quiz-q" id="quizQ">คำถาม</div>
+      <div class="quiz-big" id="quizBig"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFb"></div>
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <div class="progress-dots" id="quizProg"></div>
+    </div>
+  </section>
+
+  <!-- TONE MARKS (วรรณยุกต์ เอก โท) -->
+  <section id="tone" class="screen">
+    <h2 class="screen-title">วรรณยุกต์ เอก โท 🎵</h2>
+    <div class="lang-toggle" id="toneModeToggle">
+      <button class="lang-btn on" data-mode="read" onclick="setToneMode('read')">📖 อ่าน 3 เสียง</button>
+      <button class="lang-btn" data-mode="quiz" onclick="setToneMode('quiz')">🖼️ คำตรงภาพ</button>
+      <button class="lang-btn" data-mode="fill" onclick="setToneMode('fill')">✏️ เติมคำ</button>
+    </div>
+    <div id="toneReadWrap" class="flash-wrap">
+      <div class="flashcard" id="toneCard" onclick="speakToneRow()">
+        <div class="tone-row" id="toneRow"></div>
+        <div class="flash-word" id="toneSentence" style="font-size:20px;"></div>
+        <div class="tap-hint">👆 แตะเพื่อฟังทั้ง 3 เสียง</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevTone()">◀</button>
+        <button class="speak-btn" onclick="speakToneRow()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextTone()">▶</button>
+      </div>
+      <div class="progress-dots" id="toneProg">1 / 10</div>
+    </div>
+    <div id="toneQuizWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q">คำไหนตรงกับภาพนี้?</div>
+      <div class="quiz-big" id="toneQBig"></div>
+      <div class="quiz-opts" id="toneQOpts"></div>
+      <div class="quiz-feedback" id="toneQFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="toneQProg"></div>
+      </div>
+    </div>
+    <div id="toneFillWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q">เลือกคำเติมลงในประโยคให้ถูกต้อง</div>
+      <div class="quiz-big" id="toneFEmoji" style="font-size:52px;"></div>
+      <div class="fill-sentence" id="toneFSent"></div>
+      <div class="quiz-opts" id="toneFOpts"></div>
+      <div class="quiz-feedback" id="toneFFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="toneFProg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY READING COMPREHENSION -->
+  <section id="story" class="screen">
+    <h2 class="screen-title">อ่านจับใจความ 📖</h2>
+    <div id="storyPicker" class="story-picker"></div>
+    <div id="storyView" style="display:none;">
+      <div class="quiz-card" style="margin-bottom:14px;">
+        <div class="story-title" id="storyTitle"></div>
+        <div class="story-text" id="storyText"></div>
+        <div style="text-align:center;margin-top:12px;">
+          <button class="speak-btn" onclick="speakStory()">🔊 ฟังเรื่อง</button>
+        </div>
+      </div>
+      <div class="quiz-card" id="storyQCard">
+        <div class="quiz-q" id="storyQ"></div>
+        <div class="quiz-opts" id="storyOpts"></div>
+        <div class="quiz-feedback" id="storyFb"></div>
+        <div style="text-align:center;margin-top:10px;">
+          <div class="progress-dots" id="storyProg"></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:14px;">
+        <button class="speak-btn" onclick="openStory()">📚 เลือกเรื่องอื่น</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGLISH DAILY SENTENCES -->
+  <section id="engsent" class="screen">
+    <h2 class="screen-title">ประโยคอังกฤษพูดทุกวัน 💬</h2>
+    <div class="lang-toggle" id="esModeToggle">
+      <button class="lang-btn on" data-mode="read" onclick="setEsMode('read')">📖 ฝึกพูด</button>
+      <button class="lang-btn" data-mode="quiz" onclick="setEsMode('quiz')">🎯 เลือกประโยค</button>
+    </div>
+    <div id="esReadWrap" class="flash-wrap">
+      <div class="flashcard" id="esCard" onclick="speakEs()">
+        <div class="phonics-emoji" id="esEmoji">🙋</div>
+        <div class="flash-word" id="esEn" style="font-size:clamp(20px,5.5vw,28px);"></div>
+        <div class="flash-read" id="esAnswer" style="color:var(--mint-d);"></div>
+        <div class="flash-read" id="esTh"></div>
+        <div class="tap-hint">👆 แตะเพื่อฟังเสียง</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevEs()">◀</button>
+        <button class="speak-btn" onclick="speakEs()">🔊 Listen</button>
+        <button class="nav-btn" onclick="nextEs()">▶</button>
+      </div>
+      <div class="progress-dots" id="esProg">1 / 10</div>
+    </div>
+    <div id="esQuizWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q" id="esQPrompt"></div>
+      <div class="quiz-big" id="esQBig" style="font-size:52px;"></div>
+      <div class="quiz-opts" id="esQOpts"></div>
+      <div class="quiz-feedback" id="esQFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="esQProg"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THAI READING PRACTICE -->
+  <section id="readth" class="screen">
+    <h2 class="screen-title">ฝึกอ่านไทย 🇹🇭</h2>
+    <div class="lang-toggle" id="rtModeToggle">
+      <button class="lang-btn on" data-mode="words" onclick="setRtMode('words')">🔤 คำศัพท์</button>
+      <button class="lang-btn" data-mode="sent" onclick="setRtMode('sent')">📜 ประโยค</button>
+    </div>
+    <div class="flash-wrap">
+      <div class="flashcard" id="rtCard" onclick="speakRt()">
+        <div class="flash-char" id="rtText" style="font-size:clamp(30px,9vw,52px);line-height:1.5;"></div>
+        <div class="tap-hint">🗣️ ลองอ่านเองก่อน แล้วแตะเพื่อฟังเฉลย</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevRt()">◀</button>
+        <button class="speak-btn" onclick="speakRt()">🔊 ฟังเสียง</button>
+        <button class="nav-btn" onclick="nextRt()">▶</button>
+      </div>
+      <div class="progress-dots" id="rtProg">1 / 20</div>
+    </div>
+  </section>
+
+  <!-- ENGLISH PHONICS: SILENT E -->
+  <section id="phonics" class="screen">
+    <h2 class="screen-title">English Phonics: Silent E 🔤</h2>
+    <div class="lang-toggle" id="phonicsModeToggle">
+      <button class="lang-btn on" data-mode="read" onclick="setPhonicsMode('read')">📖 Read it</button>
+      <button class="lang-btn" data-mode="quiz" onclick="setPhonicsMode('quiz')">🎯 Quiz</button>
+      <button class="lang-btn" data-mode="spell" onclick="setPhonicsMode('spell')">✏️ Spell it</button>
+    </div>
+    <div id="phonicsReadWrap" class="flash-wrap">
+      <div class="flashcard" id="phonicsCard" onclick="speakPhonics()">
+        <div class="phonics-emoji" id="phEmoji">🦴</div>
+        <div class="flash-char" id="phWord" style="font-size:clamp(32px,10vw,56px);">bone</div>
+        <div class="flash-read" id="phHint">o says "oh" · silent e</div>
+        <div class="tap-hint">👆 Tap to hear it · แตะเพื่อฟังเสียง</div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevPhonics()">◀</button>
+        <button class="speak-btn" onclick="speakPhonics()">🔊 Listen</button>
+        <button class="nav-btn" onclick="nextPhonics()">▶</button>
+      </div>
+      <div class="progress-dots" id="phProg">1 / 12</div>
+    </div>
+    <div id="phonicsQuizWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q">Which word matches the picture?</div>
+      <div class="quiz-big" id="phQBig"></div>
+      <div class="quiz-opts" id="phQOpts"></div>
+      <div class="quiz-feedback" id="phQFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="phQProg"></div>
+      </div>
+    </div>
+    <div id="phonicsSpellWrap" class="quiz-card" style="display:none;">
+      <div class="quiz-q">เติมตัวอักษรที่หายไป · Fill in the missing letter</div>
+      <div class="quiz-big" id="phSBig" style="font-size:52px;"></div>
+      <div class="fill-sentence" id="phSWord" style="letter-spacing:6px;font-family:'Baloo 2','Nunito',sans-serif;"></div>
+      <div class="quiz-opts" id="phSOpts"></div>
+      <div class="quiz-feedback" id="phSFb"></div>
+      <div style="text-align:center;margin-top:10px;">
+        <div class="progress-dots" id="phSProg"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ---------- SOUND: speech + effects ---------- */
+const hasTTS = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+let thVoice=null, enVoice=null, voicesReady=false, ttsUnlocked=false;
+function loadVoices(){
+  if(!hasTTS) return;
+  const vs = speechSynthesis.getVoices();
+  if(vs && vs.length){
+    voicesReady=true;
+    // prefer high-quality voices (Google / Apple premium names) over the first random match —
+    // low-quality voices are what makes the reading sound "เพี้ยน"
+    const pick=(list,pref)=>{
+      for(const re of pref){ const v=list.find(v=>re.test(v.name)); if(v) return v; }
+      return list[0]||null;
+    };
+    const thList = vs.filter(v=>/^th(-|_)?/i.test(v.lang));
+    const enList = vs.filter(v=>/^en(-|_)?US/i.test(v.lang)).concat(vs.filter(v=>/^en/i.test(v.lang)));
+    thVoice = pick(thList,[/google/i,/kanya|narisa|premwadee|pattara/i]);
+    enVoice = pick(enList,[/google us english/i,/google/i,/samantha|ava|allison|zoe/i]);
+  }
+}
+if(hasTTS){
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+  // some browsers populate voices a moment later
+  setTimeout(loadVoices,300); setTimeout(loadVoices,1200);
+}
+function pickVoice(lang){ return lang.startsWith('th') ? thVoice : enVoice; }
+function mkUtter(text,lang){
+  const u=new SpeechSynthesisUtterance(text);
+  // natural pitch — a raised pitch (old value 1.15) made voices sound distorted/off
+  u.lang=lang; u.rate=0.88; u.pitch=1.0; u.volume=1;
+  const v=pickVoice(lang); if(v) u.voice=v;
+  return u;
+}
+// iOS Safari is fragile with speechSynthesis (resume-polling and rapid cancel/speak
+// can freeze the page). Detect it and use a gentler path there.
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+              (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+
+// Chrome (desktop) silently pauses long speech; nudge resume — but NOT on iOS, and
+// with a hard tick cap so the interval can never run away.
+let _resumeTimer=null;
+function keepAlive(){
+  if(isIOS) return;                 // resume-polling hangs iOS — skip entirely
+  clearInterval(_resumeTimer);
+  let ticks=0;
+  _resumeTimer=setInterval(()=>{
+    ticks++;
+    if(ticks>40 || (!speechSynthesis.speaking && !speechSynthesis.pending)){ clearInterval(_resumeTimer); return; }
+    try{ speechSynthesis.resume(); }catch(e){}
+  },250);
+}
+// ---- Fallback TTS via online audio (works even where speechSynthesis is silent,
+//      e.g. in-app preview webviews). Uses <audio>, which plays cross-origin without CORS. ----
+let _audioEl=null, _audioQ=[], lastPlayback='none';
+function ttsURL(text, lang){
+  const tl = lang.startsWith('th') ? 'th' : 'en';
+  return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl='+tl+'&q='+encodeURIComponent(text);
+}
+function stopAudio(){
+  if(_audioEl){ try{ _audioEl.onended=null; _audioEl.onerror=null; _audioEl.pause(); }catch(e){} }
+  _audioQ=[];
+}
+function audioSay(pairs){
+  stopAudio();
+  _audioQ = pairs.slice();
+  playNextAudio();
+}
+function playNextAudio(){
+  if(!_audioQ.length) return;
+  const [t,l]=_audioQ.shift();
+  _audioEl = new Audio(ttsURL(t,l));
+  _audioEl.onended = playNextAudio;
+  _audioEl.onerror = ()=>{ lastPlayback='audio-error'; };
+  const pr=_audioEl.play();
+  if(pr && pr.then){ pr.then(()=>{ lastPlayback='audio'; }).catch(()=>{ lastPlayback='audio-error'; }); }
+}
+// speechSynthesis path — called SYNCHRONOUSLY inside the gesture.
+function synthSay(pairs){
+  try{
+    if(speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    let started=false;
+    const utters=pairs.map(([t,l])=>mkUtter(t,l));
+    // Track whether synth ACTUALLY starts. Only fall back to online audio when it
+    // truly never speaks — otherwise the fallback would replay and we'd hear it twice.
+    utters[0].addEventListener('start',()=>{ started=true; });
+    utters[0].addEventListener('error',()=>{ if(!started) audioSay(pairs); });
+    utters.forEach(u=> speechSynthesis.speak(u) );
+    keepAlive();
+    lastPlayback='synth';
+    if(!isIOS){
+      setTimeout(()=>{
+        // fire fallback ONLY if speech never started and the queue is empty (silently blocked)
+        if(!started && !speechSynthesis.speaking && !speechSynthesis.pending){
+          audioSay(pairs);
+        }
+      }, 900);
+    }
+  }catch(e){ try{ audioSay(pairs); }catch(_){} }
+}
+// Smart dispatcher: use built-in voices when available for ALL parts, else audio fallback.
+// Throttled so rapid double-taps can't pile up utterances (a freeze risk on iOS).
+let _lastSayAt=0;
+function say(pairs){
+  const now = (window.performance && performance.now) ? performance.now() : 0;
+  if(now && now - _lastSayAt < 140) return;   // ignore a burst of taps
+  _lastSayAt = now;
+  loadVoices();
+  stopAudio();
+  const canSynthAll = hasTTS && voicesReady && pairs.every(([t,l])=>pickVoice(l));
+  if(canSynthAll) synthSay(pairs);
+  else audioSay(pairs);   // covers: no voices at all, or missing Thai voice, or webview w/o TTS
+}
+function speak(text, lang){ say([[text,lang]]); }
+function speakSeq(thText, enText){ say([[thText,'th-TH'],[enText,'en-US']]); }
+// warm up TTS inside the first real user gesture (needed on Safari/iOS)
+function unlockTTS(){
+  if(!hasTTS || ttsUnlocked) return;
+  ttsUnlocked=true;
+  try{
+    const warm=new SpeechSynthesisUtterance(' ');
+    warm.volume=0; speechSynthesis.speak(warm);
+  }catch(e){}
+  loadVoices();
+}
+
+// simple beep effects with WebAudio
+let actx=null;
+function beep(type){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const seq = type==='correct' ? [[523,0],[659,.12],[784,.24]] :
+                type==='wrong' ? [[300,0],[220,.15]] : [[660,0]];
+    seq.forEach(([f,t])=>{
+      const o=actx.createOscillator(), g=actx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      o.connect(g); g.connect(actx.destination);
+      const s=actx.currentTime+t;
+      g.gain.setValueAtTime(0.0001,s);
+      g.gain.exponentialRampToValueAtTime(0.25,s+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,s+0.22);
+      o.start(s); o.stop(s+0.24);
+    });
+  }catch(e){}
+}
+
+/* ---------- STARS + reward ---------- */
+let stars=0;
+function addStar(n=1){ stars+=n; document.getElementById('starCount').textContent=stars; }
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1200);
+}
+function celebrate(msg){ beep('correct'); addStar(); toast(msg); confetti(); }
+
+/* ---------- confetti ---------- */
+const cv=document.getElementById('confetti'); const cx=cv.getContext('2d');
+let parts=[];
+function resize(){ cv.width=innerWidth; cv.height=innerHeight; }
+resize(); addEventListener('resize',resize);
+function confetti(){
+  const colors=['#ff5d8f','#a06bff','#3fb7ff','#4cd964','#ffcb2b','#ff924c'];
+  for(let i=0;i<70;i++){
+    parts.push({x:innerWidth/2,y:innerHeight*0.28,
+      vx:(Math.random()-.5)*11, vy:Math.random()*-11-3,
+      g:0.32, s:6+Math.random()*7, c:colors[i%colors.length],
+      r:Math.random()*6, vr:(Math.random()-.5)*.4, life:70});
+  }
+  if(!confetti._run){ confetti._run=true; requestAnimationFrame(tick); }
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.life--;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.r); cx.fillStyle=p.c;
+    cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); cx.restore();
+  });
+  parts=parts.filter(p=>p.life>0 && p.y<cv.height+30);
+  if(parts.length) requestAnimationFrame(tick); else { confetti._run=false; cx.clearRect(0,0,cv.width,cv.height); }
+}
+
+/* ---------- soft clay decorations ---------- */
+(function(){
+  const d=document.getElementById('bgDeco');
+  // clay blobs
+  const blobColors=[
+    'linear-gradient(160deg,#E6DBFF,#C6B0FF)',
+    'linear-gradient(160deg,#FFD5EC,#F5A8DC)',
+    'linear-gradient(160deg,#BFE3FF,#8FC4FF)',
+    'linear-gradient(160deg,#C9F5E0,#8FE9C0)',
+    'linear-gradient(160deg,#FFE8A8,#FFD35C)',
+    'linear-gradient(160deg,#FFD0C2,#FF9E8A)'
+  ];
+  for(let i=0;i<8;i++){
+    const b=document.createElement('div'); b.className='blob';
+    const size=60+Math.random()*90;
+    b.style.width=size+'px'; b.style.height=size+'px';
+    b.style.background=blobColors[i%blobColors.length];
+    b.style.left=(4+Math.random()*88)+'%';
+    b.style.top=(6+Math.random()*84)+'%';
+    b.style.opacity=(0.35+Math.random()*0.2).toFixed(2);
+    b.style.animationDelay=(Math.random()*8)+'s';
+    b.style.animationDuration=(10+Math.random()*8)+'s';
+    d.appendChild(b);
+  }
+  // a few sparkles
+  const items=['⭐','✨','🌟'];
+  for(let i=0;i<5;i++){
+    const s=document.createElement('div'); s.className='cloud';
+    s.textContent=items[i%items.length];
+    s.style.left=(6+Math.random()*88)+'%';
+    s.style.top=(6+Math.random()*84)+'%';
+    s.style.fontSize=(20+Math.random()*22)+'px';
+    s.style.animationDelay=(Math.random()*8)+'s';
+    d.appendChild(s);
+  }
+})();
+
+/* ---------- Navigation ---------- */
+const screens=['letters','vowels','words','numbers','math','match','quiz','tone','phonics','story','engsent','readth'];
+function show(id){
+  document.getElementById('home').classList.toggle('hidden', id!=='home');
+  screens.forEach(s=>document.getElementById(s).classList.toggle('active', s===id));
+  document.getElementById('backBtn').classList.toggle('hidden', id==='home');
+  try{ speechSynthesis.cancel(); }catch(e){}
+  window.scrollTo(0,0);
+}
+function goHome(){ show('home'); }
+
+/* ============ DATA ============ */
+// Thai consonants: char, word, romanization, emoji
+const THAI=[
+ ['ก','ก ไก่','กอ ไก่','🐔'],['ข','ข ไข่','ขอ ไข่','🥚'],['ฃ','ฃ ขวด','ขอ ขวด','🍶'],
+ ['ค','ค ควาย','คอ ควาย','🐃'],['ฅ','ฅ คน','คอ คน','🧑'],['ฆ','ฆ ระฆัง','คอ ระฆัง','🔔'],
+ ['ง','ง งู','งอ งู','🐍'],['จ','จ จาน','จอ จาน','🍽️'],['ฉ','ฉ ฉิ่ง','ฉอ ฉิ่ง','🎶'],
+ ['ช','ช ช้าง','ชอ ช้าง','🐘'],['ซ','ซ โซ่','ซอ โซ่','⛓️'],['ฌ','ฌ เฌอ','ฌอ เฌอ','🌳'],
+ ['ญ','ญ หญิง','ยอ หญิง','👧'],['ฎ','ฎ ชฎา','ดอ ชฎา','👑'],['ฏ','ฏ ปฏัก','ตอ ปฏัก','🔱'],
+ ['ฐ','ฐ ฐาน','ถอ ฐาน','🏛️'],['ฑ','ฑ มณโฑ','ทอ มณโฑ','👸'],['ฒ','ฒ ผู้เฒ่า','ทอ ผู้เฒ่า','👴'],
+ ['ณ','ณ เณร','นอ เณร','🧎'],['ด','ด เด็ก','ดอ เด็ก','🧒'],['ต','ต เต่า','ตอ เต่า','🐢'],
+ ['ถ','ถ ถุง','ถอ ถุง','🛍️'],['ท','ท ทหาร','ทอ ทหาร','💂'],['ธ','ธ ธง','ทอ ธง','🚩'],
+ ['น','น หนู','นอ หนู','🐭'],['บ','บ ใบไม้','บอ ใบไม้','🍃'],['ป','ป ปลา','ปอ ปลา','🐟'],
+ ['ผ','ผ ผึ้ง','ผอ ผึ้ง','🐝'],['ฝ','ฝ ฝา','ฝอ ฝา','🍯'],['พ','พ พาน','พอ พาน','🪷'],
+ ['ฟ','ฟ ฟัน','ฟอ ฟัน','🦷'],['ภ','ภ สำเภา','พอ สำเภา','⛵'],['ม','ม ม้า','มอ ม้า','🐴'],
+ ['ย','ย ยักษ์','ยอ ยักษ์','👹'],['ร','ร เรือ','รอ เรือ','🚣'],['ล','ล ลิง','ลอ ลิง','🐒'],
+ ['ว','ว แหวน','วอ แหวน','💍'],['ศ','ศ ศาลา','สอ ศาลา','🏯'],['ษ','ษ ฤๅษี','สอ ฤๅษี','🧙'],
+ ['ส','ส เสือ','สอ เสือ','🐯'],['ห','ห หีบ','หอ หีบ','🧰'],['ฬ','ฬ จุฬา','ลอ จุฬา','🪁'],
+ ['อ','อ อ่าง','ออ อ่าง','🛁'],['ฮ','ฮ นกฮูก','ฮอ นกฮูก','🦉']
+];
+// English: letter, word, emoji
+const ENG=[
+ ['A','Apple','🍎'],['B','Ball','⚽'],['C','Cat','🐱'],['D','Dog','🐶'],['E','Elephant','🐘'],
+ ['F','Fish','🐟'],['G','Grapes','🍇'],['H','Hat','🎩'],['I','Ice cream','🍦'],['J','Juice','🧃'],
+ ['K','Kite','🪁'],['L','Lion','🦁'],['M','Monkey','🐵'],['N','Nest','🪺'],['O','Orange','🍊'],
+ ['P','Pig','🐷'],['Q','Queen','👑'],['R','Rabbit','🐰'],['S','Sun','☀️'],['T','Tiger','🐯'],
+ ['U','Umbrella','☂️'],['V','Van','🚐'],['W','Watermelon','🍉'],['X','Xylophone','🎼'],
+ ['Y','Yacht','⛵'],['Z','Zebra','🦓']
+];
+// Numbers 1-20: digit, thaiWord, engWord, emoji
+const NUMS=[
+ [1,'หนึ่ง','one','🍎'],[2,'สอง','two','🍌'],[3,'สาม','three','🍓'],[4,'สี่','four','🐟'],
+ [5,'ห้า','five','⭐'],[6,'หก','six','🌸'],[7,'เจ็ด','seven','🐝'],[8,'แปด','eight','🍀'],
+ [9,'เก้า','nine','🎈'],[10,'สิบ','ten','🍇'],
+ [11,'สิบเอ็ด','eleven','🍎'],[12,'สิบสอง','twelve','🍓'],[13,'สิบสาม','thirteen','🐟'],
+ [14,'สิบสี่','fourteen','🌸'],[15,'สิบห้า','fifteen','⭐'],[16,'สิบหก','sixteen','🐝'],
+ [17,'สิบเจ็ด','seventeen','🍀'],[18,'สิบแปด','eighteen','🎈'],[19,'สิบเก้า','nineteen','🍇'],
+ [20,'ยี่สิบ','twenty','🍊']
+];
+// Thai number words map (for math game speech)
+const THNUM={0:'ศูนย์',1:'หนึ่ง',2:'สอง',3:'สาม',4:'สี่',5:'ห้า',6:'หก',7:'เจ็ด',8:'แปด',9:'เก้า',10:'สิบ',
+ 11:'สิบเอ็ด',12:'สิบสอง',13:'สิบสาม',14:'สิบสี่',15:'สิบห้า',16:'สิบหก',17:'สิบเจ็ด',18:'สิบแปด',19:'สิบเก้า',20:'ยี่สิบ'};
+// Skip-counting by tens (10,20,...,100) — a ป.1-ป.2 counting-concept step up from 1-20
+const EN_TENS={10:'ten',20:'twenty',30:'thirty',40:'forty',50:'fifty',60:'sixty',70:'seventy',80:'eighty',90:'ninety',100:'one hundred'};
+const NUMS_TENS=[10,20,30,40,50,60,70,80,90,100].map(n=>[n, thaiNumWord(n), EN_TENS[n], '🔟']);
+// Thai SHORT vowels (สระเสียงสั้น): vowel, sound(roman), sayText(for TTS), example word, emoji
+// สระไทย — คำตัวอย่างเปลี่ยนเป็นคำจริงจากแบบหัดอ่าน/สมุดแบบฝึกหัดของโรงเรียน
+// [vowel, read, sayTx, mainWord, emoji, [more school words — tappable]]
+const VOWELS_SHORT=[
+ ['อะ','อะ (a)','อะ','ทะเล','🌊',['ชะอำ','ชะนี','กะละแม']],
+ ['อิ','อิ (i)','อิ','ปิติ','🧒',['บิดา','กิริยา']],
+ ['อึ','อึ (ue)','อึ','ผึ้ง','🐝',['หนึ่ง','ขึ้น']],
+ ['อุ','อุ (u)','อุ','ความสุข','😊',['ทุกวัน','ขยุกขยิก']],
+ ['เอะ','เอะ (e)','เอะ','เป็ด','🦆',['เกะกะ']],
+ ['แอะ','แอะ (ae)','แอะ','แกะ','🐑',['ถั่วแระ','และ']],
+ ['โอะ','โอะ (o)','โอะ','ขนม','🍬',['คน','จน']],
+ ['เอาะ','เอาะ (o)','เอาะ','เกาะ','🏝️',['เพราะ']],
+ ['เออะ','เออะ (oe)','เออะ','เยอะแยะ','🎈',['เลอะเทอะ']]
+];
+// สระเสียงยาว — คำตัวอย่างจากบทอ่านจริง (ขา ฟ้า ปู่ ผู้ แม่ ...)
+const VOWELS_LONG=[
+ ['อา','อา (aa)','อา','ขา','🦵',['นา','ป่า','ฟ้า','มาลี','ยา']],
+ ['อี','อี (ii)','อี','พี่','🧒',['สี','ดี','มี','อีกา']],
+ ['อือ','อือ (ue)','อือ','มือ','✋',['ถือ']],
+ ['อู','อู (uu)','อู','ปู่','👴',['ผู้','สู้','อยู่','หนู','งู']],
+ ['เอ','เอ (e)','เอ','เวลา','⏰',['ทะเล','เกะกะ']],
+ ['แอ','แอ (ae)','แอ','แม่','👩',['แพะ','แลดู','แม่ค้า','แม้']],
+ ['โอ','โอ (o)','โอ','ตัวโต','🐘',['โถ','โผมา']],
+ ['ออ','ออ (o)','ออ','พ่อ','👨',['ซอ','ข้อมือ','พอใจ']],
+ ['เออ','เออ (oe)','เออ','เจอ','🤝',['เธอ']]
+];
+// สระพิเศษ/สระประสม — เจอบ่อยมากในบทเรียนของหนู (เสื้อ วัว ไก่ ใจ เขา ทำ)
+const VOWELS_SPECIAL=[
+ ['เอือ','เอือ (uea)','เอือ','เสื้อ','👕',['เสือ','เสื่อ','เผื่อแผ่']],
+ ['อัว','อัว (ua)','อัว','วัว','🐮',['ถั่ว','หัวเราะ']],
+ ['ไอ','ไอ (ai)','ไอ','ไก่','🐔',['ไป','ไม้ไผ่','ไฟป่า']],
+ ['ใอ','ใอ ไม้ม้วน (ai)','ใอ','ใจ','❤️',['ใน','ใส่','ใบหญ้า']],
+ ['เอา','เอา (ao)','เอา','เขา','⛰️',['เล้าไก่','เจ้าเป้า','เต่า']],
+ ['อำ','อำ (am)','อำ','ทำดี','👍',['ขำ','อำเภอ','กะหล่ำปลี','น้ำ']]
+];
+const VOWELS=VOWELS_SHORT; // legacy alias, kept in case referenced elsewhere
+// English vocabulary: word, emoji, thai meaning — grouped by theme, ป.1-ป.2 level (nouns, colors, verbs)
+const WORDS=[
+ // Animals
+ ['Cat','🐱','แมว'],['Dog','🐶','หมา'],['Bird','🐦','นก'],['Fish','🐟','ปลา'],
+ ['Cow','🐮','วัว'],['Duck','🦆','เป็ด'],['Bear','🐻','หมี'],['Frog','🐸','กบ'],
+ // Food
+ ['Apple','🍎','แอปเปิล'],['Banana','🍌','กล้วย'],['Egg','🥚','ไข่'],['Milk','🥛','นม'],
+ ['Rice','🍚','ข้าว'],['Water','💧','น้ำ'],['Cake','🍰','เค้ก'],['Candy','🍬','ลูกอม'],
+ // Family
+ ['Mom','👩','แม่'],['Dad','👨','พ่อ'],['Baby','👶','เด็กน้อย'],['Friend','🧑‍🤝‍🧑','เพื่อน'],
+ // Nature
+ ['Sun','☀️','ดวงอาทิตย์'],['Moon','🌙','พระจันทร์'],['Star','⭐','ดาว'],
+ ['Tree','🌳','ต้นไม้'],['Flower','🌸','ดอกไม้'],['Rain','🌧️','ฝน'],
+ ['Cloud','☁️','เมฆ'],['Wind','💨','ลม'],['Snow','❄️','หิมะ'],
+ // Things
+ ['Car','🚗','รถ'],['Ball','⚽','ลูกบอล'],['Book','📖','หนังสือ'],['House','🏠','บ้าน'],
+ // Body (ตามใบคำศัพท์ของโรงเรียน: hair, face, head, hand, eye, ear, arm, leg, mouth)
+ ['Hair','💇','ผม'],['Face','🙂','ใบหน้า'],['Head','👦','หัว'],
+ ['Hand','✋','มือ'],['Eye','👁️','ตา'],['Nose','👃','จมูก'],['Mouth','👄','ปาก'],
+ ['Ear','👂','หู'],['Arm','💪','แขน'],['Leg','🦵','ขา'],
+ // Clothes
+ ['Hat','🎩','หมวก'],['Shoe','👟','รองเท้า'],['Shirt','👕','เสื้อ'],['Socks','🧦','ถุงเท้า'],
+ // School
+ ['Pencil','✏️','ดินสอ'],['Pen','🖊️','ปากกา'],['Bag','🎒','กระเป๋า'],['Ruler','📏','ไม้บรรทัด'],
+ ['Chair','🪑','เก้าอี้'],
+ // Colors
+ ['Red','🔴','สีแดง'],['Blue','🔵','สีน้ำเงิน'],['Yellow','🟡','สีเหลือง'],
+ ['Green','🟢','สีเขียว'],['White','⚪','สีขาว'],['Black','⚫','สีดำ'],
+ // Feelings
+ ['Happy','😄','มีความสุข'],['Sad','😢','เศร้า'],['Angry','😠','โกรธ'],
+ // Simple verbs (action words — a nice ป.2 vocabulary step up)
+ ['Run','🏃','วิ่ง'],['Jump','🤸','กระโดด'],['Eat','🍽️','กิน'],['Sleep','😴','นอน'],
+ ['Swim','🏊','ว่ายน้ำ'],['Read','📖','อ่าน'],['Sing','🎤','ร้องเพลง'],['Dance','💃','เต้น']
+];
+
+/* ============ LETTERS ============ */
+let letLang='th', lIdx=0;
+function openLetters(){ letLang='th'; lIdx=0; setLetterLang('th'); show('letters'); }
+function setLetterLang(l){
+  letLang=l; lIdx=0;
+  document.getElementById('letTH').classList.toggle('on',l==='th');
+  document.getElementById('letEN').classList.toggle('on',l==='en');
+  renderLetter();
+}
+function renderLetter(){
+  if(letLang==='th'){
+    const [c,w,r,e]=THAI[lIdx];
+    document.getElementById('lChar').textContent=c;
+    document.getElementById('lEmoji').textContent=e;
+    document.getElementById('lWord').textContent=w;
+    document.getElementById('lRead').textContent=r;
+    document.getElementById('lProg').textContent=(lIdx+1)+' / '+THAI.length;
+  }else{
+    const [c,w,e]=ENG[lIdx];
+    document.getElementById('lChar').textContent=c;
+    document.getElementById('lEmoji').textContent=e;
+    document.getElementById('lWord').textContent=c+' — '+w;
+    document.getElementById('lRead').textContent='';
+    document.getElementById('lProg').textContent=(lIdx+1)+' / '+ENG.length;
+  }
+  speakLetter();
+}
+function speakLetter(){
+  beep('tap');
+  if(letLang==='th'){ const [c,w]=THAI[lIdx]; speak(w, 'th-TH'); }
+  else{ const [c,w]=ENG[lIdx]; speakSeq2(c, w); }
+}
+// English: say letter name then word — ONE utterance (iOS only plays the first clip
+// of a chained sequence, so keep same-language reads in a single string).
+function speakSeq2(letter, word){ say([[letter+' for '+word,'en-US']]); }
+function nextLetter(){ const arr=letLang==='th'?THAI:ENG; lIdx=(lIdx+1)%arr.length; renderLetter(); }
+function prevLetter(){ const arr=letLang==='th'?THAI:ENG; lIdx=(lIdx-1+arr.length)%arr.length; renderLetter(); }
+
+/* ============ ORDINALS — first, second, third... (ตามบทเรียนอังกฤษของโรงเรียน) ============ */
+// [abbrev, word, thai]
+const ORDINALS=[
+ ['1st','first','ลำดับที่หนึ่ง'],['2nd','second','ลำดับที่สอง'],['3rd','third','ลำดับที่สาม'],
+ ['4th','fourth','ลำดับที่สี่'],['5th','fifth','ลำดับที่ห้า'],['6th','sixth','ลำดับที่หก'],
+ ['7th','seventh','ลำดับที่เจ็ด'],['8th','eighth','ลำดับที่แปด'],['9th','ninth','ลำดับที่เก้า'],
+ ['10th','tenth','ลำดับที่สิบ']
+];
+let ordState={mode:'read', idx:0};
+let ordQuiz={i:0, score:0, total:10};
+function openOrdinals(){ ordState={mode:'read', idx:0}; setOrdMode('read'); show('numbers'); }
+function setOrdMode(m){
+  ordState.mode=m;
+  document.querySelectorAll('#ordModeToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  document.getElementById('ordReadWrap').style.display = m==='read' ? '' : 'none';
+  document.getElementById('ordQuizWrap').style.display = m==='quiz' ? '' : 'none';
+  if(m==='read') renderOrdinal(); else startOrdQuiz();
+}
+function renderOrdinal(){
+  const [ab,en,th]=ORDINALS[ordState.idx];
+  document.getElementById('ordBig').textContent=ab;
+  document.getElementById('ordEn').textContent=en;
+  document.getElementById('ordTh').textContent=th;
+  document.getElementById('ordProg').textContent=(ordState.idx+1)+' / '+ORDINALS.length;
+  // race-line visual: N runners, the Nth one highlighted
+  const race=document.getElementById('ordRace'); race.innerHTML='';
+  const n=ordState.idx+1;
+  const show=Math.min(n+1, 10);
+  for(let i=0;i<show;i++){
+    const s=document.createElement('span');
+    s.textContent=['🏃','🏃‍♀️'][i%2];
+    if(i===n-1){ s.classList.add('ord-me'); s.textContent='⭐'; }
+    race.appendChild(s);
+  }
+  setTimeout(speakOrdinal,250);
+}
+function speakOrdinal(){ beep('tap'); const [,en,th]=ORDINALS[ordState.idx]; say([[en,'en-US'],[th,'th-TH']]); }
+function nextOrdinal(){ ordState.idx=(ordState.idx+1)%ORDINALS.length; renderOrdinal(); }
+function prevOrdinal(){ ordState.idx=(ordState.idx-1+ORDINALS.length)%ORDINALS.length; renderOrdinal(); }
+function startOrdQuiz(){ ordQuiz={i:0, score:0, total:10}; renderOrdQ(); }
+function renderOrdQ(){
+  if(ordQuiz.i>=ordQuiz.total){
+    document.getElementById('ordQPrompt').textContent='Great job! 🏆';
+    document.getElementById('ordLineup').innerHTML='🌟';
+    document.getElementById('ordQOpts').innerHTML='';
+    document.getElementById('ordQFb').textContent='ได้ '+ordQuiz.score+' / '+ordQuiz.total+' ข้อ!';
+    document.getElementById('ordQFb').style.color='var(--sun-d)';
+    document.getElementById('ordQProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 เล่นอีกครั้ง'; b.onclick=startOrdQuiz;
+    document.getElementById('ordQOpts').appendChild(b);
+    celebrate('เก่งมาก! 🏆');
+    return;
+  }
+  const animals=shuffle(['🐰','🐢','🐱','🐶','🦊','🐸','🐵','🐥','🐼','🦁']).slice(0,5);
+  const pos=Math.floor(Math.random()*5); // 0-4 → 1st-5th
+  const [ab,en,th]=ORDINALS[pos];
+  ordQuiz.correct=animals[pos];
+  document.getElementById('ordQPrompt').textContent='ตัวไหนอยู่ลำดับที่ '+ab+' ('+en+')?';
+  const line=document.getElementById('ordLineup'); line.innerHTML='';
+  animals.forEach((a,i)=>{
+    const s=document.createElement('span'); s.className='ord-runner';
+    s.innerHTML='<span class="ord-emoji">'+a+'</span><span class="ord-tag">'+ORDINALS[i][0]+'</span>';
+    line.appendChild(s);
+  });
+  document.getElementById('ordQFb').textContent='';
+  document.getElementById('ordQProg').textContent=(ordQuiz.i+1)+' / '+ordQuiz.total;
+  const opts=shuffle(animals.slice());
+  const box=document.getElementById('ordQOpts'); box.innerHTML='';
+  opts.forEach(a=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.style.fontSize='30px'; btn.textContent=a;
+    btn.onclick=()=>answerOrdQ(btn,a,ordQuiz.correct);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([['Which one is '+en+'?','en-US']]),250);
+}
+function answerOrdQ(btn,v,correct){
+  if(v===correct){
+    [...document.getElementById('ordQOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); ordQuiz.score++;
+    document.getElementById('ordQFb').textContent='Correct! 🎉'; document.getElementById('ordQFb').style.color='var(--mint-d)';
+    confetti();
+    ordQuiz.i++;
+    setTimeout(renderOrdQ,1300);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('ordQFb').textContent='Try again 💪'; document.getElementById('ordQFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+
+/* ============ THAI VOWELS — short + long (P.1 pairing set) ============ */
+let vIdx=0, vSet='short';
+function openVowels(){ vIdx=0; vSet='short'; setVowelSet('short'); show('vowels'); }
+function setVowelSet(s){
+  vSet=s; vIdx=0;
+  document.getElementById('vShort').classList.toggle('on', s==='short');
+  document.getElementById('vLong').classList.toggle('on', s==='long');
+  document.getElementById('vSpecial').classList.toggle('on', s==='special');
+  renderVowel();
+}
+function currentVowels(){ return vSet==='short' ? VOWELS_SHORT : vSet==='long' ? VOWELS_LONG : VOWELS_SPECIAL; }
+function renderVowel(){
+  const arr=currentVowels();
+  const [v,sound,sayTx,word,emo,more]=arr[vIdx];
+  document.getElementById('vChar').textContent=v;
+  document.getElementById('vEmoji').textContent=emo;
+  document.getElementById('vWord').textContent=word;
+  document.getElementById('vRead').textContent=sound;
+  document.getElementById('vProg').textContent=(vIdx+1)+' / '+arr.length;
+  // school-word chips: real words from the reading book using this vowel, tap to hear each
+  const chips=document.getElementById('vChips'); chips.innerHTML='';
+  (more||[]).forEach(w=>{
+    const c=document.createElement('button'); c.className='vowel-chip'; c.textContent=w;
+    c.onclick=(ev)=>{ ev.stopPropagation(); beep('tap'); say([[w,'th-TH']]); };
+    chips.appendChild(c);
+  });
+  speakVowel();
+}
+function speakVowel(){ beep('tap'); const arr=currentVowels(); const [v,sound,sayTx,word]=arr[vIdx]; speakSeq2Th(sayTx, word); }
+// Thai: say vowel sound then example word — ONE utterance (see note above).
+function speakSeq2Th(sound, word){ say([[sound+' '+word,'th-TH']]); }
+function nextVowel(){ const arr=currentVowels(); vIdx=(vIdx+1)%arr.length; renderVowel(); }
+function prevVowel(){ const arr=currentVowels(); vIdx=(vIdx-1+arr.length)%arr.length; renderVowel(); }
+
+/* ============ ENGLISH WORDS ============ */
+let wIdx=0, wDeck=WORDS.slice();
+// fresh random order every time the section opens (and after a full loop) — never static
+function openWords(){ wDeck=shuffle(WORDS); wIdx=0; renderWord(); show('words'); }
+function renderWord(){
+  const [w,emo,th]=wDeck[wIdx];
+  document.getElementById('wChar').textContent=w;
+  document.getElementById('wEmoji').textContent=emo;
+  document.getElementById('wThai').textContent=th;
+  document.getElementById('wProg').textContent=(wIdx+1)+' / '+wDeck.length+' 🔀';
+  // no auto-speak: let the child try pronouncing it first, then tap to check
+}
+function speakWord(){ beep('tap'); const [w,emo,th]=wDeck[wIdx]; say([[w,'en-US'],[th,'th-TH']]); }
+function nextWord(){ wIdx++; if(wIdx>=wDeck.length){ wDeck=shuffle(WORDS); wIdx=0; } renderWord(); }
+function prevWord(){ wIdx=(wIdx-1+wDeck.length)%wDeck.length; renderWord(); }
+
+/* ============ MATH — ป.1-ป.2 (adaptive difficulty + varied question types) ============ */
+const MATH_EMO=['🍎','🍓','⭐','🎈','🍊','🐟','🌸','🍀','🍬','🐝'];
+const MATH_STORY_ITEMS=[['🐱','แมว'],['🍎','แอปเปิ้ล'],['🎈','ลูกโป่ง'],['🐟','ปลา'],['⭐','ดาว'],
+ ['🍬','ลูกอม'],['🐶','หมา'],['🍪','คุกกี้'],['🚗','รถ'],['🦋','ผีเสื้อ']];
+// Thai number-to-words for any 0-999 (used so speech stays correct as numbers grow past 20)
+function thaiNumWord(n){
+  if(n===0) return 'ศูนย์';
+  if(n<0) return 'ลบ'+thaiNumWord(-n);
+  const D=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  let hundreds=Math.floor(n/100), rest=n%100;
+  let tens=Math.floor(rest/10), ones=rest%10;
+  let w='';
+  if(hundreds>0) w+=D[hundreds]+'ร้อย';
+  if(tens===1) w+='สิบ'; else if(tens===2) w+='ยี่สิบ'; else if(tens>0) w+=D[tens]+'สิบ';
+  if(ones===1 && tens>0) w+='เอ็ด'; else if(ones>0) w+=D[ones];
+  return w||'ศูนย์';
+}
+// Difficulty tiers: index 0 (easiest) → 3 (ยาก) — บวก/ลบ เท่านั้น ตามที่ใช้จริงในโรงเรียน
+const MATH_LVL=[
+ {range:10, ops:['+','-']},
+ {range:20, ops:['+','-']},
+ {range:50, ops:['+','-']},
+ {range:100, ops:['+','-']}
+];
+let math={type:'equation',a:0,b:0,op:'+',ans:0,emo:'🍎',solved:0,level:1,streak:0,wrongStreak:0,lastType:''};
+function openMath(){ math.solved=0; math.streak=0; math.wrongStreak=0; highlightMathLevelBtn(); newMathProblem(); show('math'); }
+function setMathLevel(lvl){
+  math.level=lvl; math.streak=0;
+  highlightMathLevelBtn();
+  newMathProblem();
+}
+// highlight the toggle button whose tier range contains the current level (0 / 1-2 / 3)
+function highlightMathLevelBtn(){
+  const lvl=math.level;
+  const nearest = lvl===0 ? 0 : lvl===3 ? 3 : 1;
+  document.querySelectorAll('#mathLevelToggle .lang-btn').forEach(b=>b.classList.toggle('on', +b.dataset.lvl===nearest));
+}
+function pickQType(levelIdx){
+  let pool;
+  if(levelIdx<=0) pool=['equation','equation','equation','word'];
+  else if(levelIdx<=2) pool=['equation','equation','missing','word'];
+  else pool=['equation','missing','word','equation'];
+  // avoid repeating the exact same type twice in a row so it feels varied
+  let choice=pool[Math.floor(Math.random()*pool.length)];
+  if(choice===math.lastType && pool.length>1){
+    const alt=pool.filter(t=>t!==choice);
+    choice=alt[Math.floor(Math.random()*alt.length)];
+  }
+  return choice;
+}
+function genEquation(lvl){
+  const ops=lvl.ops;
+  const op = ops[Math.floor(Math.random()*ops.length)];
+  let a,b,ans;
+  if(op==='+'){
+    a=1+Math.floor(Math.random()*(lvl.range-1));
+    b=1+Math.floor(Math.random()*(lvl.range-a));
+    ans=a+b;
+  } else {
+    a=2+Math.floor(Math.random()*(lvl.range-1));
+    b=1+Math.floor(Math.random()*(a-1));
+    ans=a-b;
+  }
+  return {a,b,op,ans};
+}
+function newMathProblem(){
+  const lvl=MATH_LVL[math.level];
+  const qtype=pickQType(math.level);
+  math.lastType=qtype;
+  const {a,b,op,ans}=genEquation(lvl);
+  math.a=a; math.b=b; math.op=op; math.ans=ans; math.type=qtype;
+  math.emo=MATH_EMO[Math.floor(Math.random()*MATH_EMO.length)];
+  if(qtype==='word'){
+    const item=MATH_STORY_ITEMS[Math.floor(Math.random()*MATH_STORY_ITEMS.length)];
+    math.storyEmo=item[0]; math.storyNoun=item[1];
+  }
+  if(qtype==='missing'){
+    // hide 'a' or 'b'; ans becomes the hidden number
+    math.hideFirst = Math.random()<0.5;
+  }
+  renderMath();
+}
+function makeGroup(n,emo,goneCount){
+  const g=document.createElement('div'); g.className='math-group';
+  for(let i=0;i<n;i++){
+    const s=document.createElement('span'); s.textContent=emo; s.style.animationDelay=(i*0.05)+'s';
+    if(i>=n-goneCount) s.classList.add('gone');
+    g.appendChild(s);
+  }
+  return g;
+}
+// place-value blocks (ten-square + one-dot) for numbers too big for a dot-by-dot count
+function makePVBlock(n,label){
+  const wrap=document.createElement('div'); wrap.className='pv-num';
+  const lab=document.createElement('div'); lab.className='pv-label'; lab.textContent=label+' ('+n+')';
+  const blocks=document.createElement('div'); blocks.className='pv-blocks';
+  const tens=Math.floor(n/10), ones=n%10;
+  for(let i=0;i<tens;i++){ const t=document.createElement('div'); t.className='pv-ten'; blocks.appendChild(t); }
+  for(let i=0;i<ones;i++){ const o=document.createElement('div'); o.className='pv-one'; blocks.appendChild(o); }
+  wrap.appendChild(blocks); wrap.appendChild(lab);
+  return wrap;
+}
+function opSymbol(op){ return op==='+'?'+':'−'; }
+function opWord(op){ return op==='+'?'บวก':'ลบ'; }
+function makeMathOptions(ans){
+  const set=new Set([ans]);
+  const spread = ans>30 ? 6 : 3;
+  while(set.size<4){
+    let d = ans + (Math.floor(Math.random()*(spread*2+1))-spread);
+    if(d<0) d=Math.abs(d)+1;
+    set.add(d);
+  }
+  return shuffle([...set]);
+}
+function renderMath(){
+  const {a,b,op,ans,emo,type}=math;
+  const eqEl=document.getElementById('mathEq');
+  const V=document.getElementById('mathVisual'); V.innerHTML='';
+  const story=document.getElementById('mathStory'); story.classList.remove('show'); story.textContent='';
+  document.getElementById('mathFb').textContent='';
+  const lvlNames=['เริ่มต้น (1-10)','ปานกลาง (1-20)','ปานกลาง (1-50)','ยาก (1-100)'];
+  document.getElementById('mathProg').innerHTML =
+    '<span class="level-badge">ระดับ: '+lvlNames[math.level]+'</span><br>ทำถูกแล้ว '+math.solved+' ข้อ ⭐'+(math.streak>=2?' 🔥 ถูกต่อกัน '+math.streak:'');
+
+  const bigNums = a>12 || b>12; // switch to place-value blocks once numbers get bigger
+  function drawOperandVisual(container,x,y,operator){
+    if(x<=12 && y<=12){
+      if(operator==='+'){
+        container.appendChild(makeGroup(x,emo,0));
+        const o=document.createElement('div'); o.className='math-op'; o.textContent='+'; container.appendChild(o);
+        container.appendChild(makeGroup(y,emo,0));
+      } else {
+        container.appendChild(makeGroup(x,emo,y));
+        const o=document.createElement('div'); o.className='math-op'; o.textContent='−'; container.appendChild(o);
+      }
+    } else {
+      const wrap=document.createElement('div'); wrap.className='pv-wrap';
+      wrap.appendChild(makePVBlock(x,'จำนวนแรก'));
+      const o=document.createElement('div'); o.className='math-op'; o.textContent=opSymbol(operator); wrap.appendChild(o);
+      wrap.appendChild(makePVBlock(y,'จำนวนสอง'));
+      container.appendChild(wrap);
+    }
+  }
+
+  if(type==='equation'){
+    eqEl.style.display='';
+    eqEl.textContent = a+' '+opSymbol(op)+' '+b+' = ?';
+    drawOperandVisual(V,a,b,op);
+    document.getElementById('mathOpts').innerHTML='';
+    renderOptions(ans);
+  } else if(type==='missing'){
+    eqEl.style.display='';
+    if(math.hideFirst) eqEl.textContent = '? '+opSymbol(op)+' '+b+' = '+ans;
+    else eqEl.textContent = a+' '+opSymbol(op)+' ? = '+ans;
+    drawOperandVisual(V,a,b,op);
+    const hiddenVal = math.hideFirst ? a : b;
+    renderOptions(hiddenVal);
+  } else if(type==='word'){
+    eqEl.style.display='';
+    eqEl.textContent = a+' '+opSymbol(op)+' '+b+' = ?';
+    const noun=math.storyNoun, se=math.storyEmo;
+    story.classList.add('show');
+    story.textContent = op==='+'
+      ? se+' '+noun+' มี '+a+' ตัว ได้มาเพิ่มอีก '+b+' ตัว รวมมีกี่ตัว?'
+      : se+' '+noun+' มี '+a+' ตัว ให้เพื่อนไป '+b+' ตัว เหลือกี่ตัว?';
+    drawOperandVisual(V,a,b,op);
+    renderOptions(ans);
+  }
+  setTimeout(speakMath,300);
+}
+function renderOptions(correctVal){
+  const opts=makeMathOptions(correctVal);
+  const box=document.getElementById('mathOpts'); box.innerHTML='';
+  opts.forEach(v=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=v;
+    btn.onclick=()=>answerMath(btn,v,correctVal);
+    box.appendChild(btn);
+  });
+}
+function answerMath(btn,v,correctVal){
+  if(v===correctVal){
+    [...document.getElementById('mathOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); math.solved++;
+    math.streak++; math.wrongStreak=0;
+    if(math.streak>0 && math.streak%3===0 && math.level<MATH_LVL.length-1){
+      math.level++;
+      highlightMathLevelBtn();
+      const fb=document.getElementById('mathFb'); fb.textContent='ถูกต้อง! 🎉 เก่งขึ้นแล้ว เลื่อนระดับ! 🚀'; fb.style.color='var(--mint-d)';
+    } else {
+      const fb=document.getElementById('mathFb'); fb.textContent='ถูกต้อง! 🎉'; fb.style.color='var(--mint-d)';
+    }
+    confetti();
+    speakMathAnswer();
+    setTimeout(newMathProblem,1700);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    math.wrongStreak++;
+    if(math.wrongStreak>=3 && math.level>0){ math.level--; math.wrongStreak=0; highlightMathLevelBtn(); }
+    const fb=document.getElementById('mathFb'); fb.textContent='ลองใหม่นะ 💪'; fb.style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+function speakMathAnswer(){
+  const {a,b,op,ans}=math;
+  say([[thaiNumWord(a)+' '+opWord(op)+' '+thaiNumWord(b)+' เท่ากับ '+thaiNumWord(ans),'th-TH']]);
+}
+function speakMath(){
+  const {type,a,b,op,ans}=math;
+  if(type==='missing'){
+    say([[math.hideFirst
+      ? 'ตัวเลขอะไร '+opWord(op)+' '+thaiNumWord(b)+' เท่ากับ '+thaiNumWord(ans)
+      : thaiNumWord(a)+' '+opWord(op)+' ตัวเลขอะไร เท่ากับ '+thaiNumWord(ans),'th-TH']]);
+    return;
+  }
+  if(type==='word'){
+    const noun=math.storyNoun;
+    const txt = op==='+'
+      ? noun+' มี '+thaiNumWord(a)+' ตัว เพิ่มอีก '+thaiNumWord(b)+' ตัว รวมกี่ตัว'
+      : op==='-'
+      ? noun+' มี '+thaiNumWord(a)+' ตัว หายไป '+thaiNumWord(b)+' ตัว เหลือกี่ตัว'
+      : noun+' มี '+thaiNumWord(a)+' ถุง ถุงละ '+thaiNumWord(b)+' ตัว รวมกี่ตัว';
+    say([[txt,'th-TH']]);
+    return;
+  }
+  say([[thaiNumWord(a)+' '+opWord(op)+' '+thaiNumWord(b)+' เท่ากับเท่าไร','th-TH']]);
+}
+
+/* ============ MATCH ============ */
+// pool of {emoji, word(TH), en}
+const MATCHPOOL=[
+ ['🐘','ช้าง','elephant'],['🐟','ปลา','fish'],['🐱','แมว','cat'],['🐶','หมา','dog'],
+ ['🍎','แอปเปิ้ล','apple'],['🐰','กระต่าย','rabbit'],['🐝','ผึ้ง','bee'],['🚗','รถ','car'],
+ ['⭐','ดาว','star'],['🌸','ดอกไม้','flower'],['🦁','สิงโต','lion'],['🐦','นก','bird'],
+ ['🍌','กล้วย','banana'],['🐸','กบ','frog'],['☀️','ดวงอาทิตย์','sun'],['🐭','หนู','mouse'],
+ ['🐮','วัว','cow'],['🐻','หมี','bear'],['🦆','เป็ด','duck'],['🥚','ไข่','egg'],
+ ['🌙','พระจันทร์','moon'],['🏠','บ้าน','house'],['📖','หนังสือ','book'],['⚽','ลูกบอล','ball'],
+ ['👟','รองเท้า','shoe'],['🎒','กระเป๋า','bag'],['🌳','ต้นไม้','tree'],['☁️','เมฆ','cloud'],
+ ['🐢','เต่า','turtle'],['🐒','ลิง','monkey'],['🦋','ผีเสื้อ','butterfly'],['🐍','งู','snake'],
+ // — เนื้อหาจากสมุด/ใบงานโรงเรียนจริง —
+ ['🦴','กระดูก','bone'],['🍦','โคน','cone'],['🪢','เชือก','rope'],['🧊','ลูกบาศก์','cube'],
+ ['🎵','เพลง','tune'],['🐴','ม้า','mule'],['📏','ไม้บรรทัด','ruler'],['✏️','ดินสอ','pencil'],
+ ['✋','มือ','hand'],['👁️','ตา','eye'],['👂','หู','ear'],['💪','แขน','arm'],
+ ['👄','ปาก','mouth'],['🦵','ขา','leg'],['💇','ผม','hair'],['🙂','ใบหน้า','face'],
+ ['🎋','ไม้ไผ่','bamboo'],['⛲','น้ำพุ','fountain'],['👓','แว่นตา','glasses'],['⏰','นาฬิกา','clock'],
+ ['🦀','ปู','crab'],['⛵','เรือ','boat'],['👕','เสื้อ','shirt'],['🍳','ไข่ดาว','fried egg']
+];
+let matchState={pairs:[],picked:null,left:[],right:[],doneCount:0,size:6,lang:'th'};
+function openMatch(){ matchState.size=6; matchState.lang='th'; highlightMatchToggles(); newMatchRound(); show('match'); }
+function setMatchSize(n){ matchState.size=n; highlightMatchToggles(); newMatchRound(); }
+function setMatchLang(l){ matchState.lang=l; highlightMatchToggles(); newMatchRound(); }
+function highlightMatchToggles(){
+  document.querySelectorAll('#matchSizeToggle .lang-btn').forEach(b=>b.classList.toggle('on', +b.dataset.size===matchState.size));
+  document.querySelectorAll('#matchLangToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.lang===matchState.lang));
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function newMatchRound(){
+  beep('tap');
+  const pick=shuffle(MATCHPOOL).slice(0,matchState.size);
+  matchState.pairs=pick; matchState.picked=null; matchState.doneCount=0;
+  const useEn = matchState.lang==='en';
+  matchState.left=shuffle(pick.map((p,i)=>({id:i, kind:'emoji', txt:p[0]})));
+  matchState.right=shuffle(pick.map((p,i)=>({id:i, kind:'word', txt: useEn ? p[2] : p[1],
+    thWord:p[1], enWord:p[2], speakLang: useEn?'en-US':'th-TH'})));
+  renderMatch();
+}
+function renderMatch(){
+  const L=document.getElementById('matchLeft'), R=document.getElementById('matchRight');
+  L.innerHTML=''; R.innerHTML='';
+  matchState.left.forEach(it=>{
+    const b=document.createElement('button'); b.className='match-item'+(it.done?' done':'');
+    b.innerHTML='<span class="big">'+it.txt+'</span>';
+    b.onclick=()=>pickMatch('emoji',it,b);
+    L.appendChild(b);
+  });
+  matchState.right.forEach(it=>{
+    const b=document.createElement('button'); b.className='match-item'+(it.done?' done':'');
+    b.textContent=it.txt;
+    b.onclick=()=>pickMatch('word',it,b);
+    R.appendChild(b);
+  });
+}
+function pickMatch(kind,it,el){
+  if(it.done) return;
+  // speak
+  if(kind==='word'){ speak(it.txt, it.speakLang||'th-TH'); }
+  if(!matchState.picked){
+    matchState.picked={kind,it,el};
+    el.classList.add('sel');
+    return;
+  }
+  const first=matchState.picked;
+  if(first.kind===kind){ // same column, switch selection
+    first.el.classList.remove('sel'); matchState.picked={kind,it,el}; el.classList.add('sel'); return;
+  }
+  // check match
+  if(first.it.id===it.id){
+    first.el.classList.remove('sel'); first.el.classList.add('done'); el.classList.add('done');
+    first.it.done=true; it.done=true; matchState.picked=null; matchState.doneCount++;
+    beep('correct'); addStar();
+    // bonus: speak the OTHER language's word as a reward (reinforces both TH+EN)
+    const wordItem = it.thWord!==undefined ? it : first.it;
+    if(wordItem && wordItem.thWord!==undefined){
+      const bonusLang = matchState.lang==='en' ? 'th-TH' : 'en-US';
+      const bonusWord = matchState.lang==='en' ? wordItem.thWord : wordItem.enWord;
+      say([[bonusWord, bonusLang]]);
+    }
+    if(matchState.doneCount===matchState.pairs.length){
+      setTimeout(()=>{ celebrate('เก่งมาก! 🎉'); }, 300);
+      // auto-deal a brand-new random set so it never gets boring
+      setTimeout(newMatchRound, 1800);
+    }
+  }else{
+    beep('wrong');
+    el.classList.add('wrong'); first.el.classList.add('wrong');
+    const a=first.el; setTimeout(()=>{ a.classList.remove('wrong','sel'); el.classList.remove('wrong'); },420);
+    matchState.picked=null;
+  }
+}
+
+/* ============ QUIZ — ป.1-ป.2 mixed review (bigger pools, more question types) ============ */
+let quiz={list:[],i:0,score:0};
+function buildQuiz(){
+  const qs=[];
+  // Type 1: which picture is X (Thai word) — pulls from the full 30-item match pool now
+  shuffle(MATCHPOOL).slice(0,3).forEach(a=>{
+    const wrong=shuffle(MATCHPOOL.filter(x=>x[1]!==a[1])).slice(0,3);
+    const opts=shuffle([[a[0],true],...wrong.map(w=>[w[0],false])]);
+    qs.push({q:'อันไหนคือ "'+a[1]+'"?', speak:['th',a[1]], big:'', opts:opts});
+  });
+  // Type 2: English letter -> which word starts with it (emoji answer)
+  shuffle(ENG).slice(0,2).forEach(e=>{
+    const wrong=shuffle(ENG.filter(x=>x[0]!==e[0])).slice(0,3);
+    const opts=shuffle([[e[2],true],...wrong.map(w=>[w[2],false])]);
+    qs.push({q:'ตัว "'+e[0]+'" คือรูปไหน? ('+e[1]+')', speak:['en',e[0]+' for '+e[1]], big:e[0], opts:opts});
+  });
+  // Type 3: counting - how many? (now up to 20)
+  shuffle(NUMS).slice(0,2).forEach(n=>{
+    const count=n[0]; const emo=n[3];
+    const big=emo.repeat(Math.min(count,20));
+    const pool=[]; for(let x=1;x<=20;x++) if(x!==count) pool.push(x);
+    const wrongNums=shuffle(pool).slice(0,3);
+    const opts=shuffle([[String(count),true],...wrongNums.map(w=>[String(w),false])]);
+    qs.push({q:'นับดูสิ มีกี่ชิ้น?', speak:['th','นับดูสิ มีกี่ชิ้น'], big:big, bigSize:'small', opts:opts});
+  });
+  // Type 4: English word reading — show the word, pick the matching picture
+  shuffle(WORDS).slice(0,3).forEach(w=>{
+    const wrong=shuffle(WORDS.filter(x=>x[0]!==w[0])).slice(0,3);
+    const opts=shuffle([[w[1],true],...wrong.map(x=>[x[1],false])]);
+    qs.push({q:'คำว่า "'+w[0]+'" คือรูปไหน?', speak:['en',w[0]], big:'', opts:opts});
+  });
+  // Type 5: Thai vowel sound — pick the word that has that vowel sound
+  const allVowels=[...VOWELS_SHORT,...VOWELS_LONG];
+  shuffle(allVowels).slice(0,2).forEach(v=>{
+    const [vChar,sound,sayTx,word,emo]=v;
+    const wrong=shuffle(allVowels.filter(x=>x[0]!==vChar)).slice(0,3);
+    const opts=shuffle([[emo,true],...wrong.map(w=>[w[4],false])]);
+    qs.push({q:'สระ "'+vChar+'" อยู่ในคำไหน? ('+word+')', speak:['th',sayTx+' '+word], big:'', opts:opts});
+  });
+  // Type 6: quick math (small addition/subtraction within 10 — light review, not the full math game)
+  for(let i=0;i<3;i++){
+    const op = Math.random()<0.5 ? '+' : '-';
+    let a,b,ans;
+    if(op==='+'){ a=1+Math.floor(Math.random()*8); b=1+Math.floor(Math.random()*(10-a)); ans=a+b; }
+    else { a=2+Math.floor(Math.random()*8); b=1+Math.floor(Math.random()*(a-1)); ans=a-b; }
+    const wrongSet=new Set([ans]);
+    while(wrongSet.size<4){ let d=ans+(Math.floor(Math.random()*5)-2); if(d<0)d=Math.abs(d)+1; wrongSet.add(d); }
+    const opts=shuffle([...wrongSet].map(v=>[String(v), v===ans]));
+    qs.push({q:a+' '+(op==='+'?'+':'−')+' '+b+' = ?', speak:['th',thaiNumWord(a)+' '+opWord(op)+' '+thaiNumWord(b)+' เท่ากับเท่าไร'], big:'', opts:opts});
+  }
+  // Type 7: Silent-E phonics — word -> picture (จากใบงาน ILEP)
+  shuffle(PHONICS_WORDS).slice(0,3).forEach(p=>{
+    const wrong=shuffle(PHONICS_WORDS.filter(x=>x[0]!==p[0])).slice(0,3);
+    const opts=shuffle([[p[1],true],...wrong.map(w=>[w[1],false])]);
+    qs.push({q:'คำว่า "'+p[0]+'" คือรูปไหน?', speak:['en',p[0]], big:'', opts:opts});
+  });
+  // Type 8: tone-mark word matching picture (จากแบบฝึกหัดวรรณยุกต์)
+  shuffle(TONE_QUIZ).slice(0,3).forEach(t=>{
+    const [emo,correct,wrongs]=t;
+    const opts=shuffle([[correct,true],...wrongs.slice(0,2).map(w=>[w,false])]);
+    qs.push({q:'คำไหนตรงกับภาพนี้?', speak:['th',correct], big:emo, opts:opts});
+  });
+  // Type 9: daily English sentence — situation -> sentence (จากใบประโยคที่ครูให้พูดทุกวัน)
+  shuffle(ENG_SENT).slice(0,2).forEach(s=>{
+    const [emo,en,,th,prompt]=s;
+    const wrong=shuffle(ENG_SENT.filter(x=>x[1]!==en)).slice(0,2);
+    const opts=shuffle([[en,true],...wrong.map(w=>[w[1],false])]);
+    qs.push({q:prompt, speak:['th',prompt], big:emo, opts:opts, small:true});
+  });
+  // Type 10: ordinals — which position?
+  for(let i=0;i<2;i++){
+    const animals=shuffle(['🐰','🐢','🐱','🐶','🦊','🐸','🐵','🐥']).slice(0,4);
+    const pos=Math.floor(Math.random()*4);
+    const opts=shuffle(animals.map((a,idx)=>[a, idx===pos]));
+    qs.push({q:'ตัวไหนอยู่ลำดับที่ '+ORDINALS[pos][0]+' ('+ORDINALS[pos][1]+')?',
+      speak:['en','Which one is '+ORDINALS[pos][1]+'?'], big:animals.join(' '), bigSize:'small', opts:opts});
+  }
+  return shuffle(qs).slice(0,20);
+}
+function openQuiz(){ quiz={list:buildQuiz(),i:0,score:0}; renderQuiz(); show('quiz'); }
+function renderQuiz(){
+  const q=quiz.list[quiz.i];
+  document.getElementById('quizQ').textContent=q.q;
+  const big=document.getElementById('quizBig');
+  big.textContent=q.big||'';
+  big.style.fontSize = q.bigSize==='small' ? 'clamp(30px,9vw,52px)' : '';
+  document.getElementById('quizFb').textContent='';
+  document.getElementById('quizProg').textContent='ข้อ '+(quiz.i+1)+' / '+quiz.list.length+'  •  ได้ '+quiz.score+' ⭐';
+  const box=document.getElementById('quizOpts'); box.innerHTML='';
+  q.opts.forEach(([txt,ok])=>{
+    const b=document.createElement('button'); b.className='quiz-opt'; b.textContent=txt;
+    if(q.small) b.style.fontSize='15px';   // long English sentences need a smaller size
+    b.onclick=()=>answerQuiz(b,ok,q);
+    box.appendChild(b);
+  });
+  if(q.speak){ setTimeout(()=>speak(q.speak[1], q.speak[0]==='en'?'en-US':'th-TH'),250); }
+}
+function answerQuiz(btn,ok,q){
+  // lock
+  [...document.getElementById('quizOpts').children].forEach(b=>b.onclick=null);
+  const fb=document.getElementById('quizFb');
+  if(ok){
+    btn.classList.add('right'); beep('correct'); addStar(); quiz.score++;
+    fb.textContent='ถูกต้อง! 🎉'; fb.style.color='var(--mint-d)'; confetti();
+  }else{
+    btn.classList.add('wrong'); beep('wrong');
+    fb.textContent='ลองอีกที นะ 💪'; fb.style.color='var(--coral-d)';
+    // reveal correct
+    [...document.getElementById('quizOpts').children].forEach((b,idx)=>{
+      if(q.opts[idx][1]) b.classList.add('right');
+    });
+  }
+  setTimeout(()=>{
+    quiz.i++;
+    if(quiz.i>=quiz.list.length){ finishQuiz(); }
+    else renderQuiz();
+  }, 1300);
+}
+function finishQuiz(){
+  const box=document.getElementById('quizOpts');
+  document.getElementById('quizQ').textContent='เย้! เล่นจบแล้ว 🏆';
+  document.getElementById('quizBig').textContent='🌟';
+  box.innerHTML='';
+  document.getElementById('quizFb').textContent='ได้ '+quiz.score+' / '+quiz.list.length+' ดาว!';
+  document.getElementById('quizFb').style.color='var(--sun-d)';
+  document.getElementById('quizProg').textContent='';
+  const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+  b.textContent='🔁 เล่นอีกครั้ง'; b.onclick=openQuiz;
+  box.appendChild(b);
+  celebrate('เยี่ยมมาก! 🏆');
+  speak('เก่งมากเลย','th-TH');
+}
+
+/* ============ TONE MARKS วรรณยุกต์ เอก โท (จากแบบฝึกอ่านของโรงเรียนจริง) ============ */
+// each row: [base, ่ form, ้ form, example sentence using the ่ /้ words]
+const TONE_ROWS=[
+ ['ขา','ข่า','ข้า','ตาขำมีข่า'],
+ ['ผู','ผู่','ผู้','ผู้ใดจะไปกะบิดา'],
+ ['ถำ','ถ่ำ','ถ้ำ','บิดาพาปิติไปดูถ้ำ'],
+ ['ใส','ใส่','ใส้','มาลีใส่ใจดูเต่า'],
+ ['เสือ','เสื่อ','เสื้อ','ตาสีใส่เสื้อสีเทา'],
+ ['เฝา','เฝ่า','เฝ้า','อาจูเฝ้าดูมาลีสีซอ'],
+ ['ขอ','ข่อ','ข้อ','ตาฮะทายที่ข้อมือ'],
+ ['ถัว','ถั่ว','ถั้ว','อาโกมีถั่วแระ'],
+ ['สู','สู่','สู้','ไก่อูสู้กะไก่ป่า'],
+ ['เผือ','เผื่อ','เผื้อ','ผู้ดีมีใจเผื่อแผ่แก่ผู้อื่น'],
+ ['เห','เห่','เห้','บิดาพาเราไปดูเห่เรือ'],
+ ['พอ','พ่อ','พ้อ','บิดา คือ พ่อ'],
+ ['แม','แม่','แม้','แม่ทำกะละแม'],
+ ['ยา','ย่า','ย้า','พ่อพาปิติไปหาย่า'],
+ ['นา','น่า','น้า','แม่พามาลีไปหาน้า'],
+ ['พี','พี่','พี้','ปิติ คือ พี่มาลี'],
+ ['ฟา','ฟ่า','ฟ้า','ปิติใส่เสื้อสีฟ้า'],
+ ['วา','ว่า','ว้า','พ่อว่าจะพาไปทะเล'],
+ ['เลา','เล่า','เล้า','เขาเล่าว่า ที่นี่มีเล้าไก่']
+];
+// picture-matching quiz — real word pairs from the school workbook (คำที่สะกดคล้ายกันแต่วรรณยุกต์ต่างกัน)
+const TONE_QUIZ=[
+ ['🐴','ขี่ม้า',['ขี่ไก่','ขี่วัว']],
+ ['🐄','แม่วัว',['พ่อวัว','ปู่วัว']],
+ ['👴👵','ปู่ย่า',['พ่อแม่','ปู่ตา']],
+ ['🏞️','แม่น้ำ',['ท่าน้ำ','บ่อน้ำ']],
+ ['👕','ใส่เสื้อ',['ซื้อเสื้อ','ถอดเสื้อ']],
+ ['🥚🐔','ไข่ไก่',['ไข่เป็ด','ไข่นก']],
+ ['⛲','น้ำพุ',['น้ำตก','บ่อน้ำ']],
+ ['🐕🍚','เลีย',['เล่น','เดิน']],
+ ['🎶','เป่าปี่',['เป่านกหวีด','เป่าแคน']],
+ ['🐮','เขาวัว',['หูวัว','หางวัว']],
+ ['😂','หัวเราะ',['ร้องไห้','ร้องเพลง']],
+ ['🚜','ชาวนาไถนา',['ชาวนาเกี่ยวข้าว','ชาวนาปลูกข้าว']],
+ ['🥛','ดื่มนม',['ดื่มน้ำ','ดื่มกาแฟ']],
+ ['💃','รำวง',['ร้องเพลง','เต้น']],
+ ['🌳','ต้นไม้',['ท้องฟ้า','แม่น้ำ']],
+ ['🪷','ดอกบัว',['ใบบัว','กอบัว']],
+ ['🥬','กะหล่ำปลี',['ผักกาดขาว','หัวไชเท้า']],
+ ['🎋','ไม้ไผ่',['ลำไย','ผลไม้']],
+ ['🍌','หัวปลี',['ดอกบัว','มะลิ']]
+];
+let toneState={mode:'read', idx:0};
+let toneQuiz={list:[], i:0, score:0};
+function openTone(){ toneState={mode:'read', idx:0}; setToneMode('read'); show('tone'); }
+function setToneMode(m){
+  toneState.mode=m;
+  document.querySelectorAll('#toneModeToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  document.getElementById('toneReadWrap').style.display = m==='read' ? '' : 'none';
+  document.getElementById('toneQuizWrap').style.display = m==='quiz' ? '' : 'none';
+  document.getElementById('toneFillWrap').style.display = m==='fill' ? '' : 'none';
+  if(m==='read') renderTone(); else if(m==='quiz') startToneQuiz(); else startToneFill();
+}
+function renderTone(){
+  const [b1,b2,b3,sent]=TONE_ROWS[toneState.idx];
+  const row=document.getElementById('toneRow'); row.innerHTML='';
+  [b1,b2,b3].forEach(w=>{ const c=document.createElement('div'); c.className='tone-cell'; c.textContent=w; row.appendChild(c); });
+  document.getElementById('toneSentence').textContent=sent;
+  document.getElementById('toneProg').textContent=(toneState.idx+1)+' / '+TONE_ROWS.length;
+  setTimeout(speakToneRow,250);
+}
+function speakToneRow(){
+  beep('tap');
+  const [b1,b2,b3,sent]=TONE_ROWS[toneState.idx];
+  say([[b1+', '+b2+', '+b3+', , '+sent,'th-TH']]);
+}
+function nextTone(){ toneState.idx=(toneState.idx+1)%TONE_ROWS.length; renderTone(); }
+function prevTone(){ toneState.idx=(toneState.idx-1+TONE_ROWS.length)%TONE_ROWS.length; renderTone(); }
+function startToneQuiz(){
+  toneQuiz={list:shuffle(TONE_QUIZ).slice(0,10), i:0, score:0};
+  renderToneQ();
+}
+function renderToneQ(){
+  if(toneQuiz.i>=toneQuiz.list.length){
+    document.getElementById('toneQBig').textContent='🌟';
+    document.getElementById('toneQOpts').innerHTML='';
+    document.getElementById('toneQFb').textContent='ได้ '+toneQuiz.score+' / '+toneQuiz.list.length+' ข้อ!';
+    document.getElementById('toneQFb').style.color='var(--sun-d)';
+    document.getElementById('toneQProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 เล่นอีกครั้ง'; b.onclick=startToneQuiz;
+    document.getElementById('toneQOpts').appendChild(b);
+    celebrate('เก่งมาก! 🏆');
+    return;
+  }
+  const [emo,correct,wrongs]=toneQuiz.list[toneQuiz.i];
+  document.getElementById('toneQBig').textContent=emo;
+  document.getElementById('toneQFb').textContent='';
+  document.getElementById('toneQProg').textContent=(toneQuiz.i+1)+' / '+toneQuiz.list.length;
+  const opts=shuffle([correct,...wrongs]);
+  const box=document.getElementById('toneQOpts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=w;
+    btn.onclick=()=>answerToneQ(btn,w,correct);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[correct,'th-TH']]),250);
+}
+function answerToneQ(btn,v,correct){
+  if(v===correct){
+    [...document.getElementById('toneQOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); toneQuiz.score++;
+    document.getElementById('toneQFb').textContent='ถูกต้อง! 🎉'; document.getElementById('toneQFb').style.color='var(--mint-d)';
+    confetti();
+    toneQuiz.i++;
+    setTimeout(renderToneQ,1300);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('toneQFb').textContent='ลองใหม่นะ 💪'; document.getElementById('toneQFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+/* --- โหมดเติมคำ (จากแบบฝึกหัดหน้า 27, 29, 34-35, 40 ของจริง) --- */
+// [before, after, correct, [wrong choices], emoji]
+const TONE_FILL=[
+ ['บิดาพาปิติไปดู','','ถ้ำ',['ท้ำ'],'⛰️'],
+ ['ตาฮะทายาที่','มือ','ข้อ',['ค้อ'],'💊'],
+ ['อาโกชอบกิน','','ถั่วแระ',['ทั่วแระ'],'🫛'],
+ ['ปิติใส่','สีฟ้าตัวใหม่','เสื้อ',['เชื้อ'],'👕'],
+ ['ไก่อู','กะไก่ป่า','สู้',['ซู่'],'🐓'],
+ ['ฉันชอบกิน','','ไข่ดาว',['ข่าว','ขาว'],'🍳'],
+ ['ฉันมีดิน','','สอ',['ซอ','ส้อ'],'✏️'],
+ ['ฉันมีแมวสี','','ดำ',['ด่ำ','ด้ำ'],'🐈‍⬛'],
+ ['ฉันมาโรง','','เรียน',['เลียน','เรี่ยน'],'🏫'],
+ ['เต่ามีขาสี่','','ขา',['ข่า','ข้า'],'🐢'],
+ ['คุณพ่อมี','สองคู่','รองเท้า',['รองเทา','รองเท่า'],'👞'],
+ ['ฉันมี','','ดอกไม้',['ดอกไม่','ดอกไม'],'🌼'],
+ ['ฉันดู','','เต่า',['เตา','เต้า'],'🐢'],
+ ['คุณพ่อมี','','แว่นตา',['แวนตา','แว้นตา'],'👓'],
+ ['ฉันมี','ไว้เดิน','เท้า',['เทา','เท่า'],'🦶'],
+ ['ฉันกิน','','ไก่',['ไก','ไก้'],'🍗'],
+ ['ฉันสวม','','รองเท้า',['รองเทา','รองเท่า'],'👟'],
+ ['แมวอยู่บน','','เก้าอี้',['เกาอี','เก่าอี้'],'🪑'],
+ ['ฉันมี','','แก้วน้ำ',['แกวนำ','แก่วน้ำ'],'🥛'],
+ ['ฉันใส่','','เสื้อ',['เสือ','เสื่อ'],'👕'],
+ ['พ่อของฉันใจ','','ดี',['ดี่','ดี้'],'😊'],
+ ['เรามีนาฬิกาไว้ดู','','เวลา',['เวหา','เวล่า'],'⏰'],
+ ['ปู่นำไม้ไผ่มาทำ','','รั้ว',['รัว','รั่ว'],'🎋'],
+ ['ไก่ออกลูกเป็น','','ไข่',['ไข','ไข้'],'🥚'],
+ ['ปีระกาคือปี','','ไก่',['หมา','ลิง'],'🐔'],
+ ['ปีมะแมคือปี','','แพะ',['แกะ','ม้า'],'🐐']
+];
+let toneFill={list:[], i:0, score:0};
+function startToneFill(){
+  toneFill={list:shuffle(TONE_FILL).slice(0,10), i:0, score:0};
+  renderToneF();
+}
+function renderToneF(){
+  if(toneFill.i>=toneFill.list.length){
+    document.getElementById('toneFEmoji').textContent='🌟';
+    document.getElementById('toneFSent').innerHTML='';
+    document.getElementById('toneFOpts').innerHTML='';
+    document.getElementById('toneFFb').textContent='ได้ '+toneFill.score+' / '+toneFill.list.length+' ข้อ!';
+    document.getElementById('toneFFb').style.color='var(--sun-d)';
+    document.getElementById('toneFProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 เล่นอีกครั้ง'; b.onclick=startToneFill;
+    document.getElementById('toneFOpts').appendChild(b);
+    celebrate('เก่งมาก! 🏆');
+    return;
+  }
+  const [pre,post,correct,wrongs,emo]=toneFill.list[toneFill.i];
+  document.getElementById('toneFEmoji').textContent=emo;
+  document.getElementById('toneFSent').innerHTML = pre+'<span class="fill-blank">____</span>'+post;
+  document.getElementById('toneFFb').textContent='';
+  document.getElementById('toneFProg').textContent=(toneFill.i+1)+' / '+toneFill.list.length;
+  const opts=shuffle([correct,...wrongs]);
+  const box=document.getElementById('toneFOpts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=w;
+    btn.onclick=()=>answerToneF(btn,w,correct,pre,post);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[pre+' อะไรเอ่ย '+post,'th-TH']]),250);
+}
+function answerToneF(btn,v,correct,pre,post){
+  if(v===correct){
+    [...document.getElementById('toneFOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); toneFill.score++;
+    document.getElementById('toneFSent').innerHTML = pre+'<span class="fill-blank" style="color:var(--mint-d);border-color:var(--mint-d);">'+correct+'</span>'+post;
+    document.getElementById('toneFFb').textContent='ถูกต้อง! 🎉'; document.getElementById('toneFFb').style.color='var(--mint-d)';
+    confetti();
+    say([[pre+correct+post,'th-TH']]);
+    toneFill.i++;
+    setTimeout(renderToneF,1600);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('toneFFb').textContent='ลองใหม่นะ 💪'; document.getElementById('toneFFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+
+/* ============ STORY READING (อ่านจับใจความ — เรื่องจริงจากสมุดแบบฝึกหัด) ============ */
+const STORIES=[
+ {emoji:'👨‍👩‍👧‍👧', title:'ครอบครัวของฉัน',
+  text:'คุณพ่อของฉันเป็นตำรวจ คุณแม่เป็นคุณหมอ พี่สาวเป็นคุณครู น้องสาวของฉันกำลังเรียนหนังสือ กิจกรรมในเวลาว่าง คุณพ่อชอบปลูกต้นไม้และปลูกผัก คุณแม่ชอบทำขนม พี่สาวและน้องชอบอ่านหนังสือ ส่วนฉันชอบดูทีวี ครอบครัวของฉันใช้ชีวิตอย่างพอเพียงและมีความสุขมาก',
+  qs:[
+   ['ครอบครัวนี้มีสมาชิกทั้งหมดกี่คน?','5 คน',['4 คน','6 คน']],
+   ['ใครมีหน้าที่รักษาคนไข้?','คุณแม่',['คุณพ่อ','พี่สาว']],
+   ['ใครทำหน้าที่สอนหนังสือ?','พี่สาว',['น้องสาว','คุณแม่']],
+   ['ในเวลาว่างคุณแม่ชอบทำอะไร?','ทำขนม',['ปลูกต้นไม้','ดูทีวี']],
+   ['ครอบครัวของฉันใช้ชีวิตแบบใด?','พอเพียงและมีความสุข',['ฟุ่มเฟือย','เร่งรีบมาก']]
+  ]},
+ {emoji:'🛒', title:'วันหยุดอันแสนสุข',
+  text:'เช้าวันเสาร์แม่พาใบตองไปตลาดซื้อหมูสับ แครอท กะหล่ำปลีและแตงกวา ใบตองซื้อขนมสายไหม วันนี้คุณแม่จะทำข้าวผัดและแกงจืด ใบตองชอบทานข้าวผัด กลับจากตลาดใบตองช่วยคุณแม่ล้างผัก เสร็จแล้วจึงมานั่งอ่านหนังสือที่หน้าบ้าน คุณแม่เรียกใบตองมาทานข้าว ใบตองล้างมือทุกครั้งก่อนจะรับประทานอาหาร',
+  qs:[
+   ['คุณแม่และใบตองไปตลาดในวันใด?','วันเสาร์',['วันอาทิตย์','วันจันทร์']],
+   ['คุณแม่ซื้อผักทั้งหมดกี่ชนิด?','3 ชนิด',['2 ชนิด','4 ชนิด']],
+   ['ใบตองช่วยคุณแม่ทำอะไร?','ล้างผัก',['หุงข้าว','กวาดบ้าน']],
+   ['ใบตองนั่งอ่านหนังสือที่ไหน?','ที่หน้าบ้าน',['ในห้องนอน','ที่โรงเรียน']],
+   ['ใบตองทำอะไรทุกครั้งก่อนทานอาหาร?','ล้างมือ',['ล้างเท้า','แปรงฟัน']]
+  ]},
+ {emoji:'🎋', title:'เจ้าเป้าไปป่าไผ่',
+  text:'เจ้าเป้าไปหาปู่ที่ยะลา ปู่พาเจ้าเป้าไปป่าไผ่ ในป่ามีไม้ไผ่กอโต มีผู้นำไม้ไผ่มาทำแพ ทำที่อยู่ ปู่นำไม้ไผ่มาทำรั้ว เจ้าเป้าช่วยปู่ทำรั้ว แลดูมีเงา เจ้าเป้าพอใจ',
+  qs:[
+   ['เจ้าเป้าไปหาปู่ที่ไหน?','ยะลา',['ชะอำ','เชียงใหม่']],
+   ['ใครพาเจ้าเป้าไปป่าไผ่?','ปู่',['พ่อ','น้า']],
+   ['ปู่นำไม้ไผ่มาทำอะไร?','ทำรั้ว',['ทำแพ','ทำเรือ']],
+   ['ใครช่วยปู่ทำรั้ว?','เจ้าเป้า',['มาลี','ปิติ']],
+   ['ในป่าไผ่มีอะไร?','ไม้ไผ่กอโต',['ต้นมะพร้าว','ดอกบัว']]
+  ]},
+ {emoji:'⛰️', title:'ปิติไปดูถ้ำ',
+  text:'ถ้ำมีในป่า ปิติจะไปดูถ้ำ ปิติใส่เสื้อสีฟ้า บิดาใส่เสื้อสีเทา บิดาแนะนำปิติว่า ข้อ 1 เข้าถ้ำให้ถือไต้ จะมีไฟให้ดูทาง ข้อ 2 เข้าป่าให้ถือพร้า ไว้ตัดใบหญ้าที่เกะกะ ข้อ 3 ให้มีใจเผื่อแผ่แก่ผู้อื่น ผู้ที่มีใจเผื่อแผ่แก่ผู้อื่น คือ ผู้ดี ผู้ดี คือ ผู้ที่มีกิริยาวาจาดี ปิติใส่ใจจำคำบิดา บิดาพอใจ พาปิติไปดูถ้ำ',
+  qs:[
+   ['ปิติใส่เสื้อสีอะไร?','สีฟ้า',['สีเทา','สีแดง']],
+   ['บิดาใส่เสื้อสีอะไร?','สีเทา',['สีฟ้า','สีขาว']],
+   ['เข้าถ้ำให้ถืออะไร?','ไต้',['พร้า','ร่ม']],
+   ['เข้าป่าให้ถืออะไร?','พร้า',['ไต้','ไม้เท้า']],
+   ['ผู้ดี คือ ใคร?','ผู้ที่มีกิริยาวาจาดี',['ผู้ที่มีเงินมาก','ผู้ที่ตัวโต']]
+  ]},
+ {emoji:'🥬', title:'ไปที่ไร่ปู่',
+  text:'มาลีและสีดาไปที่ไร่ปู่ ไร่ปู่มีคะน้า มะเขือ ถั่วพู และมะระ มาลีแลดูคะน้าและมะเขือ สีดาแลดูถั่วพูและมะระ ปู่นำมะเขือและมะระใส่ในโถสีดำเก้าโถ ปู่ให้คะน้าแก่มาลีห้ากำ ให้ถั่วพูแก่สีดาห้ากำ มาลีนำคะน้ามาให้แม่ แม่พอใจ สีดานำถั่วพูมาให้พ่อ พ่อก็พอใจ',
+  qs:[
+   ['ใครไปที่ไร่ปู่?','มาลีและสีดา',['ปิติและมาลี','ใบตองและแม่']],
+   ['ไร่ปู่ไม่มีผักชนิดใด?','ผักบุ้ง',['คะน้า','มะระ']],
+   ['ปู่ให้คะน้าแก่มาลีกี่กำ?','ห้ากำ',['สามกำ','เก้ากำ']],
+   ['มาลีนำคะน้ามาให้ใคร?','แม่',['พ่อ','ย่า']],
+   ['สีดานำถั่วพูมาให้ใคร?','พ่อ',['แม่','ปู่']]
+  ]},
+ {emoji:'🦀', title:'ปิติไปหาป้าปุ๋',
+  text:'พ่อแม่พาปิติและมาลีไปหาป้าปุ๋ที่ชะอำ ที่ชะอำมีทะเล ป้าปุ๋ว่าที่นี่มีคนมาแยะ ในทะเลมีปูม้า ปูทะเล และเต่าทะเล ที่ท่าเรือมีแม่ค้ามาขายปูม้าและปูทะเล ผู้ที่มาชะอำมาซื้อปูทะเลเยอะแยะ ป้าปุ๋ว่าถ้าเราไม่ทำให้ทะเลเลอะเทอะ ทะเลก็จะสะอาด และทำให้น่าดู',
+  qs:[
+   ['ปิติและมาลีไปหาป้าปุ๋ที่ไหน?','ชะอำ',['ยะลา','หัวหิน']],
+   ['ที่ชะอำมีอะไร?','ทะเล',['ภูเขา','น้ำตก']],
+   ['ในทะเลไม่มีสัตว์ชนิดใด?','ช้างทะเล',['ปูม้า','เต่าทะเล']],
+   ['ใครมาขายปูที่ท่าเรือ?','แม่ค้า',['พ่อค้า','ชาวนา']],
+   ['ถ้าไม่ทำให้ทะเลเลอะเทอะ ทะเลจะเป็นอย่างไร?','สะอาดน่าดู',['สกปรก','มีคลื่นแรง']]
+  ]}
+];
+let storyState={idx:0, qi:0, score:0};
+function openStory(){
+  document.getElementById('storyPicker').style.display='';
+  document.getElementById('storyView').style.display='none';
+  const p=document.getElementById('storyPicker'); p.innerHTML='';
+  STORIES.forEach((s,i)=>{
+    const b=document.createElement('button'); b.className='story-pick-btn';
+    b.innerHTML='<span class="spe">'+s.emoji+'</span>'+s.title;
+    b.onclick=()=>startStory(i);
+    p.appendChild(b);
+  });
+  show('story');
+}
+function startStory(i){
+  storyState={idx:i, qi:0, score:0};
+  const s=STORIES[i];
+  document.getElementById('storyPicker').style.display='none';
+  document.getElementById('storyView').style.display='';
+  document.getElementById('storyTitle').textContent=s.emoji+' '+s.title;
+  document.getElementById('storyText').textContent=s.text;
+  renderStoryQ();
+  setTimeout(speakStory,350);
+}
+function speakStory(){ beep('tap'); const s=STORIES[storyState.idx]; say([[s.title+', , '+s.text,'th-TH']]); }
+function renderStoryQ(){
+  const s=STORIES[storyState.idx];
+  if(storyState.qi>=s.qs.length){
+    document.getElementById('storyQ').textContent='เย้! ตอบครบแล้ว 🏆';
+    document.getElementById('storyOpts').innerHTML='';
+    document.getElementById('storyFb').textContent='ได้ '+storyState.score+' / '+s.qs.length+' ข้อ!';
+    document.getElementById('storyFb').style.color='var(--sun-d)';
+    document.getElementById('storyProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 ตอบอีกครั้ง'; b.onclick=()=>{ storyState.qi=0; storyState.score=0; renderStoryQ(); };
+    document.getElementById('storyOpts').appendChild(b);
+    celebrate('อ่านเก่งมาก! 🏆');
+    return;
+  }
+  const [q,correct,wrongs]=s.qs[storyState.qi];
+  document.getElementById('storyQ').textContent='ข้อ '+(storyState.qi+1)+'. '+q;
+  document.getElementById('storyFb').textContent='';
+  document.getElementById('storyProg').textContent=(storyState.qi+1)+' / '+s.qs.length;
+  const opts=shuffle([correct,...wrongs]);
+  const box=document.getElementById('storyOpts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=w;
+    btn.onclick=()=>answerStoryQ(btn,w,correct);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[q,'th-TH']]),200);
+}
+function answerStoryQ(btn,v,correct){
+  if(v===correct){
+    [...document.getElementById('storyOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); storyState.score++;
+    document.getElementById('storyFb').textContent='ถูกต้อง! 🎉'; document.getElementById('storyFb').style.color='var(--mint-d)';
+    confetti();
+    say([[correct,'th-TH']]);
+    storyState.qi++;
+    setTimeout(renderStoryQ,1500);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('storyFb').textContent='อ่านเรื่องอีกครั้งแล้วลองใหม่นะ 💪'; document.getElementById('storyFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+
+/* ============ ENGLISH DAILY SENTENCES (10 ประโยคที่ครูให้ฝึกพูดทุกวัน) ============ */
+// [emoji, EN sentence, example answer/EN, Thai meaning, situation prompt for quiz]
+const ENG_SENT=[
+ ['🙋','What is your name?','My name is ...','คุณชื่ออะไร','เมื่อครูถามชื่อของเรา ครูพูดว่าอย่างไร?'],
+ ['🏫','What is your school name?','Buranasuka School.','โรงเรียนของคุณชื่ออะไร','เมื่อครูถามชื่อโรงเรียน ครูพูดว่าอย่างไร?'],
+ ['🎨','What color do you like?','I like pink.','คุณชอบสีอะไร','เมื่อครูถามว่าชอบสีอะไร ครูพูดว่าอย่างไร?'],
+ ['🎂','How old are you?','I am five years old.','คุณอายุเท่าไร','เมื่อครูถามอายุของเรา ครูพูดว่าอย่างไร?'],
+ ['🥤','May I drink water, please?','','ขออนุญาตดื่มน้ำ','อยากดื่มน้ำ ต้องขออนุญาตครูว่าอย่างไร?'],
+ ['🚻','May I go to toilet, please?','','ขออนุญาตไปห้องน้ำ','อยากไปห้องน้ำ ต้องขออนุญาตครูว่าอย่างไร?'],
+ ['🚪','May I come in, please?','','ขออนุญาตเข้าห้อง','มาสายอยากเข้าห้องเรียน ต้องพูดว่าอย่างไร?'],
+ ['✏️','May I borrow your pencil, please?','','ขอยืมดินสอหน่อย','อยากยืมดินสอเพื่อน ต้องพูดว่าอย่างไร?'],
+ ['📚','Please take out your book.','','กรุณาหยิบหนังสือออกมา','ครูให้หยิบหนังสือออกมา ครูพูดว่าอย่างไร?'],
+ ['👀','Look at the book.','','มองที่หนังสือ','ครูให้มองที่หนังสือ ครูพูดว่าอย่างไร?'],
+ ['📖','Open your book, please.','','กรุณาเปิดหนังสือ','ครูให้เปิดหนังสือ ครูพูดว่าอย่างไร?']
+];
+let esState={mode:'read', idx:0};
+let esQuiz={list:[], i:0, score:0};
+function openEngSent(){ esState={mode:'read', idx:0}; setEsMode('read'); show('engsent'); }
+function setEsMode(m){
+  esState.mode=m;
+  document.querySelectorAll('#esModeToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  document.getElementById('esReadWrap').style.display = m==='read' ? '' : 'none';
+  document.getElementById('esQuizWrap').style.display = m==='quiz' ? '' : 'none';
+  if(m==='read') renderEs(); else startEsQuiz();
+}
+function renderEs(){
+  const [emo,en,ans,th]=ENG_SENT[esState.idx];
+  document.getElementById('esEmoji').textContent=emo;
+  document.getElementById('esEn').textContent=en;
+  document.getElementById('esAnswer').textContent=ans;
+  document.getElementById('esTh').textContent='('+th+')';
+  document.getElementById('esProg').textContent=(esState.idx+1)+' / '+ENG_SENT.length;
+  setTimeout(speakEs,250);
+}
+function speakEs(){
+  beep('tap');
+  const [,en,ans]=ENG_SENT[esState.idx];
+  say([[ans ? en+' , '+ans : en,'en-US']]);
+}
+function nextEs(){ esState.idx=(esState.idx+1)%ENG_SENT.length; renderEs(); }
+function prevEs(){ esState.idx=(esState.idx-1+ENG_SENT.length)%ENG_SENT.length; renderEs(); }
+function startEsQuiz(){
+  esQuiz={list:shuffle(ENG_SENT).slice(0,8), i:0, score:0};
+  renderEsQ();
+}
+function renderEsQ(){
+  if(esQuiz.i>=esQuiz.list.length){
+    document.getElementById('esQPrompt').textContent='Great job! 🏆';
+    document.getElementById('esQBig').textContent='🌟';
+    document.getElementById('esQOpts').innerHTML='';
+    document.getElementById('esQFb').textContent='ได้ '+esQuiz.score+' / '+esQuiz.list.length+' ข้อ!';
+    document.getElementById('esQFb').style.color='var(--sun-d)';
+    document.getElementById('esQProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 เล่นอีกครั้ง'; b.onclick=startEsQuiz;
+    document.getElementById('esQOpts').appendChild(b);
+    celebrate('เก่งมาก! 🏆');
+    return;
+  }
+  const [emo,en,,th,prompt]=esQuiz.list[esQuiz.i];
+  document.getElementById('esQPrompt').textContent=prompt;
+  document.getElementById('esQBig').textContent=emo;
+  document.getElementById('esQFb').textContent='';
+  document.getElementById('esQProg').textContent=(esQuiz.i+1)+' / '+esQuiz.list.length;
+  const wrongs=shuffle(ENG_SENT.filter(s=>s[1]!==en)).slice(0,2).map(s=>s[1]);
+  const opts=shuffle([en,...wrongs]);
+  const box=document.getElementById('esQOpts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.style.fontSize='16px'; btn.textContent=w;
+    btn.onclick=()=>answerEsQ(btn,w,en);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[prompt,'th-TH']]),200);
+}
+function answerEsQ(btn,v,correct){
+  if(v===correct){
+    [...document.getElementById('esQOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); esQuiz.score++;
+    document.getElementById('esQFb').textContent='Correct! 🎉'; document.getElementById('esQFb').style.color='var(--mint-d)';
+    confetti();
+    say([[correct,'en-US']]);
+    esQuiz.i++;
+    setTimeout(renderEsQ,1600);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('esQFb').textContent='Try again 💪'; document.getElementById('esQFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+
+/* ============ THAI READING PRACTICE (คำ/ประโยคจริงจากใบอ่านรายสัปดาห์ + แบบหัดอ่าน) ============ */
+const RT_WORDS=[
+ 'ก็ได้','ไฟป่า','เราทำดี','คำแนะนำ','ก็ใส่ใจ','ใบหญ้า','เสือดุ','อำเภอ','เรือสำเภา','งัวเงีย',
+ 'เสื้อผ้า','ไม้ไผ่','ทำรั้ว','ป่าไผ่','วินาที','กอไผ่','ในตู้','เจ้าเป้า','ป้าปุ๋','ปลาเก๋า'
+];
+const RT_SENT=[
+ 'วัวอยู่ในนา','ปลาอยู่ในน้ำ','ไก่อยู่ในเล้า','ปูอยู่ในทะเล',
+ 'อาสัวอยู่นา','ตาฮะอยู่เรือ','เสืออยู่ในป่า',
+ 'นาฬิกา มีไว้เพื่อดูเวลา','ตู้เสื้อผ้ามีไว้ใส่เสื้อผ้า',
+ 'ไม้ไผ่ สี่ห้าลำ คือ กอไผ่','ป่ามีเสือ ป่ามีชะนี และมีงูดุ',
+ 'เรือสำเภามีเสาเรือ และใบเรือ','ปูตัวโตมีขาแปดขา','เต่าทะเลมีขาสี่ขา',
+ 'ปลาเก๋า คือ ปลาทะเล','แม่ค้า คือ ผู้ที่ค้าขาย',
+ 'พี่จ๋า ฟ้าใส แลไป น่าดู','อีกา โผไป โผมา สู่รัง',
+ 'เราอยู่กะพ่อ แม่ เราอยู่กะปู่ ย่า น้า อา',
+ 'เขาจะว่าเราทำดี ก็อยู่ที่เรามีกิริยาดี'
+];
+let rtState={mode:'words', idx:0};
+function openReadTh(){ rtState={mode:'words', idx:0}; setRtMode('words'); show('readth'); }
+function setRtMode(m){
+  rtState.mode=m; rtState.idx=0;
+  document.querySelectorAll('#rtModeToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  renderRt();
+}
+function rtList(){ return rtState.mode==='words' ? RT_WORDS : RT_SENT; }
+function renderRt(){
+  const arr=rtList();
+  const t=document.getElementById('rtText');
+  t.textContent=arr[rtState.idx];
+  t.style.fontSize = rtState.mode==='words' ? 'clamp(44px,13vw,72px)' : 'clamp(24px,7vw,40px)';
+  document.getElementById('rtProg').textContent=(rtState.idx+1)+' / '+arr.length;
+  // no auto-speak here: let the child try reading it first, then tap to check
+}
+function speakRt(){ beep('tap'); say([[rtList()[rtState.idx],'th-TH']]); }
+function nextRt(){ const a=rtList(); rtState.idx=(rtState.idx+1)%a.length; renderRt(); }
+function prevRt(){ const a=rtList(); rtState.idx=(rtState.idx-1+a.length)%a.length; renderRt(); }
+
+/* ============ ENGLISH PHONICS: SILENT E (จาก ILEP Worksheet ของโรงเรียนจริง) ============ */
+// [word, emoji, hint]
+const PHONICS_WORDS=[
+ ['bone','🦴','o says "oh"'],['cone','🍦','o says "oh"'],['home','🏠','o says "oh"'],['rope','🪢','o says "oh"'],
+ ['cute','🐱','u says "you"'],['mute','🤫','u says "you"'],['tube','🧪','u says "you"'],['cube','🧊','u says "you"'],
+ ['mule','🐴','u says "you"'],['rule','📏','u says "you"'],['tune','🎵','u says "you"'],['June','📅','u says "you"']
+];
+let phState={mode:'read', idx:0};
+let phQuiz={list:[], i:0, score:0};
+function openPhonics(){ phState={mode:'read', idx:0}; setPhonicsMode('read'); show('phonics'); }
+function setPhonicsMode(m){
+  phState.mode=m;
+  document.querySelectorAll('#phonicsModeToggle .lang-btn').forEach(b=>b.classList.toggle('on', b.dataset.mode===m));
+  document.getElementById('phonicsReadWrap').style.display = m==='read' ? '' : 'none';
+  document.getElementById('phonicsQuizWrap').style.display = m==='quiz' ? '' : 'none';
+  document.getElementById('phonicsSpellWrap').style.display = m==='spell' ? '' : 'none';
+  if(m==='read') renderPhonics(); else if(m==='quiz') startPhonicsQuiz(); else startPhonicsSpell();
+}
+function renderPhonics(){
+  const [w,emo,hint]=PHONICS_WORDS[phState.idx];
+  document.getElementById('phEmoji').textContent=emo;
+  const base=w.slice(0,-1), e=w.slice(-1);
+  document.getElementById('phWord').innerHTML = base+'<span style="opacity:.35;">'+e+'</span>';
+  document.getElementById('phHint').textContent = hint+' · silent e';
+  document.getElementById('phProg').textContent=(phState.idx+1)+' / '+PHONICS_WORDS.length;
+  setTimeout(speakPhonics,250);
+}
+function speakPhonics(){ beep('tap'); const [w]=PHONICS_WORDS[phState.idx]; say([[w,'en-US']]); }
+function nextPhonics(){ phState.idx=(phState.idx+1)%PHONICS_WORDS.length; renderPhonics(); }
+function prevPhonics(){ phState.idx=(phState.idx-1+PHONICS_WORDS.length)%PHONICS_WORDS.length; renderPhonics(); }
+function startPhonicsQuiz(){
+  phQuiz={list:shuffle(PHONICS_WORDS).slice(0,8), i:0, score:0};
+  renderPhonicsQ();
+}
+function renderPhonicsQ(){
+  if(phQuiz.i>=phQuiz.list.length){
+    document.getElementById('phQBig').textContent='🌟';
+    document.getElementById('phQOpts').innerHTML='';
+    document.getElementById('phQFb').textContent='Score: '+phQuiz.score+' / '+phQuiz.list.length;
+    document.getElementById('phQFb').style.color='var(--sun-d)';
+    document.getElementById('phQProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 Play again'; b.onclick=startPhonicsQuiz;
+    document.getElementById('phQOpts').appendChild(b);
+    celebrate('Great job! 🏆');
+    return;
+  }
+  const [word,emo]=phQuiz.list[phQuiz.i];
+  document.getElementById('phQBig').textContent=emo;
+  document.getElementById('phQFb').textContent='';
+  document.getElementById('phQProg').textContent=(phQuiz.i+1)+' / '+phQuiz.list.length;
+  const wrongs=shuffle(PHONICS_WORDS.filter(p=>p[0]!==word)).slice(0,3).map(p=>p[0]);
+  const opts=shuffle([word,...wrongs]);
+  const box=document.getElementById('phQOpts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=w;
+    btn.onclick=()=>answerPhonicsQ(btn,w,word);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[word,'en-US']]),250);
+}
+function answerPhonicsQ(btn,v,correct){
+  if(v===correct){
+    [...document.getElementById('phQOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); phQuiz.score++;
+    document.getElementById('phQFb').textContent='Correct! 🎉'; document.getElementById('phQFb').style.color='var(--mint-d)';
+    confetti();
+    phQuiz.i++;
+    setTimeout(renderPhonicsQ,1300);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('phQFb').textContent='Try again 💪'; document.getElementById('phQFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+/* --- Spell it: fill in the missing letter (b_ne) --- */
+let phSpell={list:[], i:0, score:0};
+function startPhonicsSpell(){
+  phSpell={list:shuffle(PHONICS_WORDS).slice(0,10), i:0, score:0};
+  renderPhonicsS();
+}
+function renderPhonicsS(){
+  if(phSpell.i>=phSpell.list.length){
+    document.getElementById('phSBig').textContent='🌟';
+    document.getElementById('phSWord').textContent='';
+    document.getElementById('phSOpts').innerHTML='';
+    document.getElementById('phSFb').textContent='Score: '+phSpell.score+' / '+phSpell.list.length;
+    document.getElementById('phSFb').style.color='var(--sun-d)';
+    document.getElementById('phSProg').textContent='';
+    const b=document.createElement('button'); b.className='speak-btn'; b.style.margin='10px auto';
+    b.textContent='🔁 Play again'; b.onclick=startPhonicsSpell;
+    document.getElementById('phSOpts').appendChild(b);
+    celebrate('Great job! 🏆');
+    return;
+  }
+  const [word,emo]=phSpell.list[phSpell.i];
+  // blank one meaningful letter (never the final silent e — that's the lesson pattern itself...
+  // actually blanking the silent e sometimes IS a great check; mix: 30% blank the final e)
+  let pos;
+  if(Math.random()<0.3) pos=word.length-1;
+  else pos=1+Math.floor(Math.random()*(word.length-2)); // any middle letter
+  const missing=word[pos].toLowerCase();
+  phSpell.correct=missing; phSpell.word=word; phSpell.pos=pos;
+  document.getElementById('phSBig').textContent=emo;
+  document.getElementById('phSWord').textContent=word.slice(0,pos)+'_'+word.slice(pos+1);
+  document.getElementById('phSFb').textContent='';
+  document.getElementById('phSProg').textContent=(phSpell.i+1)+' / '+phSpell.list.length;
+  const letters='abcdemnoprstu'.split('').filter(c=>c!==missing);
+  const opts=shuffle([missing,...shuffle(letters).slice(0,3)]);
+  const box=document.getElementById('phSOpts'); box.innerHTML='';
+  opts.forEach(c=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.style.fontSize='26px'; btn.textContent=c;
+    btn.onclick=()=>answerPhonicsS(btn,c);
+    box.appendChild(btn);
+  });
+  setTimeout(()=>say([[word,'en-US']]),250);
+}
+function answerPhonicsS(btn,c){
+  if(c===phSpell.correct){
+    [...document.getElementById('phSOpts').children].forEach(b=>b.onclick=null);
+    btn.classList.add('right'); beep('correct'); addStar(); phSpell.score++;
+    document.getElementById('phSWord').textContent=phSpell.word;
+    document.getElementById('phSFb').textContent='Correct! 🎉 '+phSpell.word;
+    document.getElementById('phSFb').style.color='var(--mint-d)';
+    confetti();
+    say([[phSpell.word,'en-US']]);
+    phSpell.i++;
+    setTimeout(renderPhonicsS,1500);
+  } else {
+    beep('wrong'); btn.classList.add('wrong');
+    document.getElementById('phSFb').textContent='Try again 💪'; document.getElementById('phSFb').style.color='var(--coral-d)';
+    setTimeout(()=>btn.classList.remove('wrong'),450);
+  }
+}
+
+/* unlock audio on first interaction (WebAudio + Speech) */
+function unlockAll(){
+  try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended')actx.resume(); }catch(e){}
+  unlockTTS();
+}
+document.body.addEventListener('pointerdown', unlockAll, {once:true});
+document.body.addEventListener('click', unlockAll, {once:true});
+
+/* sound self-test button */
+function testSound(){
+  unlockAll(); beep('tap');
+  const s=document.getElementById('soundStatus');
+  s.textContent='กำลังทดสอบ... 🔎';
+  say([['สวัสดีค่ะ','th-TH'],['Hello!','en-US']]);
+  setTimeout(()=>{
+    loadVoices();
+    const vs = hasTTS ? speechSynthesis.getVoices().length : 0;
+    if(lastPlayback==='synth'){
+      s.textContent='🔊 ใช้เสียงในเครื่อง — ควรได้ยิน "สวัสดีค่ะ / Hello" (พบเสียง '+vs+' แบบ)';
+    } else if(lastPlayback==='audio'){
+      s.textContent='🔊 ใช้เสียงสำรองออนไลน์ — ควรได้ยินเสียงอ่านแล้ว (ต้องต่อเน็ต)';
+    } else if(lastPlayback==='audio-error'){
+      s.textContent='🔇 เล่นเสียงไม่ได้ — ลองเปิดไฟล์ใน Chrome/Safari โดยตรง และเช็กอินเทอร์เน็ต';
+    } else {
+      s.textContent='🔇 ยังไม่มีเสียงพูด — ถ้าอยู่ในหน้าต่าง preview ให้เปิดไฟล์ใน Chrome/Safari แทน';
+    }
+  }, 1500);
+}
+</script>
+</body>
+</html>
