@@ -255,12 +255,8 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   box-shadow:0 5px 0 var(--grey-l),0 10px 16px -12px rgba(96,52,170,.5);transition:all .12s;
 }
 .mtile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--grey-l);}
-.mtile.audio{background:var(--g-blue);color:#fff;gap:8px;
-  box-shadow:0 5px 0 var(--blue-d),0 12px 18px -12px rgba(14,165,233,.7),
-             inset 0 -3px 6px rgba(0,0,0,.13),inset 0 3px 6px rgba(255,255,255,.4);}
-.mtile.audio .spk{font-size:27px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));}
-.mtile.audio .num{font-size:15px;font-weight:800;opacity:.9;
-  background:rgba(255,255,255,.28);border-radius:999px;padding:1px 9px;}
+.mtile.long{font-size:15px;line-height:1.45;padding:12px 8px;}
+.mtile.emo{font-size:44px;}
 .mtile.sel{background:var(--grape-l);color:var(--grape-d);box-shadow:0 5px 0 var(--purple-d);}
 .mtile.ok{background:var(--green-l);color:var(--green-d);box-shadow:0 3px 0 var(--green-d);opacity:.5;pointer-events:none;}
 .mtile.err{background:var(--red-l);color:var(--red-d);box-shadow:0 5px 0 var(--red-d);animation:shake .35s;}
@@ -1081,7 +1077,7 @@ function prep(ex){
   }
   if(e.t==='grid'){ const correct = e.opts[e.a]; const opts = shuffle(e.opts); e._opts=opts; e._ans=correct; e._ai=opts.indexOf(correct); }
   if(e.t==='build'){ e._bankFull = shuffle(e.tokens.concat(e.extra||[])); e._bankEasy = shuffle(e.tokens); }
-  if(e.t==='match'){ e._left = shuffle(e.pairs.map(p=>p[0])); e._right = shuffle(e.pairs.map(p=>p[1])); }
+  if(e.t==='match'){ e._left = shuffle(e.pairs.map(p=>p[1])); e._right = shuffle(e.pairs.map(p=>p[0])); }
   return e;
 }
 
@@ -1237,37 +1233,37 @@ function drawEx(ex){
 
   if(ex.t==='match'){
     b.appendChild(el('div','qtitle', esc(ex.q)));
-    const hasAudio = ex._right.some(v=>[...v].length>6);
-    b.appendChild(el('div','qsub', hasAudio
-      ? 'ฝั่งขวาเป็น 🔊 แตะฟังได้เลย · เลือกคำฝั่งซ้ายก่อน แล้วแตะ 🔊 ที่เป็นคู่ของมัน'
-      : 'แตะคำฝั่งซ้าย แล้วแตะคู่ของมันฝั่งขวา'));
+    b.appendChild(el('div','qsub','แตะฝั่งซ้ายก่อน (กดแล้วมีเสียงอ่านให้ฟัง) แล้วเลือกคำที่เป็นคำตอบฝั่งขวา'));
     const cols = el('div','matchcols');
     const lc = el('div'), rc = el('div');
     lc.style.cssText = rc.style.cssText = 'display:flex;flex-direction:column;gap:11px;';
-    const map = {}; ex.pairs.forEach(p=> map[p[0]] = p[1]);
+    /* ซ้าย = ความหมาย/รูป  ->  ขวา = คำ (คำตอบ) */
+    const map = {}; ex.pairs.forEach(p=> map[p[1]] = p[0]);
+    const tileCls = v => {
+      const n = [...v].length;
+      if(n<=3 && !/[\u0E00-\u0E7Fa-zA-Z0-9]/.test(v)) return ' emo';
+      if(n>14) return ' long';
+      return '';
+    };
     ex._left.forEach(v=>{
-      const t = el('button','mtile', esc(v));
+      const t = el('button','mtile'+tileCls(v), esc(v));
       t.onclick = ()=>{
         if(t.classList.contains('ok')) return;
         lc.querySelectorAll('.mtile').forEach(x=>x.classList.remove('sel'));
-        t.classList.add('sel'); matchLeft = {v, node:t}; speak(v, langOf(v, ex.lang));
+        t.classList.add('sel'); matchLeft = {v, node:t};
+        speak(v, langOf(v, ex.lang));
       };
       lc.appendChild(t);
     });
-    /* ฝั่งขวา: ถ้าเป็นคำอธิบายยาว ๆ ให้เป็นปุ่มลำโพงแทน เด็กฟังเอาไม่ต้องอ่าน */
-    ex._right.forEach((v, ri)=>{
-      const useAudio = [...v].length > 6;
-      const t = el('button','mtile'+(useAudio?' audio':''),
-        useAudio ? '<span class="spk">🔊</span><span class="num">'+(ri+1)+'</span>' : esc(v));
+    ex._right.forEach(v=>{
+      const t = el('button','mtile'+tileCls(v), esc(v));
       t.onclick = ()=>{
         if(t.classList.contains('ok')) return;
         speak(v, langOf(v, ex.lang));
-        if(!matchLeft) return;                       /* ยังไม่เลือกฝั่งซ้าย = แค่ฟังเฉย ๆ */
+        if(!matchLeft) return;
         if(map[matchLeft.v] === v){
           matchLeft.node.classList.remove('sel'); matchLeft.node.classList.add('ok');
-          t.classList.add('ok');
-          if(useAudio) t.innerHTML = esc(v);         /* จับคู่ถูกแล้วค่อยเฉลยข้อความ */
-          matchOK++; beep('tap'); matchLeft=null;
+          t.classList.add('ok'); matchOK++; beep('tap'); matchLeft=null;
           if(matchOK === ex.pairs.length){ $('#l-btn').disabled=false; onCheck(); }
         }else{
           matchErr = true; t.classList.add('err'); beep('bad'); haptic(60);
