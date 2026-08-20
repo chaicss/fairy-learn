@@ -273,6 +273,14 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 }
 .chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grey-l);}
 .chip.used{opacity:0;pointer-events:none;}
+.chip.done{background:var(--grape-l);color:var(--grape-d);box-shadow:0 4px 0 var(--purple-d);}
+.chip.wrong{background:var(--red-l);color:var(--red-d);box-shadow:0 4px 0 var(--red-d);animation:shake .35s;}
+.chip.hint{box-shadow:0 4px 0 var(--gold-d),0 0 0 5px rgba(255,197,61,.45);animation:hintbob 1s ease-in-out infinite;}
+@keyframes hintbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.slot{height:46px;border-radius:14px;background:rgba(168,85,247,.08);
+  box-shadow:inset 0 0 0 2px rgba(168,85,247,.18);}
+.slot.next{box-shadow:inset 0 0 0 3px var(--purple);animation:blink 1.3s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* passage */
 .passage{
@@ -563,7 +571,7 @@ unit({ id:'u1', name:'ผันวรรณยุกต์', sub:'สามั�
     {t:'ch', emo:'🫛', q:'อาโกมี____', opts:['ถัวแระ','ถั่วแระ','ทั่วแระ'], a:1},
     {t:'ch', q:'ผู้ดีมีใจ____แก่ผู้อื่น', opts:['เผาแผ่','เผื่อแผ่','เพื่อแผ่'], a:1, sub:'เผื่อแผ่ = แบ่งปันให้คนอื่น'},
     {t:'ch', q:'อาจูทำ____ให้บิดา', opts:['ฉู่ฉี่','ชู่ชี่','ฉุฉี'], a:0},
-    {t:'build', q:'เรียงคำให้เป็นประโยค', tokens:['บิดา','พา','เรา','ไป','ดู','เห่','เรือ'], extra:['ถ้ำ'], lang:'th'},
+    {t:'build', q:'เรียงคำให้เป็นประโยค', tokens:['บิดา','พา','เรา','ไป','ดู','เห่เรือ'], extra:['ถ้ำ'], lang:'th'},
     {t:'listen', lang:'th', a:'เผือ', opts:['เผือ','เผื่อ','เผื้อ']},
   ]},
 ]});
@@ -855,8 +863,9 @@ const S = {
   mistakes:  store.get('mistakes', []),
   lessons:   store.get('lessons', 0),
   bestCombo: store.get('bestCombo', 0),
+  easy:      store.get('easy', true),
 };
-function save(){ ['xp','streak','lastDay','hearts','heartAt','crowns','today','todayXP','mistakes','lessons','bestCombo']
+function save(){ ['xp','streak','lastDay','hearts','heartAt','crowns','today','todayXP','mistakes','lessons','bestCombo','easy']
   .forEach(k=>store.set(k, S[k])); }
 function dayKey(d){ d=d||new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function yesterdayKey(){ const d=new Date(); d.setDate(d.getDate()-1); return dayKey(d); }
@@ -1061,19 +1070,19 @@ function prep(ex){
     e._opts = opts; e._ans = correct; e._ai = opts.indexOf(correct);
   }
   if(e.t==='grid'){ const correct = e.opts[e.a]; const opts = shuffle(e.opts); e._opts=opts; e._ans=correct; e._ai=opts.indexOf(correct); }
-  if(e.t==='build'){ e._bank = shuffle(e.tokens.concat(e.extra||[])); }
+  if(e.t==='build'){ e._bankFull = shuffle(e.tokens.concat(e.extra||[])); e._bankEasy = shuffle(e.tokens); }
   if(e.t==='match'){ e._left = shuffle(e.pairs.map(p=>p[0])); e._right = shuffle(e.pairs.map(p=>p[1])); }
   return e;
 }
 
-let picked = null, checked = false, buildSeq = [], matchLeft = null, matchOK = 0, matchErr = false;
+let picked = null, checked = false, buildSeq = [], buildWrong = 0, matchLeft = null, matchOK = 0, matchErr = false;
 
 function nextEx(){
   if(L.pos >= L.queue.length){
     if(L.retry.length){ L.queue = L.queue.concat(L.retry); L.retry = []; nextEx(); return; }
     finishLesson(); return;
   }
-  picked = null; checked = false; buildSeq = []; matchLeft = null; matchOK = 0; matchErr = false;
+  picked = null; checked = false; buildSeq = []; buildWrong = 0; matchLeft = null; matchOK = 0; matchErr = false;
   const ex = L.queue[L.pos];
   const bar = Math.round(100 * L.pos / Math.max(L.total, L.queue.length));
   $('#l-bar').style.width = bar+'%';
@@ -1156,29 +1165,69 @@ function drawEx(ex){
   }
 
   if(ex.t==='build'){
-    b.appendChild(el('div','qtitle', esc(ex.q)));
     const joiner = ex.lang==='en' ? ' ' : '';
-    b.appendChild(el('div','qsub','แตะคำด้านล่างเรียงให้ถูกต้อง · แตะคำที่วางแล้วเพื่อเอาออก'));
+    ex._joiner = joiner;
+    const target = ex.tokens.join(joiner);
+    b.appendChild(el('div','qtitle', esc(ex.q)));
+
+    if(S.easy){
+      /* โหมดง่าย: เห็นประโยคตัวอย่าง + แตะเรียงตามทีละคำ แตะผิดไม่เสียหัวใจ */
+      const pr = el('div','prompt');
+      const sp = el('button','speaker','🔊'); sp.onclick = ()=> speak(target, ex.lang);
+      const bu = el('div','bubble', esc(target));
+      pr.appendChild(sp); pr.appendChild(bu); b.appendChild(pr);
+      setTimeout(()=> speak(target, ex.lang), 320);
+      b.appendChild(el('div','qsub','แตะคำด้านล่างเรียงตามประโยคข้างบน ทีละคำ · แตะผิดไม่เสียหัวใจนะ'));
+    }else{
+      b.appendChild(el('div','qsub','แตะคำด้านล่างเรียงให้เป็นประโยค · แตะคำที่วางแล้วเพื่อเอาออก'));
+    }
+
+    const bankSrc = S.easy ? ex._bankEasy : ex._bankFull;
     const ansLine = el('div','answerline');
     const bank = el('div','bank');
     const redraw = ()=>{
       ansLine.innerHTML=''; bank.innerHTML='';
       buildSeq.forEach((tok,i)=>{
-        const c = el('button','chip', esc(tok));
-        c.onclick = ()=>{ if(checked) return; buildSeq.splice(i,1); redraw(); };
+        const c = el('button','chip done', esc(tok));
+        c.onclick = ()=>{
+          if(checked) return;
+          if(S.easy && i !== buildSeq.length-1) return;   /* โหมดง่าย เอาออกได้เฉพาะคำล่าสุด */
+          buildSeq.splice(i,1); redraw();
+        };
         ansLine.appendChild(c);
       });
-      ex._bank.forEach((tok,i)=>{
-        const used = countIn(buildSeq,tok) >= countIn(ex._bank.slice(0,i+1), tok);
-        const c = el('button','chip'+(used?' used':''), esc(tok));
-        c.onclick = ()=>{ if(checked||used) return; buildSeq.push(tok); speak(tok, ex.lang); redraw(); };
+      if(S.easy){
+        for(let k=buildSeq.length; k<ex.tokens.length; k++){
+          const sl = el('div','slot'+(k===buildSeq.length?' next':''),'');
+          sl.style.width = Math.max(44, ex.tokens[k].length*13 + 22)+'px';
+          ansLine.appendChild(sl);
+        }
+      }
+      bankSrc.forEach((tok,i)=>{
+        const used = countIn(buildSeq,tok) >= countIn(bankSrc.slice(0,i+1), tok);
+        const isNext = S.easy && tok === ex.tokens[buildSeq.length];
+        const c = el('button','chip'+(used?' used':'')+((!used && isNext && buildWrong>=2)?' hint':''), esc(tok));
+        c.onclick = ()=>{
+          if(checked || used) return;
+          if(S.easy && !isNext){
+            buildWrong++; beep('bad'); haptic(40);
+            c.classList.add('wrong');
+            setTimeout(()=>{ c.classList.remove('wrong'); if(buildWrong>=2) redraw(); }, 420);
+            return;
+          }
+          buildSeq.push(tok); beep('tap'); speak(tok, ex.lang); redraw();
+          if(S.easy && buildSeq.length===ex.tokens.length){
+            $('#l-btn').disabled = false;
+            const posNow = L.pos;
+            setTimeout(()=>{ if(L && !checked && L.pos===posNow && L.queue[L.pos]===ex) onCheck(); }, 280);
+          }
+        };
         bank.appendChild(c);
       });
-      $('#l-btn').disabled = buildSeq.length===0;
+      $('#l-btn').disabled = S.easy ? (buildSeq.length !== ex.tokens.length) : (buildSeq.length === 0);
     };
     b.appendChild(ansLine); b.appendChild(bank);
     redraw();
-    ex._joiner = joiner;
   }
 
   if(ex.t==='match'){
@@ -1415,6 +1464,17 @@ function paintMe(){
     g.appendChild(s);
   });
   b.appendChild(g);
+
+  b.appendChild(el('div','h2','⚙️ ตั้งค่า'));
+  const setT = el('div','tile');
+  setT.innerHTML = '<div class="tt">🧩 โหมดง่าย · ข้อเรียงประโยค</div>'+
+    '<div class="ts">เปิดไว้ = เห็นประโยคตัวอย่าง มีช่องบอกจำนวนคำ กดฟังเสียงได้ '+
+    'แตะผิดแค่สั่นเตือน ไม่เสียหัวใจ และถ้าแตะผิด 2 ครั้งจะไฮไลต์คำที่ถูกให้<br>ตอนนี้: <b>'+
+    (S.easy?'เปิดอยู่':'ปิดอยู่')+'</b></div>';
+  const tg = el('button','btn'+(S.easy?' ghost':''), S.easy?'ปิดโหมดง่าย (ให้ท้าทายขึ้น)':'เปิดโหมดง่าย');
+  tg.style.marginTop='12px';
+  tg.onclick = ()=>{ S.easy = !S.easy; save(); paintMe(); };
+  setT.appendChild(tg); b.appendChild(setT);
 
   b.appendChild(el('div','h2','🏅 เหรียญรางวัล'));
   const bs = el('div','badges');
