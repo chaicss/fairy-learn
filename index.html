@@ -255,6 +255,12 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
   box-shadow:0 5px 0 var(--grey-l),0 10px 16px -12px rgba(96,52,170,.5);transition:all .12s;
 }
 .mtile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--grey-l);}
+.mtile.audio{background:var(--g-blue);color:#fff;gap:8px;
+  box-shadow:0 5px 0 var(--blue-d),0 12px 18px -12px rgba(14,165,233,.7),
+             inset 0 -3px 6px rgba(0,0,0,.13),inset 0 3px 6px rgba(255,255,255,.4);}
+.mtile.audio .spk{font-size:27px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));}
+.mtile.audio .num{font-size:15px;font-weight:800;opacity:.9;
+  background:rgba(255,255,255,.28);border-radius:999px;padding:1px 9px;}
 .mtile.sel{background:var(--grape-l);color:var(--grape-d);box-shadow:0 5px 0 var(--purple-d);}
 .mtile.ok{background:var(--green-l);color:var(--green-d);box-shadow:0 3px 0 var(--green-d);opacity:.5;pointer-events:none;}
 .mtile.err{background:var(--red-l);color:var(--red-d);box-shadow:0 5px 0 var(--red-d);animation:shake .35s;}
@@ -307,6 +313,10 @@ button{font-family:inherit;border:none;background:none;cursor:pointer;color:inhe
 .fb .ft{font-weight:800;font-size:19px;}
 .fb .fs{font-weight:700;font-size:15px;opacity:.92;margin-top:2px;line-height:1.5;}
 .lfoot.good .fb{color:var(--green-d);} .lfoot.bad .fb{color:var(--red-d);}
+.saybtn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+  background:rgba(255,255,255,.85);border-radius:16px;padding:11px 14px;margin:-4px 0 12px;
+  font-size:17px;font-weight:800;color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.07);}
+.saybtn:active{transform:translateY(3px);box-shadow:none;}
 
 /* ============ Result ============ */
 #result{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;
@@ -1109,12 +1119,7 @@ function drawEx(ex){
   if(ex.t==='ch' || ex.t==='grid'){
     b.appendChild(el('div','qtitle', esc(ex.q)));
     if(ex.emo) b.appendChild(el('div','bigemo', ex.emo));
-    if(ex.say){
-      const pr = el('div','prompt');
-      const sp = el('button','speaker','🔊'); sp.onclick = ()=> speak(ex.say[0], ex.say[1]);
-      const bu = el('div','bubble', esc(ex.say[0]));
-      pr.appendChild(sp); pr.appendChild(bu); b.appendChild(pr);
-    }
+    /* ประโยคเฉลย (ex.say) จะโชว์ตอนเฉลยเท่านั้น ไม่โชว์ก่อนตอบ เดี๋ยวเด็กเดาได้ */
   }
 
   if(ex.t==='ch'){
@@ -1232,7 +1237,10 @@ function drawEx(ex){
 
   if(ex.t==='match'){
     b.appendChild(el('div','qtitle', esc(ex.q)));
-    b.appendChild(el('div','qsub','แตะฝั่งซ้าย แล้วแตะคู่ของมันฝั่งขวา'));
+    const hasAudio = ex._right.some(v=>[...v].length>6);
+    b.appendChild(el('div','qsub', hasAudio
+      ? 'ฝั่งขวาเป็น 🔊 แตะฟังได้เลย · เลือกคำฝั่งซ้ายก่อน แล้วแตะ 🔊 ที่เป็นคู่ของมัน'
+      : 'แตะคำฝั่งซ้าย แล้วแตะคู่ของมันฝั่งขวา'));
     const cols = el('div','matchcols');
     const lc = el('div'), rc = el('div');
     lc.style.cssText = rc.style.cssText = 'display:flex;flex-direction:column;gap:11px;';
@@ -1246,13 +1254,20 @@ function drawEx(ex){
       };
       lc.appendChild(t);
     });
-    ex._right.forEach(v=>{
-      const t = el('button','mtile', esc(v));
+    /* ฝั่งขวา: ถ้าเป็นคำอธิบายยาว ๆ ให้เป็นปุ่มลำโพงแทน เด็กฟังเอาไม่ต้องอ่าน */
+    ex._right.forEach((v, ri)=>{
+      const useAudio = [...v].length > 6;
+      const t = el('button','mtile'+(useAudio?' audio':''),
+        useAudio ? '<span class="spk">🔊</span><span class="num">'+(ri+1)+'</span>' : esc(v));
       t.onclick = ()=>{
-        if(!matchLeft || t.classList.contains('ok')) return;
+        if(t.classList.contains('ok')) return;
+        speak(v, langOf(v, ex.lang));
+        if(!matchLeft) return;                       /* ยังไม่เลือกฝั่งซ้าย = แค่ฟังเฉย ๆ */
         if(map[matchLeft.v] === v){
           matchLeft.node.classList.remove('sel'); matchLeft.node.classList.add('ok');
-          t.classList.add('ok'); matchOK++; beep('tap'); matchLeft=null;
+          t.classList.add('ok');
+          if(useAudio) t.innerHTML = esc(v);         /* จับคู่ถูกแล้วค่อยเฉลยข้อความ */
+          matchOK++; beep('tap'); matchLeft=null;
           if(matchOK === ex.pairs.length){ $('#l-btn').disabled=false; onCheck(); }
         }else{
           matchErr = true; t.classList.add('err'); beep('bad'); haptic(60);
@@ -1284,12 +1299,10 @@ function onCheck(){
       else if(i===picked) x.classList.add('bad');
       else x.classList.add('dim');
     });
-    if(ex.t!=='grid') speak(ex._ans, ex.lang || langOf(ex._ans));
   }
   if(ex.t==='build'){
     ok = buildSeq.length===ex.tokens.length && buildSeq.every((t,i)=>t===ex.tokens[i]);
     answerText = ex.tokens.join(ex._joiner);
-    if(ok) speak(answerText, ex.lang);
   }
   if(ex.t==='match'){
     ok = !matchErr;
@@ -1319,6 +1332,21 @@ function onCheck(){
       (ex.sub?'<div class="fs">'+esc(ex.sub)+'</div>':'<div class="fs">ไม่เป็นไร เดี๋ยวเจอข้อนี้อีกครั้งนะ</div>')+'</div></div>';
     if(S.hearts<=0 && !L.practice){ setTimeout(heartsOut, 700); }
   }
+  /* เฉลยด้วยเสียง: มีประโยคเต็มก็อ่านประโยค ไม่มีก็อ่านคำตอบ */
+  if(ex.say){
+    const sl = el('button','saybtn','🔊 '+ex.say[0]);
+    sl.onclick = ()=> speak(ex.say[0], ex.say[1]);
+    fb.appendChild(sl);
+    speak(ex.say[0], ex.say[1]);
+  }else if(ex.t==='build'){
+    const sl = el('button','saybtn','🔊 '+answerText);
+    sl.onclick = ()=> speak(answerText, ex.lang);
+    fb.appendChild(sl);
+    if(ok) speak(answerText, ex.lang);
+  }else if(ex.t==='ch' || ex.t==='listen'){
+    speak(ex._ans, ex.lang || langOf(ex._ans));
+  }
+
   $('#l-combo').textContent = L.combo>=3 ? ('🔥 ตอบถูกติดกัน '+L.combo+' ข้อ!') : '';
   paintStats();
 }
