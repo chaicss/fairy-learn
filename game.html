@@ -579,7 +579,7 @@ function update(dt){
   const g=G;
   g.t+=dt*1000; g.chestT+=dt*1000; g.worldX+=g.speed*dt;
   g.speed=105*SC + Math.min(34*SC, g.t/ROUND_MS*34*SC);
-  g.depth += g.speed*dt/26;
+  g.depth += g.speed*dt/(26*SC);   // หารด้วย SC เพื่อให้ตัวเลขเท่ากันทุกขนาดจอ
 
   // diver
   const d=g.diver;
