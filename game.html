@@ -25,11 +25,15 @@ canvas{display:block;position:absolute;inset:0;touch-action:none}
 /* ---------- HUD ---------- */
 #hud{position:absolute;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top) + 9px) 10px 0;
   display:flex;flex-direction:column;gap:6px;pointer-events:none;z-index:5}
-.hudRow{display:flex;gap:6px;align-items:center}
+.hudRow{display:flex;gap:5px;align-items:center;flex-wrap:wrap;padding-right:94px}
+#hudBtns{position:absolute;z-index:8;right:10px;top:calc(env(safe-area-inset-top) + 9px);
+  display:none;gap:6px}
+#hudBtns.on{display:flex}
 #hudHearts{letter-spacing:-1px;padding:5px 10px 6px}
 .pill{display:inline-flex;align-items:center;gap:6px;background:rgba(6,40,62,.62);
   border:2.5px solid rgba(255,255,255,.5);border-radius:999px;padding:5px 12px 6px;
-  font-weight:700;font-size:17px;line-height:1.1;white-space:nowrap;backdrop-filter:blur(4px)}
+  font-weight:700;font-size:16px;line-height:1.1;white-space:nowrap;backdrop-filter:blur(4px)}
+@media (max-width:400px){ .pill{font-size:15px;padding:5px 11px 6px;gap:5px} .pill img{width:22px} }
 .pill img{width:26px;height:auto;display:block}
 #meterWrap{margin:0 2px}
 #meter{height:11px;border-radius:999px;background:rgba(6,40,62,.6);
@@ -120,10 +124,12 @@ h1.big{font-family:'Mali';font-weight:700;font-size:clamp(34px,10vw,46px);line-h
     <div class="pill" style="color:#ffe066"><span style="font-size:15px">✨</span><span id="hudRare">0</span></div>
     <div style="flex:1"></div>
     <div class="pill"><span id="hudDepth">0 ม.</span></div>
-    <button id="btnMute" aria-label="เสียง">🔊</button>
-    <button id="btnPause" aria-label="หยุดพัก">⏸</button>
   </div>
   <div id="meterWrap"><div id="meter"><div id="meterFill"></div></div></div>
+</div>
+<div id="hudBtns">
+  <button id="btnMute" aria-label="เสียง">🔊</button>
+  <button id="btnPause" aria-label="หยุดพัก">⏸</button>
 </div>
 
 <a id="homeBtn" href="index.html">🏠 หน้าหลัก</a>
@@ -372,7 +378,16 @@ function fishSVG(f){
     crest=`<path d="${d} Z" fill="${f.crest||glowC}" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>`;
   }
   // ---- มงกุฎ (ระดับตำนาน) ----
-  const crown = tier>=6 ? `<g transform="translate(${cx-30},${cy-ry-56}) scale(.92)"><path d="M0 26 L6 4 L18 18 L30 0 L42 18 L54 4 L60 26 Z" fill="#ffd23f" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="30" cy="6" r="5" fill="#ff6b9d" stroke="#fff" stroke-width="3"/></g>` : '';
+  const crown = tier>=6 ? `<g transform="translate(${cx-26},${cy-ry-24}) scale(.8)"><path d="M0 26 L6 4 L18 18 L30 0 L42 18 L54 4 L60 26 Z" fill="#ffd23f" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><circle cx="30" cy="6" r="5" fill="#ff6b9d" stroke="#fff" stroke-width="3"/></g>` : '';
+
+  // ---- ปีกนางฟ้า (ระดับตำนาน) — วาดไว้หลังตัว ----
+  const wing = tier>=6 ? `
+    <g transform="translate(${cx+12},${cy-ry+14})">
+      <path d="M0 0 Q-20 -44 2 -70 Q34 -54 18 -4 Z"  fill="url(#w${id})" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M6 -2 Q30 -36 68 -38 Q64 -4 20 0 Z"   fill="url(#w${id})" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M2 -6 Q-8 -34 0 -56"  fill="none" stroke="#fff" stroke-width="2.6" opacity=".75"/>
+      <path d="M12 -6 Q34 -26 56 -30" fill="none" stroke="#fff" stroke-width="2.6" opacity=".75"/>
+    </g>` : '';
 
   // ---- ตัวปลา: 4-5 ดาวใช้ไล่สีทแยงหลายสี ----
   let bodyDef;
@@ -389,14 +404,18 @@ function fishSVG(f){
   const shimmer = tier>=5 ? `<rect x="${cx-rx*.1}" y="${cy-ry*1.5}" width="${rx*.26}" height="${ry*3}"
       fill="#fff" opacity=".17" transform="rotate(-22 ${cx} ${cy})"/>` : '';
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="158" viewBox="0 -28 200 158">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="170" viewBox="0 -40 200 170">
    <defs>${bodyDef}
     <linearGradient id="n${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${lighten(c2,26)}"/><stop offset="100%" stop-color="${c2}"/></linearGradient>
     ${rb}
+    <linearGradient id="w${id}" x1="0" y1="1" x2="0.4" y2="0">
+      <stop offset="0%" stop-color="${f.wing||'#ffffff'}" stop-opacity="1"/>
+      <stop offset="60%" stop-color="${f.wing||'#ffffff'}" stop-opacity=".92"/>
+      <stop offset="100%" stop-color="${glowC}" stop-opacity=".75"/></linearGradient>
     <radialGradient id="g${id}"><stop offset="0%" stop-color="${glowC}" stop-opacity="${tier>=5?1:.95}"/><stop offset="52%" stop-color="${glowC}" stop-opacity="${tier>=5?.5:.42}"/><stop offset="100%" stop-color="${glowC}" stop-opacity="0"/></radialGradient>
     <clipPath id="c${id}"><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"/></clipPath>
    </defs>
-   ${glow}${ring}${crest}
+   ${glow}${ring}${crest}${wing}
    <path d="${tail}" fill="${fF}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
    <path d="${dorsal}" fill="${fF}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
    <path d="${anal}" fill="${fF}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
@@ -441,22 +460,38 @@ function jellySVG(){
    <path d="M52 58 q8 8 16 0" fill="none" stroke="#4a2c78" stroke-width="4" stroke-linecap="round"/></svg>`;
 }
 function chestSVG(kind){
-  const gold=kind==='gold', rb=kind==='rainbow';
-  const wood = rb?'#9b5cc9' : gold?'#c9971f' : '#c8763a';
-  const lid  = rb?'#7b3fa8' : gold?'#a87a12' : '#a4622c';
-  const band = rb?'url(#cg)' : '#ffd23f';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="118" viewBox="0 0 132 118">
-   <defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="0">
+  const gold=kind==='gold', rb=kind==='rainbow', dr=kind==='dragon';
+  const wood = dr?'url(#dgold)' : rb?'#9b5cc9' : gold?'#c9971f' : '#c8763a';
+  const lid  = dr?'url(#dgold2)': rb?'#7b3fa8' : gold?'#a87a12' : '#a4622c';
+  const band = dr?'#fff6c8' : rb?'url(#cg)' : '#ffd23f';
+  // ลำแสงทองแผ่ออกรอบหีบมังกร
+  let rays='';
+  if(dr){ for(let i=0;i<12;i++){ const a=i*30*Math.PI/180, L=i%2?54:38;
+      rays+=`<path d="M66 62 L${(66+Math.cos(a)*L).toFixed(1)} ${(62+Math.sin(a)*L).toFixed(1)}"
+        stroke="#fff3a8" stroke-width="${i%2?7:4}" stroke-linecap="round" opacity=".55"/>`; } }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="152" height="138" viewBox="-10 -12 152 138">
+   <defs>
+    <linearGradient id="cg" x1="0" y1="0" x2="1" y2="0">
      <stop offset="0%" stop-color="#ff5d94"/><stop offset="30%" stop-color="#ffd23f"/>
-     <stop offset="60%" stop-color="#2fd6a0"/><stop offset="100%" stop-color="#6cc6ff"/></linearGradient></defs>
+     <stop offset="60%" stop-color="#2fd6a0"/><stop offset="100%" stop-color="#6cc6ff"/></linearGradient>
+    <linearGradient id="dgold" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0%" stop-color="#fff0a3"/><stop offset="42%" stop-color="#ffc21f"/><stop offset="100%" stop-color="#a86f0a"/></linearGradient>
+    <linearGradient id="dgold2" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0%" stop-color="#ffe98a"/><stop offset="100%" stop-color="#d9a318"/></linearGradient>
+    <radialGradient id="dhalo"><stop offset="0%" stop-color="#fffbe0" stop-opacity=".95"/>
+     <stop offset="55%" stop-color="#ffd75e" stop-opacity=".45"/><stop offset="100%" stop-color="#ffd75e" stop-opacity="0"/></radialGradient>
+   </defs>
+   ${dr?`<circle cx="66" cy="62" r="82" fill="url(#dhalo)"/>${rays}`:''}
    <path d="M14 56 Q14 24 66 24 Q118 24 118 56 Z" fill="${lid}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
    <rect x="54" y="24" width="24" height="32" fill="${band}" stroke="#fff" stroke-width="5"/>
    <rect x="14" y="54" width="104" height="52" rx="12" fill="${wood}" stroke="#fff" stroke-width="6"/>
    <rect x="14" y="66" width="104" height="16" fill="${band}" stroke="#fff" stroke-width="5"/>
    <rect x="56" y="60" width="20" height="30" rx="6" fill="${band}" stroke="#fff" stroke-width="5"/>
-   <circle cx="66" cy="74" r="5" fill="#8a4b16"/>
-   ${gold||rb?starPath(24,16,13,'#fff8c8')+starPath(112,18,11,'#fff8c8'):''}
-   ${rb?starPath(66,8,12,'#ffffff'):''}</svg>`;
+   <circle cx="66" cy="74" r="5" fill="${dr?'#a3700f':'#8a4b16'}"/>
+   ${dr?`<circle cx="30" cy="72" r="7" fill="#ff6b9d" stroke="#fff" stroke-width="3"/>
+        <circle cx="102" cy="72" r="7" fill="#6cc6ff" stroke="#fff" stroke-width="3"/>`:''}
+   ${gold||rb||dr?starPath(24,14,13,'#fff8c8')+starPath(112,16,11,'#fff8c8'):''}
+   ${rb||dr?starPath(66,4,14,'#ffffff'):''}</svg>`;
 }
 function toImg(svg){ const i=new Image(); i.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); return i; }
 
@@ -497,6 +532,26 @@ const FISH=[
  {n:'ปลาอเมทิสต์',t:4,shape:'tall',fin:'veil',grad:['#f0c9ff','#b06bf0','#6b2fb5'],glow:'#c88cff'},
  {n:'ปลาปะการัง',t:4,shape:'oval',fin:'veil',grad:['#ffd9e8','#ff8ab5','#ff6a3d'],glow:'#ff9ec4'},
  {n:'ปลาดาวเงิน',t:4,shape:'long',fin:'veil',grad:['#ffffff','#dbe9f5','#8fb6d8'],glow:'#cfe6ff'},
+ {n:'ปลาทับทิม',t:4,shape:'round',fin:'veil',grad:['#ffb3c1','#ff4d6d','#a4133c'],glow:'#ff7a94'},
+ {n:'ปลามะม่วง',t:4,shape:'oval',fin:'veil',grad:['#fff3b0','#ffca3a','#f77f00'],glow:'#ffd75e'},
+ {n:'ปลาองุ่น',t:4,shape:'round',fin:'veil',grad:['#e0c3fc','#a26bd8','#5a189a'],glow:'#bb8fee'},
+ {n:'ปลาแตงโม',t:4,shape:'oval',fin:'veil',grad:['#ffd6e0','#ff5c8a','#38b000'],glow:'#ff8fae'},
+ {n:'ปลาสายฟ้า',t:4,shape:'long',fin:'veil',grad:['#fffbe6','#ffe066','#f2a900'],glow:'#ffe98a'},
+ {n:'ปลาหิมะ',t:4,shape:'round',fin:'veil',grad:['#ffffff','#e0f0ff','#7ab8e8'],glow:'#cfe8ff'},
+ {n:'ปลาเมฆชมพู',t:4,shape:'round',fin:'veil',grad:['#ffe5ec','#ffb3c6','#c77dff'],glow:'#ffb8d8'},
+ {n:'ปลาทะเลสาบ',t:4,shape:'tall',fin:'veil',grad:['#c8f5e8','#3dc9b0','#0a7d8c'],glow:'#5fe0c8'},
+ {n:'ปลาพลบค่ำ',t:4,shape:'tall',fin:'veil',grad:['#ffd6a5','#e08bb0','#5a3d9a'],glow:'#e0a3c8'},
+ {n:'ปลาสนิมทอง',t:4,shape:'oval',fin:'veil',grad:['#ffe8b0','#d9a441','#8c5a1f'],glow:'#e8c070'},
+ {n:'ปลาใบไม้ร่วง',t:4,shape:'tall',fin:'veil',grad:['#ffe0a3','#ff9e3d','#c1440e'],glow:'#ffb05e'},
+ {n:'ปลาน้ำผึ้ง',t:4,shape:'round',fin:'veil',grad:['#fff0c2','#ffc233','#c98a1a'],glow:'#ffd75e'},
+ {n:'ปลาสะระแหน่',t:4,shape:'long',fin:'veil',grad:['#d9ffe8','#5fe3a1','#1a9e6b'],glow:'#7fe8b8'},
+ {n:'ปลาลูกอม',t:4,shape:'round',fin:'veil',grad:['#ffe0f5','#ff8fd8','#8fd4ff'],glow:'#ffa8e0'},
+ {n:'ปลาฟองสบู่',t:4,shape:'round',fin:'veil',grad:['#e8faff','#a8dfff','#c9b8ff'],glow:'#bfeaff'},
+ {n:'ปลาแสงเทียน',t:4,shape:'tall',fin:'veil',grad:['#fff5d6','#ffcf70','#e06d3d'],glow:'#ffd98f'},
+ {n:'ปลาหมึกสี',t:4,shape:'long',fin:'veil',grad:['#d6e0ff','#8f9fff','#3d3d99'],glow:'#a3b0ff'},
+ {n:'ปลาปีกนก',t:4,shape:'tall',fin:'veil',grad:['#e0fff0','#8fe8c8','#3d9e8c'],glow:'#a3f0d8'},
+ {n:'ปลาดินเผา',t:4,shape:'oval',fin:'veil',grad:['#ffd9b8','#e08a5c','#8c4a2f'],glow:'#e8a884'},
+ {n:'ปลาหยก',t:4,shape:'round',fin:'veil',grad:['#e0fff5','#7fe0c8','#2f8c7a'],glow:'#9fe8d8'},
  /* ---------- ⭐⭐⭐⭐⭐ เจิดจ้า (10) — ไล่สี 5 สี + หงอน + แถบแสงพาดตัว ---------- */
  {n:'ปลานางฟ้า',t:5,shape:'tall',fin:'veil',grad:['#ff9ee0','#c86bff','#6ba8ff','#5fe8d8','#ffd86b'],glow:'#ff8fd8',crest:'#ff7ad0'},
  {n:'ปลาราชินีสายรุ้ง',t:5,shape:'tall',fin:'veil',grad:['#ff2d75','#ff9500','#2fd66b','#00b4ff','#8b3fff'],glow:'#ffb03f',crest:'#ffd23f'},
@@ -508,13 +563,38 @@ const FISH=[
  {n:'ปลาหางนกยูงทอง',t:5,shape:'tall',fin:'veil',grad:['#ffe23f','#ffab00','#5fd84f','#00c4c9','#2f5fd8'],glow:'#ffc63f',crest:'#ffd23f'},
  {n:'ปลาผีเสื้อสวรรค์',t:5,shape:'tall',fin:'veil',grad:['#ffd23f','#ff6bb5','#a86bff','#4fb0ff','#3fe0a8'],glow:'#ff9ad8',crest:'#ff8fd0'},
  {n:'ปลามุกทะเลลึก',t:5,shape:'round',fin:'veil',grad:['#ffb8e8','#b88fff','#6fc8ff','#7fe8c8','#ffe08f'],glow:'#c9a0ff',crest:'#d8a8ff'},
+ {n:'ปลาสายฟ้าฟาด',t:5,shape:'long',fin:'veil',grad:['#fff8c8','#ffe23f','#ff8a00','#ff3d6b','#8b3fff'],glow:'#ffd75e',crest:'#ffe066'},
+ {n:'ปลาพระอาทิตย์',t:5,shape:'round',fin:'veil',grad:['#fff0a3','#ffc233','#ff7a1f','#ff3d5c','#c02f8c'],glow:'#ffb03d',crest:'#ffd23f'},
+ {n:'ปลาดวงดาว',t:5,shape:'tall',fin:'veil',grad:['#fffbe6','#ffe066','#8fd4ff','#6b6bff','#3d1f8c'],glow:'#9fc2ff',crest:'#ffe98a'},
+ {n:'ปลาแสงเงิน',t:5,shape:'long',fin:'veil',grad:['#ffffff','#d6e8ff','#8fa8e8','#6b5cc9','#3d2f8c'],glow:'#a8c2ff',crest:'#dbe8ff'},
+ {n:'ปลาทะเลไฟ',t:5,shape:'oval',fin:'veil',grad:['#fff0c8','#ffab3d','#ff4d3d','#c92f6b','#6b1f8c'],glow:'#ff8a5e',crest:'#ffc26b'},
+ {n:'ปลามหาสมุทร',t:5,shape:'tall',fin:'veil',grad:['#c8fff5','#3de0d6','#1f9ec9','#2f5cc9','#5b2fb5'],glow:'#4fe0e8',crest:'#8ff0e8'},
+ {n:'ปลาป่าฝน',t:5,shape:'round',fin:'veil',grad:['#e8ffd6','#8fe066','#2fb56b','#1f8c9e','#2f4d99'],glow:'#8fe08f',crest:'#bff0a3'},
+ {n:'ปลาดอกซากุระ',t:5,shape:'tall',fin:'veil',grad:['#fff0f5','#ffb3d9','#ff6bb5','#c95cd8','#7a3dc9'],glow:'#ff9ed8',crest:'#ffc2e8'},
+ {n:'ปลาแสงเหนือคู่',t:5,shape:'long',fin:'veil',grad:['#d6fff0','#5fe8c8','#3dc9ff','#8f6bff','#e05cc4'],glow:'#6fe8e0',crest:'#a3f0e0'},
+ {n:'ปลาไข่มุกไฟ',t:5,shape:'round',fin:'veil',grad:['#fff8e8','#ffd6a3','#ff9e6b','#e05c8c','#8f3dc9'],glow:'#ffb88f',crest:'#ffd6b8'},
+ {n:'ปลาเพชรน้ำงาม',t:5,shape:'tall',fin:'veil',grad:['#ffffff','#e0f5ff','#a3d9ff','#c9b8ff','#ffc2e8'],glow:'#c2e8ff',crest:'#e8f8ff'},
+ {n:'ปลามรกตราตรี',t:5,shape:'oval',fin:'veil',grad:['#d6ffe8','#3de08f','#1f9e8c','#2f5c9e','#3d2f8c'],glow:'#5fe0a8',crest:'#8ff0c2'},
+ {n:'ปลาไฟฟ้า',t:5,shape:'long',fin:'veil',grad:['#f0fff5','#8fffd6','#3de0ff','#5c8fff','#a03dff'],glow:'#5fe8ff',crest:'#a3ffe8'},
+ {n:'ปลาทองคำขาว',t:5,shape:'round',fin:'veil',grad:['#ffffff','#fff0c8','#ffd23f','#e0a33d','#a36b2f'],glow:'#ffdd8a',crest:'#fff0c8'},
+ {n:'ปลาราตรีสวัสดิ์',t:5,shape:'tall',fin:'veil',grad:['#e0d6ff','#8f7ae0','#5c4dc9','#3d2f8c','#1f1a5c'],glow:'#9f8fe8',crest:'#c9b8ff'},
+ {n:'ปลาผลไม้รวม',t:5,shape:'round',fin:'veil',grad:['#fff0a3','#ff9e5c','#ff5c8f','#a35cff','#5cc9ff'],glow:'#ffa87a',crest:'#ffd28a'},
+ {n:'ปลาจันทร์เสี้ยว',t:5,shape:'tall',fin:'veil',grad:['#fffce8','#ffe8a3','#c9d9ff','#8f9ee0','#5c5c9e'],glow:'#e0e0ff',crest:'#fff0c2'},
+ {n:'ปลาปีกแก้ว',t:5,shape:'long',fin:'veil',grad:['#ffffff','#d6fff5','#a3e8ff','#c9c2ff','#ffd6f0'],glow:'#b8f0ff',crest:'#dbfaff'},
+ {n:'ปลาสายรุ้งคู่',t:5,shape:'tall',fin:'veil',grad:['#ff5c8f','#ffb03d','#5ce08f','#3dc9ff','#a35cff'],glow:'#ffb85e',crest:'#ffd23f'},
+ {n:'ปลาวิมาน',t:5,shape:'round',fin:'veil',grad:['#fff5d6','#ffc2e8','#c9a3ff','#8fc2ff','#a3ffd6'],glow:'#e0b8ff',crest:'#ffd6f0'},
  /* ---------- 👑 ตำนาน (1) ---------- */
- {n:'ปลามังกรสายรุ้ง',t:6,shape:'tall',fin:'veil',rainbow:1,glow:'#ffd77a',crest:'#ffd23f'},
+ {n:'ปลามังกรสายรุ้ง',t:6,shape:'tall',fin:'veil',rainbow:1,glow:'#ffd77a',wing:'#fff3c8'},
+ {n:'ปลานางฟ้าราตรี',t:6,shape:'tall',fin:'veil',grad:['#e8d6ff','#a37aff','#5c3dc9','#2f1f8c','#ffd6f5'],glow:'#b8a3ff',wing:'#e8dbff'},
+ {n:'ปลาเทพสมุทร',t:6,shape:'tall',fin:'veil',grad:['#c8fff0','#3de0d6','#1f8fc9','#2f4dc9','#7a3dd6'],glow:'#5fe8e8',wing:'#c8f8ff'},
+ {n:'ปลาสุริยเทพ',t:6,shape:'round',fin:'veil',grad:['#fff8c8','#ffd23f','#ff8a1f','#e0405c','#a32f8c'],glow:'#ffc25e',wing:'#fff0b8'},
+ {n:'ปลาจันทราเทวี',t:6,shape:'tall',fin:'veil',grad:['#ffffff','#e8e0ff','#b8a3ff','#8f7ae0','#ffd6f0'],glow:'#d6c8ff',wing:'#f5f0ff'},
 ];
 const IMG=FISH.map(f=>toImg(fishSVG(f)));
 const IMG_DIVER=toImg(diverSVG()), IMG_JELLY=toImg(jellySVG());
-const IMG_CHEST=toImg(chestSVG('normal')), IMG_CHESTG=toImg(chestSVG('gold')), IMG_CHESTR=toImg(chestSVG('rainbow'));
-const CHEST_IMG={normal:IMG_CHEST, gold:IMG_CHESTG, rainbow:IMG_CHESTR, dragon:IMG_CHESTR};
+const IMG_CHEST=toImg(chestSVG('normal')), IMG_CHESTG=toImg(chestSVG('gold'));
+const IMG_CHESTR=toImg(chestSVG('rainbow')), IMG_CHESTD=toImg(chestSVG('dragon'));
+const CHEST_IMG={normal:IMG_CHEST, gold:IMG_CHESTG, rainbow:IMG_CHESTR, dragon:IMG_CHESTD};
 const T1=[],T2=[],T3=[],T4=[],T5=[],T6=[];
 const TIER=[null,T1,T2,T3,T4,T5,T6];
 FISH.forEach((f,i)=>TIER[f.t].push(i));
@@ -605,13 +685,13 @@ function resize(){
 window.addEventListener('resize',resize); window.addEventListener('orientationchange',()=>setTimeout(resize,180));
 resize();
 
-const CHEST_MS=20000, HEART_MAX=3, FISH_PER_HEART=20;
+const CHEST_MS=20000, HEART_MAX=3;
 let G=null, running=false, paused=false, lastT=0, attract=false;
 
 function newGame(){
   G={
     t:0, chestT:0, depth:0, caught:0, rare:0, newIds:[], worldX:0, scen:[], scenT:0,
-    hearts:HEART_MAX, sinceHeart:0, deep:{}, over:false,
+    hearts:HEART_MAX, deep:{}, over:false,
     speed:105*SC, diver:{x:W*.24,y:H*.5,vy:0,rot:0,inv:0},
     fish:[], jelly:[], chest:null, pops:[], parts:[], bubs:[],
     correctRun:0, shake:0, spawnT:.4, jellyT:2.4,
@@ -622,9 +702,9 @@ function fishSize(i){ return [0,68,78,88,98,108,124][FISH[i].t]*SC; }
 // ยิ่งดำลึก ยิ่งมีโอกาสเจอปลาระดับสูงว่ายผ่าน
 function pickSpawnId(depth){
   const r=Math.random();
-  if(depth>=380 && r<.13) return rnd(T5);
-  if(depth>=220 && r<.26) return rnd(T4);
-  if(depth>=100 && r<.40) return rnd(T3);
+  if(depth>=300 && r<.15) return rnd(T5);
+  if(depth>=180 && r<.30) return rnd(T4);
+  if(depth>=80  && r<.44) return rnd(T3);
   if(r<.55) return rnd(T2);
   return rnd(T1);
 }
@@ -638,7 +718,7 @@ function spawnFishGroup(){
   const baseY=96*SC+(.06+rr*.88)*playH;
   const arc=(Math.random()<.5?1:-1)*(16+Math.random()*22)*SC;
   for(let k=0;k<n;k++){
-    const id = (k===0 || (k===1 && G.depth>=220)) ? pickSpawnId(G.depth)
+    const id = (k===0 || (k===1 && G.depth>=180)) ? pickSpawnId(G.depth)
            : (rare2&&k===1 ? rnd(T2) : rnd(T1));
     const sz=fishSize(id);
     let y=baseY+k*arc;
@@ -717,10 +797,7 @@ function update(dt){
     if(!attract && Math.hypot(f.x-d.x,f.y-d.y) < dr+f.sz*.3){
       f.gone=.01; g.caught++;
       if(FISH[f.id].t>=3) g.rare++;
-      g.sinceHeart++;
-      if(g.sinceHeart>=FISH_PER_HEART){ g.sinceHeart=0;
-        if(g.hearts<HEART_MAX){ g.hearts++; beep('rare');
-          g.pops.push({x:d.x,y:d.y-46*SC,txt:'+1 หัวใจ!',t:0,c:'#ff8fae'}); } }
+      // หัวใจไม่คืนแล้ว — หมดคือจบ
       if(!S.dex.includes(f.id)){ S.dex.push(f.id); g.newIds.push(f.id); save(); }
       g.pops.push({x:f.x,y:f.y,txt:'+1',t:0,c:'#ffe066'});
       burst(f.x,f.y,FISH[f.id].t>=2?'#ffe9a8':'#cdf1ff');
@@ -734,7 +811,7 @@ function update(dt){
     const j=g.jelly[i]; j.x-=g.speed*.82*dt; j.ph+=dt*1.5; j.y+=Math.sin(j.ph)*14*SC*dt;
     if(!attract && d.inv<=0 && Math.hypot(j.x-d.x,(j.y+18*SC)-d.y) < dr+j.sz*.24){
       d.inv=1.4; g.shake=.5; beep('bump');
-      g.hearts--; g.sinceHeart=0;
+      g.hearts--;
       g.pops.push({x:d.x,y:d.y-34*SC,txt:g.hearts>0?'โอ๊ะ!':'หมดแรงแล้ว',t:0,c:'#ffb3c6'});
       d.vy=-180*SC;
       if(g.hearts<=0){ g.hearts=0; endRound(); return; }
@@ -848,10 +925,11 @@ function draw(){
       drawImg(IMG[f.id],f.x,f.y,f.sz*sc,Math.sin(f.ph)*.12, f.gone>0?Math.max(0,1-f.gone*3):1);
     });
     if(g.chest){ const c=g.chest;
-      ctx.save(); ctx.globalAlpha=.5;
-      const rg=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.sz*.85);
-      rg.addColorStop(0, c.kind==='normal'?'rgba(255,226,150,.7)':'rgba(255,225,120,.95)'); rg.addColorStop(1,'rgba(255,226,150,0)');
-      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(c.x,c.y,c.sz*.85,0,6.29); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.globalAlpha=c.kind==='dragon'?.85:.5;
+      const rg=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.sz*(c.kind==='dragon'?1.25:.85));
+      rg.addColorStop(0, c.kind==='dragon'?'rgba(255,250,210,1)':c.kind==='normal'?'rgba(255,226,150,.7)':'rgba(255,225,120,.95)');
+      rg.addColorStop(1,'rgba(255,226,150,0)');
+      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(c.x,c.y,c.sz*(c.kind==='dragon'?1.25:.85),0,6.29); ctx.fill(); ctx.restore();
       drawImg(CHEST_IMG[c.kind]||IMG_CHEST,c.x,c.y+Math.sin(c.ph)*5*SC,c.sz);
     }
     const d=g.diver;
@@ -892,6 +970,7 @@ document.getElementById('hudFishIc').src=IMG[0].src;
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   if(id) document.getElementById(id).classList.add('on');
   document.getElementById('hud').style.display = id?'none':'flex';
+  document.getElementById('hudBtns').classList.toggle('on', !id);
   document.getElementById('homeBtn').classList.toggle('on', !!id);
 }
 function startAttract(){ newGame(); attract=true; running=true; paused=false; holding=false; }
@@ -959,7 +1038,7 @@ function answer(pick,btn){
   if(ok){
     G.correctRun++;
     beep(curKind==='normal'?'rare':'gold');
-    id = curKind==='dragon' ? T6[0]
+    id = curKind==='dragon' ? pickReward(T6)
        : curKind==='rainbow' ? pickReward(T5)
        : curKind==='gold' ? pickReward(T4)
        : pickReward(T3);
