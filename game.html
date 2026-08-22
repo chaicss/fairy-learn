@@ -1322,8 +1322,12 @@ function update(dt){
       d.inv=1.4; g.shake=.5;
       if(g.shield){
         g.shield=false; beep('rare');
-        g.pops.push({x:d.x,y:d.y-34*SC,txt:'เกราะกันไว้!',t:0,c:'#8cffd8'});
-        burst(d.x,d.y,'#b0ffe4'); d.vy=-140*SC;
+        g.pops.push({x:d.x,y:d.y-34*SC,txt:'ฟองแตก! กันไว้ได้',t:0,c:'#8cffd8'});
+        burst(d.x,d.y,'#b0ffe4'); burst(d.x,d.y,'#ffffff');
+        for(let k=0;k<10;k++){ const a=Math.random()*6.28, sp2=(90+Math.random()*150)*SC;
+          g.parts.push({x:d.x+Math.cos(a)*60*SC,y:d.y+Math.sin(a)*60*SC,
+            vx:Math.cos(a)*sp2,vy:Math.sin(a)*sp2-30*SC,t:0,c:'#dffff2',r:(3+Math.random()*4)*SC}); }
+        d.vy=-140*SC;
       } else {
         beep('bump'); g.hearts--;
         g.pops.push({x:d.x,y:d.y-34*SC,txt:g.hearts>0?'โอ๊ะ!':'หมดแรงแล้ว',t:0,c:'#ffb3c6'});
@@ -1359,6 +1363,29 @@ function update(dt){
   if(g.shake>0) g.shake-=dt;
 
   // ไม่มีตัวจับเวลาแล้ว — จบรอบเมื่อหัวใจหมด
+}
+// ฟองอากาศห่อตัวนักดำน้ำ — บอกว่ายังมีเกราะเหลืออยู่ ไม่ต้องมองแถบบน
+function drawShieldBubble(x,y,t){
+  const wob=Math.sin(t/230), r=76*SC*(1+wob*.035);
+  const ry=r*(1-wob*.03);
+  ctx.save();
+  const g1=ctx.createRadialGradient(x-r*.34,y-r*.36,r*.06,x,y,r);
+  g1.addColorStop(0,'rgba(255,255,255,.34)');
+  g1.addColorStop(.5,'rgba(150,255,220,.10)');
+  g1.addColorStop(.86,'rgba(120,240,205,.20)');
+  g1.addColorStop(1,'rgba(160,255,225,.42)');
+  ctx.fillStyle=g1;
+  ctx.beginPath(); ctx.ellipse(x,y,r,ry,0,0,6.29); ctx.fill();
+  ctx.lineWidth=4*SC; ctx.strokeStyle='rgba(255,255,255,.9)';
+  ctx.beginPath(); ctx.ellipse(x,y,r,ry,0,0,6.29); ctx.stroke();
+  ctx.lineWidth=2*SC; ctx.strokeStyle='rgba(124,232,192,.95)';
+  ctx.beginPath(); ctx.ellipse(x,y,r-3.5*SC,ry-3.5*SC,0,0,6.29); ctx.stroke();
+  // ไฮไลต์แบบฟองสบู่
+  ctx.fillStyle='rgba(255,255,255,.6)';
+  ctx.beginPath(); ctx.ellipse(x-r*.42,y-ry*.46,r*.24,ry*.13,-0.55,0,6.29); ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.34)';
+  ctx.beginPath(); ctx.ellipse(x+r*.44,y+ry*.40,r*.13,ry*.07,-0.5,0,6.29); ctx.fill();
+  ctx.restore();
 }
 function burst(x,y,col){
   for(let i=0;i<9;i++){ const a=Math.random()*6.28, s=(60+Math.random()*130)*SC;
@@ -1467,7 +1494,8 @@ function draw(){
     }
     const d=g.diver;
     if(!attract){ const blink = d.inv>0 && Math.floor(d.inv*12)%2===0;
-      drawImg(IMG_DIVER,d.x,d.y,112*SC,d.rot,blink?.4:1); }
+      drawImg(IMG_DIVER,d.x,d.y,112*SC,d.rot,blink?.4:1);
+      if(g.shield) drawShieldBubble(d.x,d.y,g.t); }
     g.parts.forEach(p=>{ ctx.globalAlpha=Math.max(0,1-p.t/.7); ctx.fillStyle=p.c;
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.29); ctx.fill(); ctx.globalAlpha=1; });
     ctx.textAlign='center'; ctx.font='700 '+(26*SC)+'px Mali, sans-serif';
