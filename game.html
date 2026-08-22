@@ -685,13 +685,13 @@ function resize(){
 window.addEventListener('resize',resize); window.addEventListener('orientationchange',()=>setTimeout(resize,180));
 resize();
 
-const CHEST_MS=20000, HEART_MAX=3;
+const CHEST_MS=20000, HEART_MAX=3, FISH_PER_HEART=300;
 let G=null, running=false, paused=false, lastT=0, attract=false;
 
 function newGame(){
   G={
     t:0, chestT:0, depth:0, caught:0, rare:0, newIds:[], worldX:0, scen:[], scenT:0,
-    hearts:HEART_MAX, deep:{}, over:false,
+    hearts:HEART_MAX, sinceHeart:0, deep:{}, over:false,
     speed:105*SC, diver:{x:W*.24,y:H*.5,vy:0,rot:0,inv:0},
     fish:[], jelly:[], chest:null, pops:[], parts:[], bubs:[],
     correctRun:0, shake:0, spawnT:.4, jellyT:2.4,
@@ -797,7 +797,15 @@ function update(dt){
     if(!attract && Math.hypot(f.x-d.x,f.y-d.y) < dr+f.sz*.3){
       f.gone=.01; g.caught++;
       if(FISH[f.id].t>=3) g.rare++;
-      // หัวใจไม่คืนแล้ว — หมดคือจบ
+      // เก็บครบ 300 ตัวได้หัวใจคืน 1 ดวง (ถ้าเต็ม 3 อยู่แล้วไม่ต้องเพิ่ม แต่ตัวนับเริ่มใหม่)
+      g.sinceHeart++;
+      if(g.sinceHeart>=FISH_PER_HEART){
+        g.sinceHeart=0;
+        if(g.hearts<HEART_MAX){
+          g.hearts++; beep('gold');
+          g.pops.push({x:d.x,y:d.y-50*SC,txt:'+1 หัวใจ! ❤️',t:0,c:'#ff8fae'});
+        }
+      }
       if(!S.dex.includes(f.id)){ S.dex.push(f.id); g.newIds.push(f.id); save(); }
       g.pops.push({x:f.x,y:f.y,txt:'+1',t:0,c:'#ffe066'});
       burst(f.x,f.y,FISH[f.id].t>=2?'#ffe9a8':'#cdf1ff');
