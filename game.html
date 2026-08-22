@@ -126,7 +126,7 @@ h1.big{font-family:'Mali';font-weight:700;font-size:clamp(34px,10vw,46px);line-h
   <div class="hudRow">
     <div class="pill" id="hudHearts">❤️❤️❤️</div>
     <div class="pill"><img id="hudFishIc" alt=""><span id="hudFish">0</span></div>
-    <div class="pill" style="color:#ffe066"><span style="font-size:15px">✨</span><span id="hudRare">0</span></div>
+    <div class="pill" style="color:#ffe066"><span style="font-size:15px">💎</span><span id="hudScore">0</span></div>
     <div style="flex:1"></div>
     <div class="pill"><span id="hudDepth">0 ม.</span></div>
   </div>
@@ -144,7 +144,7 @@ h1.big{font-family:'Mali';font-weight:700;font-size:clamp(34px,10vw,46px);line-h
 <div class="screen dim on" id="scrStart">
   <div class="sub" style="letter-spacing:3px">ปิติผจญภัย</div>
   <h1 class="big">ดำน้ำเก็บปลา</h1>
-  <div class="sub" style="margin-top:2px">เก็บปลาให้ครบ 40 ชนิด!</div>
+  <div class="sub" style="margin-top:2px" id="startGoal">เก็บปลาให้ครบทุกชนิด!</div>
   <div id="startDiver" style="margin:14px 0 4px"></div>
   <div class="rowBtn" style="flex-direction:column;align-items:center;gap:11px">
     <button class="btn big" id="btnPlay">▶ เล่นเลย!</button>
@@ -206,7 +206,7 @@ h1.big{font-family:'Mali';font-weight:700;font-size:clamp(34px,10vw,46px);line-h
       <div class="stat" style="background:#eaf7ff;border-color:#cbe9f7">
         <div class="n" id="endFish">0</div><div class="l" style="color:#5a86a0">ปลาที่เก็บได้</div></div>
       <div class="stat" style="background:#fff6da;border-color:#ffe9a8">
-        <div class="n" id="endRare" style="color:#c88a08">0</div><div class="l" style="color:#a6802c">ปลาหายาก</div></div>
+        <div class="n" id="endScore" style="color:#c88a08">0</div><div class="l" style="color:#a6802c">💎 คะแนน</div></div>
       <div class="stat" style="background:#f0ecff;border-color:#ddd4ff">
         <div class="n" id="endXP" style="color:#6b46d9">+0</div><div class="l" style="color:#7c66c4">XP ที่ได้</div></div>
     </div>
@@ -223,7 +223,7 @@ h1.big{font-family:'Mali';font-weight:700;font-size:clamp(34px,10vw,46px);line-h
   <div style="font-family:'Mali';font-weight:700;font-size:31px;margin-top:6px">📖 สมุดปลาของฉัน</div>
   <div class="sub" id="dexHead"></div>
   <div id="dexGrid"></div>
-  <div style="font-size:13px;color:#bcdff0;margin-top:12px;text-align:center;line-height:1.6">
+  <div id="dexHint" style="font-size:13px;color:#bcdff0;margin-top:12px;text-align:center;line-height:1.6">
     ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>ตอบถูกติดกันหลายข้อ หีบยิ่งดี ปลายิ่งสวย
   </div>
   <button class="btn" id="btnDexBack" style="margin:12px 0 4px;font-size:22px;padding:10px 26px 13px">↩ กลับ</button>
@@ -243,9 +243,11 @@ const S={
   xp:store.get('xp',0), streak:store.get('streak',0), lastDay:store.get('lastDay',''),
   today:store.get('today',''), todayXP:store.get('todayXP',0),
   dex:store.get('dex',[]), best:store.get('gameBestDepth',0), muted:store.get('muted',false),
+  myth:store.get('mythUnlock',false),
 };
 function save(){ ['xp','streak','lastDay','today','todayXP'].forEach(k=>store.set(k,S[k]));
-  store.set('dex',S.dex); store.set('gameBestDepth',S.best); store.set('muted',S.muted); }
+  store.set('dex',S.dex); store.set('gameBestDepth',S.best); store.set('muted',S.muted);
+  store.set('mythUnlock',S.myth); }
 function dayKey(d){ d=d||new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function yesterdayKey(){ const d=new Date(); d.setDate(d.getDate()-1); return dayKey(d); }
 function rollDay(){ const t=dayKey();
@@ -599,6 +601,29 @@ const FISH=[
  {n:'นางเงือก',t:6,build:'mermaid',grad:['#7ef9d0','#3dc9ff','#6b8fff','#a86bff','#ff8fd8'],glow:'#8fe8ff',hair:'#7a3dd6',top:'#ff6bb5',skin:'#ffcf9e',szMul:1.05},
  {n:'มังกรทะเล',t:6,build:'dragon',grad:['#c8ff9e','#3de08f','#1fb5b5','#2f6bd6','#8f3dd6'],glow:'#5fe8b0',crest:'#ffd23f',wing:'#dfffe8',szMul:1.25},
  {n:'ฉลามราชา',t:6,build:'shark',grad:['#e8f4ff','#a8c8e8','#5c8fc9','#2f5c99','#1f3a6b'],glow:'#9fd0ff',szMul:1.3},
+
+ /* ---------- 👑 ตำนาน: ตระกูลนางเงือกสายรุ้ง (10) ---------- */
+ {n:'เงือกสายรุ้ง',t:6,build:'mermaid',grad:['#ff5c8f','#ffb03d','#5ce08f','#3dc9ff','#a35cff'],glow:'#ffd23f',hair:'#ff3d8f',top:'#ffd23f',skin:'#ffd9b0',wing:'#fff0c8',szMul:1.05},
+ {n:'เงือกพระอาทิตย์',t:6,build:'mermaid',grad:['#fff8c8','#ffd23f','#ff9a1f','#ff5c3d','#ff3d8f'],glow:'#ffc25e',hair:'#ff7a1f',top:'#fff0a3',skin:'#ffcf9e',wing:'#fff3c8',szMul:1.05},
+ {n:'เงือกดอกไม้ทะเล',t:6,build:'mermaid',grad:['#ffd6f5','#ff8fd8','#c96bff','#8f5cff','#5cc9ff'],glow:'#ff9ee0',hair:'#c93df0',top:'#7ef9d0',skin:'#ffd9b0',wing:'#ffe0f7',szMul:1.05},
+ {n:'เงือกไข่มุก',t:6,build:'mermaid',grad:['#ffffff','#dff4ff','#a8d0ff','#c48fff','#ff9ed6'],glow:'#c8e4ff',hair:'#8fb8ff',top:'#ffb3e0',skin:'#ffe0c2',wing:'#ffffff',szMul:1.05},
+ {n:'เงือกปะการัง',t:6,build:'mermaid',grad:['#fff0a3','#ffb03d','#ff5c8f','#e03d9e','#a35cff'],glow:'#ffa8c2',hair:'#ff5c3d',top:'#5ce0c9',skin:'#ffcf9e',wing:'#ffe8c8',szMul:1.05},
+ {n:'เงือกน้ำแข็ง',t:6,build:'mermaid',grad:['#ffffff','#c8f4ff','#7fd8ff','#5c9eff','#a88cff'],glow:'#9fe0ff',hair:'#3dc9ff',top:'#e8f8ff',skin:'#ffe0c2',wing:'#e8fbff',szMul:1.05},
+ {n:'เงือกดาวตก',t:6,build:'mermaid',grad:['#fff8c8','#ffd23f','#ff6bb5','#8f5cff','#3d5cff'],glow:'#ffe066',hair:'#5c3dc9',top:'#ffd23f',skin:'#ffd0a8',wing:'#fff3c8',szMul:1.05},
+ {n:'เงือกลูกอม',t:6,build:'mermaid',grad:['#ffe0f0','#ff9ec4','#ff6b9d','#c96bff','#7fd8ff'],glow:'#ffb3d6',hair:'#ff5c9e',top:'#7fd8ff',skin:'#ffe0c2',wing:'#ffe8f5',szMul:1.05},
+ {n:'เงือกผีเสื้อ',t:6,build:'mermaid',grad:['#c8ffe8','#5ce0c9','#3dc9ff','#8f7aff','#ff8fd8'],glow:'#8ff0e0',hair:'#1fb5a8',top:'#ff8fd8',skin:'#ffcf9e',wing:'#dbfff5',szMul:1.05},
+ {n:'ราชินีเงือกสายรุ้ง',t:6,build:'mermaid',grad:['#ff3d8f','#ff9a1f','#ffe066','#3de08f','#3dc9ff','#a35cff'],glow:'#ffd23f',hair:'#a83dff',top:'#ffd23f',skin:'#ffd9b0',wing:'#fff8d6',szMul:1.12},
+ /* ---------- 👑 ตำนาน: เทพเจ้ากรีก-โรมัน (10) ---------- */
+ {n:'โพไซดอน',t:6,build:'deity',prop:'trident',beard:1,skin:'#e8b98c',hair:'#eaf2ff',grad:['#c8fff0','#3de0d6','#1f8fc9','#2f4dc9','#7a3dd6'],glow:'#5fe8e8',wing:'#d6f8ff',szMul:1.12},
+ {n:'ซุส',t:6,build:'deity',prop:'bolt',beard:1,skin:'#e8c8a3',hair:'#ffffff',grad:['#fff8c8','#ffe066','#ffb03d','#ff7a1f','#c93d1f'],glow:'#ffd75e',wing:'#fff3c8',szMul:1.14},
+ {n:'เอเธน่า',t:6,build:'deity',prop:'spear',skin:'#f0cfa8',hair:'#c9a33d',grad:['#fffbe0','#ffe8a3','#c9d9ff','#8fa8e0','#5c6bc9'],glow:'#ffe8a3',wing:'#fff8e0',szMul:1.1},
+ {n:'อพอลโล',t:6,build:'deity',prop:'lyre',skin:'#f0cfa8',hair:'#ffd23f',grad:['#fff8d6','#ffd23f','#ff9a3d','#ff5c8f','#a35cff'],glow:'#ffd75e',wing:'#fff3c8',szMul:1.1},
+ {n:'อาร์เทมิส',t:6,build:'deity',prop:'bow',skin:'#f5d6b0',hair:'#5c4a8c',grad:['#f0f8ff','#c8e8ff','#8fb8e8','#6b6bc9','#2f3a7a'],glow:'#b8d8ff',wing:'#eaf6ff',szMul:1.1},
+ {n:'เฮอร์มีส',t:6,build:'deity',prop:'caduceus',skin:'#eec49a',hair:'#c98a3d',grad:['#e0fff0','#7ef9d0','#3dc9ff','#5c8fff','#a86bff'],glow:'#8ff0d6',wing:'#e8fff8',szMul:1.08},
+ {n:'อโฟรไดท์',t:6,build:'deity',prop:'mirror',skin:'#ffdcc0',hair:'#ffb03d',grad:['#ffffff','#ffe0f0','#ff9ec4','#c96bff','#7fd8ff'],glow:'#ffc2e0',wing:'#fff0f8',szMul:1.1},
+ {n:'เฮร่า',t:6,build:'deity',prop:'scepter',skin:'#f0cfa8',hair:'#5c3d2f',grad:['#fff0fa','#e0c8ff','#a88cff','#5c6bd6','#2f3a8c'],glow:'#c9b0ff',wing:'#f5eaff',szMul:1.1},
+ {n:'เฮเฟสตัส',t:6,build:'deity',prop:'hammer',beard:1,skin:'#d6a377',hair:'#4a3a2f',grad:['#ffe0a3','#ff9a3d','#e05c1f','#a3301f','#5c1f1f'],glow:'#ff9a5e',wing:'#ffd6a8',szMul:1.12},
+ {n:'ไดโอนีซัส',t:6,build:'deity',prop:'cup',beard:1,skin:'#e8b98c',hair:'#5c2f6b',grad:['#f0e0ff','#c98cff','#8f3dd6','#6b1fa3','#ff6bb5'],glow:'#c98cff',wing:'#f0dbff',szMul:1.1},
  /* ---------- 🔱 สัตว์เทพนิยาย (15) ---------- */
  {n:'คราเคน',t:7,build:'kraken',grad:['#8f5cff','#5c2fb5','#2a1160','#3d1f8c','#c98cff'],glow:'#b08cff',ray:'#c9a0ff',szMul:1.45},
  {n:'หมึกยักษ์เรืองแสง',t:7,build:'kraken',grad:['#00ffd0','#00c8ff','#2f6bff','#a03dff','#ff3db5'],glow:'#4df0ff',ray:'#8cffe8',szMul:1.4},
@@ -748,7 +773,66 @@ function mermaidSVG(f){
    ` + legendSparks([[184,10,13],[10,96,10],[112,-24,11],[192,104,9],[30,86,9]])
      + crownAt(31,-16,.72) + '</svg>';
 }
-const BUILDERS={shark:sharkSVG, dragon:dragonSVG, mermaid:mermaidSVG};
+
+/* ---------- เทพเจ้ากรีก-โรมัน (ระดับตำนาน) ---------- */
+const DEITY_PROP={
+ trident:'<path d="M-18 -16 L-18 10 M0 -26 L0 8 M18 -16 L18 10 M-20 8 L20 8"/>',
+ bolt:   '<path d="M-12 -42 L12 -42 L0 -20 L16 -20 L-12 12 L-2 -12 L-16 -12 Z" data-fill="1"/>',
+ spear:  '<path d="M0 -46 L11 -18 L0 -10 L-11 -18 Z" data-fill="1"/><path d="M-13 -6 L13 -6"/>',
+ lyre:   '<path d="M-16 6 Q-26 -26 -8 -38 M16 6 Q26 -26 8 -38 M-20 -12 L20 -12" /><path d="M-8 -30 L-8 6 M0 -34 L0 6 M8 -30 L8 6"/>',
+ bow:    '<path d="M-6 -44 Q26 -14 -6 16"/><path d="M-6 -44 L-6 16"/><path d="M-24 -12 L18 -12 M12 -18 L18 -12 L12 -6"/>',
+ caduceus:'<path d="M-16 -34 Q0 -22 16 -34 Q10 -18 0 -14 Q-10 -18 -16 -34 Z" data-fill="1"/><path d="M-10 -6 Q0 -14 10 -6 M-10 8 Q0 0 10 8"/>',
+ mirror: '<circle cx="0" cy="-26" r="15" data-fill="1"/><path d="M0 -11 L0 10 M-10 10 L10 10"/>',
+ scepter:'<path d="M0 -40 L7 -26 L22 -24 L11 -13 L14 2 L0 -6 L-14 2 L-11 -13 L-22 -24 L-7 -26 Z" data-fill="1"/>',
+ hammer: '<path d="M-20 -34 L20 -34 L20 -8 L-20 -8 Z" data-fill="1"/><path d="M-26 -28 L-26 -14 M26 -28 L26 -14"/>',
+ cup:    '<path d="M-17 -36 L17 -36 L9 -12 L-9 -12 Z" data-fill="1"/><path d="M0 -12 L0 4 M-13 4 L13 4"/>'
+};
+function propSVG(kind,c){
+  const raw=DEITY_PROP[kind]||DEITY_PROP.trident;
+  const outline=raw.replace(/data-fill="1"/g,'');
+  return '<g transform="translate(150,0)" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round">'+outline+'</g>'
+       + '<g transform="translate(150,0)" stroke="'+c+'" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">'
+       + raw.replace(/data-fill="1"/g,'fill="'+c+'"')+'</g>';
+}
+function deitySVG(f){
+  const id='G'+(uid++), B=`url(#b${id})`;
+  const skin=f.skin||'#e8b98c', hair=f.hair||'#eaf2ff', gold=f.crest||'#ffd23f';
+  const wing='M0 -2 Q16 -46 52 -56 Q40 -30 44 -14 Q26 -20 12 -4 Z';
+  return SVG_OPEN + legendDefs(id,f) + `
+   <ellipse cx="100" cy="56" rx="116" ry="82" fill="url(#g${id})"/>
+   <g transform="translate(100,24) scale(.95)">
+     <path d="${wing}" fill="url(#w${id})" stroke="#fff" stroke-width="5" stroke-linejoin="round" opacity=".78"/></g>
+   <g transform="translate(80,22) scale(1.14)">
+     <path d="${wing}" fill="url(#w${id})" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+     <path d="M4 -6 Q22 -34 46 -50" fill="none" stroke="#fff" stroke-width="2.6" opacity=".8"/></g>
+   <g stroke="#fff" stroke-width="12" stroke-linecap="round" fill="none"><path d="M150 -30 L150 100"/></g>
+   <g stroke="${gold}" stroke-width="7" stroke-linecap="round" fill="none"><path d="M150 -30 L150 100"/></g>
+   ${propSVG(f.prop,gold)}
+   <path d="M52 -4 Q104 -12 118 26 Q130 62 106 84 Q100 56 82 40 Q62 24 52 -4 Z"
+     fill="${hair}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M92 64 Q128 66 150 92" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round"/>
+   <path d="M92 64 Q128 66 150 92" fill="none" stroke="${B}" stroke-width="34" stroke-linecap="round"/>
+   <path d="M148 90 Q182 62 202 68 Q182 94 202 122 Q174 128 146 100 Z"
+     fill="${B}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M62 26 Q86 22 94 48 Q102 66 96 76 Q74 82 62 66 Z"
+     fill="${skin}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M64 42 Q84 36 96 50 Q96 60 94 66 Q78 63 64 56 Z"
+     fill="${f.top||gold}" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+   <path d="M78 50 Q108 70 141 44" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
+   <path d="M78 50 Q108 70 141 44" fill="none" stroke="${skin}" stroke-width="11" stroke-linecap="round"/>
+   <circle cx="146" cy="40" r="8.5" fill="${skin}" stroke="#fff" stroke-width="4.5"/>
+   <circle cx="54" cy="14" r="21" fill="${skin}" stroke="#fff" stroke-width="6"/>
+   <path d="M34 8 Q34 -18 58 -18 Q84 -18 86 8 Q70 -4 52 0 Q40 3 34 8 Z"
+     fill="${hair}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+   ${f.beard?`<path d="M40 26 Q54 46 72 26 Q64 40 54 40 Q44 40 40 26 Z" fill="${hair}" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>`:''}
+   <circle cx="46" cy="14" r="4.4" fill="#12324a"/><circle cx="62" cy="14" r="4.4" fill="#12324a"/>
+   <circle cx="44.6" cy="12.6" r="1.6" fill="#fff"/><circle cx="60.6" cy="12.6" r="1.6" fill="#fff"/>
+   ${f.beard?'':'<path d="M48 26 Q54 31 62 25" fill="none" stroke="#c9784a" stroke-width="3.2" stroke-linecap="round"/>'}
+   <circle cx="38" cy="22" r="4" fill="#ff9ec4" opacity=".5"/><circle cx="70" cy="22" r="4" fill="#ff9ec4" opacity=".5"/>
+   ` + legendSparks([[184,4,13],[8,98,10],[110,-26,11],[192,102,9],[28,88,9]])
+     + crownAt(24,-22,.72) + '</svg>';
+}
+const BUILDERS={shark:sharkSVG, dragon:dragonSVG, mermaid:mermaidSVG, deity:deitySVG};
 
 /* =====================================================================
    4d. สัตว์เทพนิยาย (ระดับ 7) — เหนือกว่าตำนาน
@@ -1024,7 +1108,7 @@ const CHEST_IMG={normal:IMG_CHEST, gold:IMG_CHESTG, rainbow:IMG_CHESTR, dragon:I
 const ITEMS=[
  {k:'magnet',n:'แม่เหล็ก',   dur:8,  c:'#ff5c5c',glow:'#ff9e9e',msg:'ดูดปลาเข้ามา!',  w:22},
  {k:'x2',    n:'ดำน้ำ ×2',   dur:10, c:'#ffc21f',glow:'#ffe98a',msg:'ความลึก ×2!',    w:22},
- {k:'slow',  n:'เวลาช้าลง',  dur:7,  c:'#5fc6f0',glow:'#c8ecff',msg:'ทุกอย่างช้าลง!', w:20},
+ {k:'super', n:'ซูเปอร์ 🌈',  dur:10, c:'#ff5cc8',glow:'#ffe066',msg:'ซูเปอร์! 10 วิ 🌈',w:18},
  {k:'shield',n:'ฟองเกราะ',   dur:0,  c:'#2fd6a0',glow:'#b0ffe4',msg:'กันได้ 1 ครั้ง!',w:22},
  {k:'heart', n:'หัวใจ',      dur:0,  c:'#ff6b9d',glow:'#ffc2d4',msg:'+1 หัวใจ!',      w:14},
 ];
@@ -1045,11 +1129,10 @@ function itemSVG(it){
     icon=`<text x="60" y="78" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
             font-size="52" font-weight="bold" fill="#fff8c8" stroke="#fff" stroke-width="3"
             paint-order="stroke">×2</text>`;
-  } else if(it.k==='slow'){
-    icon=`<path d="M40 26 L80 26 L80 40 L64 58 L80 76 L80 92 L40 92 L40 76 L56 58 L40 40 Z"
-            fill="#e8f8ff" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
-          <path d="M46 82 L74 82 L64 68 L56 68 Z" fill="#3aa8d8"/>
-          <path d="M48 34 L72 34 L64 46 L56 46 Z" fill="#3aa8d8"/>`;
+  } else if(it.k==='super'){
+    const RB=['#ff3b6b','#ff9a1f','#ffe066','#3de08f','#3dc9ff','#8f5cff'];
+    icon=RB.map((c,i)=>`<circle cx="60" cy="60" r="${42-i*5}" fill="none" stroke="${c}" stroke-width="5" opacity=".95"/>`).join('')
+      + starPath(60,42,17,'#ffffff',1) + starPath(60,42,12,'#ffe066',1);
   } else if(it.k==='shield'){
     icon=`<path d="M60 22 L92 34 Q92 76 60 96 Q28 76 28 34 Z"
             fill="#7cffd8" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
@@ -1081,6 +1164,9 @@ const T1=[],T2=[],T3=[],T4=[],T5=[],T6=[],T7=[];
 const TIER=[null,T1,T2,T3,T4,T5,T6,T7];
 FISH.forEach((f,i)=>TIER[f.t].push(i));
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
+// คะแนนต่อ 1 ตัว — ยิ่งระดับสูงยิ่งได้เยอะ
+const PTS=[0,1,2,4,8,15,30,60];
+const ptsOf=id=>PTS[FISH[id].t]||1;
 
 /* =====================================================================
    5. คลังคำถาม — จากสมุดเรียนจริง (ไทยเป็นหลัก อังกฤษแทรก)
@@ -1172,14 +1258,15 @@ function resize(){
 window.addEventListener('resize',resize); window.addEventListener('orientationchange',()=>setTimeout(resize,180));
 resize();
 
+const GAMEVER='v12';
 const CHEST_MS=20000, HEART_MAX=3, FISH_PER_HEART=300;
 let G=null, running=false, paused=false, lastT=0, attract=false;
 
 function newGame(){
   G={
-    t:0, chestT:0, depth:0, caught:0, rare:0, newIds:[], worldX:0, scen:[], scenT:0,
+    t:0, chestT:0, depth:0, caught:0, score:0, rare:0, newIds:[], worldX:0, scen:[], scenT:0,
     hearts:HEART_MAX, sinceHeart:0, deep:{}, over:false,
-    items:[], itemT:9, buff:{magnet:0,x2:0,slow:0}, shield:false,
+    items:[], itemT:9, buff:{magnet:0,x2:0,super:0}, shield:false, unlockedNow:false,
     speed:105*SC, diver:{x:W*.24,y:H*.5,vy:0,rot:0,inv:0},
     fish:[], jelly:[], chest:null, pops:[], parts:[], bubs:[],
     correctRun:0, shake:0, spawnT:.4, jellyT:2.4,
@@ -1190,14 +1277,14 @@ function fishSize(i){ return [0,68,78,88,98,108,124,140][FISH[i].t]*(FISH[i].szM
 // ยิ่งดำลึก ยิ่งมีโอกาสเจอปลาระดับสูงว่ายผ่าน
 function pickSpawnId(depth){
   const r=Math.random();
-  if(depth>=500 && r<.08) return rnd(T7);
+  if(S.myth && depth>=500 && r<.08) return rnd(T7);   // ต้องปลดล็อกด้วยหีบมังกรสีทองก่อน
   if(depth>=300 && r<.15) return rnd(T5);
   if(depth>=180 && r<.30) return rnd(T4);
   if(depth>=80  && r<.44) return rnd(T3);
   if(r<.55) return rnd(T2);
   return rnd(T1);
 }
-function chestKindFor(run){ return run>=10?'god' : run>=7?'dragon' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
+function chestKindFor(run){ return (run>=10&&S.myth)?'god' : run>=7?'dragon' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
 
 function spawnFishGroup(){
   const n=2+Math.floor(Math.random()*4);
@@ -1248,15 +1335,16 @@ function update(dt){
   const g=G;
   g.t+=dt*1000; g.chestT+=dt*1000; g.worldX+=g.speed*dt;
   g.speed=105*SC + Math.min(52*SC, g.depth/700*52*SC);
-  if(g.buff.slow>0) g.speed*=.5;
+  const sup = g.buff.super>0;
   g.depth += g.speed*dt/(26*SC) * (g.buff.x2>0?2:1);   // หารด้วย SC เพื่อให้ตัวเลขเท่ากันทุกขนาดจอ
 
   // diver
   const d=g.diver;
   d.x += (W*.24 - d.x)*Math.min(1,dt*4);
-  const acc = holding ? -520*SC : 560*SC;
+  const spdM = sup?2:1;                       // ซูเปอร์: เคลื่อนที่เร็ว ×2
+  const acc = (holding ? -520*SC : 560*SC)*spdM;
   d.vy += acc*dt;
-  d.vy = Math.max(-300*SC,Math.min(315*SC,d.vy));
+  d.vy = Math.max(-300*SC*spdM,Math.min(315*SC*spdM,d.vy));
   d.y += d.vy*dt;
   const top=HUD_H+46*SC, bot=H-FLOOR_H-16*SC;
   if(d.y<top){ d.y=top; d.vy=Math.max(d.vy,0); }
@@ -1290,13 +1378,15 @@ function update(dt){
     const f=g.fish[i];
     f.x -= (g.speed - f.vx)*dt;
     f.ph+=dt*2.2; f.y += Math.sin(f.ph)*f.amp*dt;
-    if(g.buff.magnet>0 && f.gone<=0){
+    if((g.buff.magnet>0||sup) && f.gone<=0){
       const mx=d.x-f.x, my=d.y-f.y, md=Math.hypot(mx,my);
-      if(md>1 && md<300*SC){ const pull=340*SC*dt; f.x+=mx/md*pull; f.y+=my/md*pull; }
+      const rng=(sup?380:300)*SC, pull=(sup?430:340)*SC*dt;
+      if(md>1 && md<rng){ f.x+=mx/md*pull; f.y+=my/md*pull; }
     }
     if(f.gone>0){ f.gone+=dt; if(f.gone>.35){ g.fish.splice(i,1); } continue; }
     if(!attract && Math.hypot(f.x-d.x,f.y-d.y) < dr+f.sz*.3){
       f.gone=.01; g.caught++;
+      const pt=ptsOf(f.id); g.score+=pt;
       if(FISH[f.id].t>=3) g.rare++;
       // เก็บครบ 300 ตัวได้หัวใจคืน 1 ดวง (ถ้าเต็ม 3 อยู่แล้วไม่ต้องเพิ่ม แต่ตัวนับเริ่มใหม่)
       g.sinceHeart++;
@@ -1308,7 +1398,7 @@ function update(dt){
         }
       }
       if(!S.dex.includes(f.id)){ S.dex.push(f.id); g.newIds.push(f.id); save(); }
-      g.pops.push({x:f.x,y:f.y,txt:'+1',t:0,c:'#ffe066'});
+      g.pops.push({x:f.x,y:f.y,txt:'+'+pt,t:0,c:FISH[f.id].t>=6?'#ffd23f':FISH[f.id].t>=4?'#8cffd8':'#ffe066'});
       burst(f.x,f.y,FISH[f.id].t>=2?'#ffe9a8':'#cdf1ff');
       beep(FISH[f.id].t>=2?'rare':'pop');
       continue;
@@ -1319,6 +1409,11 @@ function update(dt){
   for(let i=g.jelly.length-1;i>=0;i--){
     const j=g.jelly[i]; j.x-=g.speed*.82*dt; j.ph+=dt*1.5; j.y+=Math.sin(j.ph)*14*SC*dt;
     if(!attract && d.inv<=0 && Math.hypot(j.x-d.x,(j.y+18*SC)-d.y) < dr+j.sz*.24){
+      if(sup){                                  // ซูเปอร์: ชนแล้วแมงกะพรุนแตก ไม่เสียหัวใจ
+        g.jelly.splice(i,1); beep('rare'); burst(j.x,j.y,'#ffe066'); burst(j.x,j.y,'#ff8fd8');
+        g.pops.push({x:j.x,y:j.y,txt:'ทะลุ! 🌈',t:0,c:'#ffe066'});
+        g.score+=3; continue;
+      }
       d.inv=1.4; g.shake=.5;
       if(g.shield){
         g.shield=false; beep('rare');
@@ -1342,7 +1437,7 @@ function update(dt){
     const o=g.items[i]; o.x-=g.speed*dt; o.ph+=dt*2.4; o.y+=Math.sin(o.ph)*16*SC*dt;
     if(Math.hypot(o.x-d.x,o.y-d.y) < dr+o.sz*.34){
       const def=ITEM_BY_K[o.k];
-      if(o.k==='heart'){ if(g.hearts<HEART_MAX) g.hearts++; else g.caught+=5; }
+      if(o.k==='heart'){ if(g.hearts<HEART_MAX) g.hearts++; else g.score+=25; }
       else if(o.k==='shield') g.shield=true;
       else g.buff[o.k]=def.dur;
       beep('gold'); burst(o.x,o.y,def.glow);
@@ -1365,6 +1460,44 @@ function update(dt){
   // ไม่มีตัวจับเวลาแล้ว — จบรอบเมื่อหัวใจหมด
 }
 // ฟองอากาศห่อตัวนักดำน้ำ — บอกว่ายังมีเกราะเหลืออยู่ ไม่ต้องมองแถบบน
+const RBOW=['#ff3b6b','#ff9a1f','#ffe066','#3de08f','#3dc9ff','#8f5cff'];
+function drawRainbowBubble(x,y,t,left){
+  const wob=Math.sin(t/200), r=92*SC*(1+wob*.04), ry=r*(1-wob*.035);
+  const spin=t/900;
+  ctx.save();
+  const g1=ctx.createRadialGradient(x-r*.3,y-r*.34,r*.05,x,y,r);
+  g1.addColorStop(0,'rgba(255,255,255,.30)');
+  g1.addColorStop(.55,'rgba(255,220,120,.10)');
+  g1.addColorStop(1,'rgba(255,120,220,.26)');
+  ctx.fillStyle=g1; ctx.beginPath(); ctx.ellipse(x,y,r,ry,0,0,6.29); ctx.fill();
+  // วงแหวนสายรุ้งหมุนรอบตัว
+  ctx.lineCap='round';
+  for(let i=0;i<6;i++){
+    const a0=spin+i*(6.283/6), a1=a0+6.283/6*0.86;
+    ctx.strokeStyle=RBOW[i]; ctx.lineWidth=7*SC; ctx.globalAlpha=.95;
+    ctx.beginPath(); ctx.ellipse(x,y,r,ry,0,a0,a1); ctx.stroke();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2.4*SC; ctx.globalAlpha=.55;
+    ctx.beginPath(); ctx.ellipse(x,y,r-5.5*SC,ry-5.5*SC,0,a0,a1); ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(255,255,255,.62)';
+  ctx.beginPath(); ctx.ellipse(x-r*.4,y-ry*.44,r*.22,ry*.12,-0.55,0,6.29); ctx.fill();
+  // ประกายรอบฟอง
+  const nst=5;
+  for(let i=0;i<nst;i++){ const a=spin*2.2+i*(6.283/nst);
+    const px=x+Math.cos(a)*r*1.04, py=y+Math.sin(a)*ry*1.04;
+    ctx.fillStyle=RBOW[(i+Math.floor(t/220))%6]; ctx.globalAlpha=.9;
+    ctx.beginPath(); ctx.arc(px,py,(3.4+Math.sin(t/150+i)*1.4)*SC,0,6.29); ctx.fill(); }
+  ctx.globalAlpha=1;
+  // ตัวเลขเวลาที่เหลือ
+  if(left!=null && left<=3.2){
+    ctx.textAlign='center'; ctx.font='700 '+(24*SC)+'px Mali, sans-serif';
+    ctx.lineWidth=5*SC; ctx.strokeStyle='rgba(6,40,62,.7)'; ctx.fillStyle='#ffe066';
+    const txt=Math.ceil(left)+'';
+    ctx.strokeText(txt,x,y-ry-10*SC); ctx.fillText(txt,x,y-ry-10*SC);
+  }
+  ctx.restore();
+}
 function drawShieldBubble(x,y,t){
   const wob=Math.sin(t/230), r=76*SC*(1+wob*.035);
   const ry=r*(1-wob*.03);
@@ -1495,7 +1628,8 @@ function draw(){
     const d=g.diver;
     if(!attract){ const blink = d.inv>0 && Math.floor(d.inv*12)%2===0;
       drawImg(IMG_DIVER,d.x,d.y,112*SC,d.rot,blink?.4:1);
-      if(g.shield) drawShieldBubble(d.x,d.y,g.t); }
+      if(g.shield) drawShieldBubble(d.x,d.y,g.t);
+      if(g.buff.super>0) drawRainbowBubble(d.x,d.y,g.t,g.buff.super); }
     g.parts.forEach(p=>{ ctx.globalAlpha=Math.max(0,1-p.t/.7); ctx.fillStyle=p.c;
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.29); ctx.fill(); ctx.globalAlpha=1; });
     ctx.textAlign='center'; ctx.font='700 '+(26*SC)+'px Mali, sans-serif';
@@ -1521,12 +1655,12 @@ const $=s=>document.querySelector(s);
 function paintHUD(){
   $('#hudHearts').textContent='❤️'.repeat(Math.max(0,G.hearts))+'🤍'.repeat(Math.max(0,HEART_MAX-G.hearts));
   $('#hudFish').textContent=G.caught;
-  $('#hudRare').textContent=G.rare;
+  $('#hudScore').textContent=G.score;
   $('#hudDepth').textContent=Math.floor(G.depth)+' ม.';
   $('#meterFill').style.width=Math.min(100,G.chestT/CHEST_MS*100)+'%';
   let bh='';
   if(G.shield) bh+=`<span class="buff"><img src="${IMG_ITEM.shield.src}" alt="">พร้อมกัน</span>`;
-  ['magnet','x2','slow'].forEach(k=>{ if(G.buff[k]>0)
+  ['magnet','x2','super'].forEach(k=>{ if(G.buff[k]>0)
     bh+=`<span class="buff"><img src="${IMG_ITEM[k].src}" alt="">${Math.ceil(G.buff[k])}</span>`; });
   const be=$('#buffs'); if(be.innerHTML!==bh){ be.innerHTML=bh; measureHUD(); }
   if(((hudTick++)&31)===0) measureHUD();
@@ -1549,14 +1683,15 @@ function endRound(){
   running=false; paused=false; holding=false; beep('end');
   const g=G; g.over=true;
   const depth=Math.floor(g.depth);
-  const xp=g.caught*2+g.rare*10;
+  const xp=g.score;
   markProgressToday(); addXP(xp);
   const isBest = depth>S.best;
   if(isBest){ S.best=depth; save(); }
   $('#endTitle').textContent = isBest?'สถิติใหม่!':'เก่งมาก!';
   $('#endDepth').innerHTML = 'ดำน้ำได้ลึก <b style="font-size:26px;color:#e2611f">'+depth+'</b> เมตร'
-    + (isBest?' 🏆' : '<br><span style="font-size:15px">สถิติดีที่สุด '+S.best+' เมตร</span>');
-  $('#endFish').textContent=g.caught; $('#endRare').textContent=g.rare; $('#endXP').textContent='+'+xp;
+    + (isBest?' 🏆' : '<br><span style="font-size:15px">สถิติดีที่สุด '+S.best+' เมตร</span>')
+    + '<br><span style="font-size:15px">ปลาหายาก '+g.rare+' ตัว</span>';
+  $('#endFish').textContent=g.caught; $('#endScore').textContent=g.score; $('#endXP').textContent='+'+xp;
   const uniq=[...new Set(g.newIds)];
   $('#endNew').innerHTML = uniq.length
     ? uniq.slice(0,3).map(id=>`<div class="newFish"><img src="${IMG[id].src}" alt="">
@@ -1568,6 +1703,7 @@ function endRound(){
 function paintStart(){
   $('#startXP').textContent=S.xp; $('#startStreak').textContent=S.streak;
   $('#dexCount').textContent=S.dex.length+'/'+FISH.length;
+  $('#startGoal').textContent='เก็บปลาให้ครบ '+FISH.length+' ชนิด!'+(S.myth?' 🔱':'');
 }
 document.getElementById('startDiver').innerHTML='<img src="'+IMG_DIVER.src+'" style="width:190px;max-width:56vw">';
 document.getElementById('startItems').innerHTML =
@@ -1584,6 +1720,9 @@ function starStr(t){ return t>=7?'🔱':t>=6?'👑':'⭐'.repeat(t); }
 function openChest(kind){
   paused=true; holding=false; beep('chest');
   curKind=kind||'normal';
+  if(curKind==='dragon' && !S.myth){        // เก็บหีบมังกรสีทอง = ปลดล็อกสัตว์เทพนิยาย
+    S.myth=true; save(); G.unlockedNow=true; beep('gold');
+  }
   curQ=QS[Math.floor(Math.random()*QS.length)];
   curOrder = Math.random()<.5?[0,1]:[1,0];
   $('#quizTitle').textContent = CHEST_LABEL[curKind];
@@ -1639,6 +1778,12 @@ function showReward(ok,id){
   $('#rwFish').innerHTML='<img src="'+IMG[id].src+'" style="width:200px;max-width:60vw">';
   $('#rwName').textContent=FISH[id].n;
   const nk=chestKindFor(G.correctRun);
+  if(G.unlockedNow){
+    G.unlockedNow=false;
+    $('#rwTag').innerHTML='<b style="color:#c98a08">🔱 ปลดล็อกสัตว์เทพนิยายแล้ว!</b><br>'
+      +'<span style="font-size:15px">ต่อจากนี้จะเจอสัตว์เทพนิยายว่ายมาให้เก็บตอนดำลึกเกิน 500 ม.</span>';
+    show('scrReward'); return;
+  }
   $('#rwTag').textContent = ok
     ? (nk!=='normal' ? 'ตอบถูก '+G.correctRun+' ข้อติด! หีบหน้าเป็น'+({gold:'หีบทอง ✨',rainbow:'หีบสายรุ้ง 🌈',dragon:'หีบมังกร 👑',god:'หีบเทพนิยาย 🔱'}[nk])
                      : 'เก็บลงสมุดปลาแล้ว · ตอบถูก 3 ข้อติดจะได้หีบทอง')
@@ -1659,12 +1804,16 @@ const FRAME={
 function openDex(){
   const gr=$('#dexGrid'); gr.innerHTML='';
   $('#dexHead').textContent='เก็บได้แล้ว '+S.dex.length+' จาก '+FISH.length+' ชนิด';
+  $('#dexHint').innerHTML = S.myth
+    ? 'ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>🔱 ปลดล็อกสัตว์เทพนิยายแล้ว — ดำลึกเกิน 500 ม. จะเจอ'
+    : 'ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>🔱 สัตว์เทพนิยายยังล็อกอยู่ — เก็บ 👑 หีบมังกรสีทอง (ตอบถูก 7 ข้อติด) เพื่อปลดล็อก';
   FISH.forEach((f,i)=>{
     const got=S.dex.includes(i), fr=FRAME[f.t];
     const d=document.createElement('div'); d.className='slot';
     if(got){ d.style.background=fr[0]; d.style.borderColor=fr[1]; d.style.boxShadow=fr[2]; }
+    const locked = !got && f.t===7 && !S.myth;
     d.innerHTML=(got?`<img src="${IMG[i].src}" alt=""><div class="nm">${f.n}</div>`
-                    :`<img src="${IMG[i].src}" style="opacity:.16;filter:grayscale(1) brightness(.35)" alt=""><div class="q">?</div>`)
+                    :`<img src="${IMG[i].src}" style="opacity:.16;filter:grayscale(1) brightness(.35)" alt=""><div class="q">${locked?'🔒':'?'}</div>`)
       +`<div class="st">${starStr(f.t)}</div>`;
     gr.appendChild(d);
   });
