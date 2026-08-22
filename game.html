@@ -43,7 +43,10 @@ canvas{display:block;position:absolute;inset:0;touch-action:none}
 #meterWrap{margin:0 2px}
 #meter{height:11px;border-radius:999px;background:rgba(6,40,62,.6);
   border:2.5px solid rgba(255,255,255,.45);overflow:hidden;margin-top:3px}
-#meterFill{height:100%;width:0%;background:linear-gradient(90deg,#ffe066,#ffb703);transition:width .2s}
+#meterFill{height:100%;width:0%;background:linear-gradient(90deg,#ffe066,#ffb703);transition:width .18s}
+#meter.hot{border-color:#fff8d0}
+#meter.hot #meterFill{background:linear-gradient(90deg,#fffbe8,#ffd23f,#ff9a1f);
+  box-shadow:0 0 12px rgba(255,214,63,.95)}
 #btnMute,#btnPause{pointer-events:auto;background:rgba(6,40,62,.62);border:2.5px solid rgba(255,255,255,.5);
   border-radius:999px;width:40px;height:40px;font-size:19px;color:#fff;cursor:pointer;flex:none}
 #btnPause{font-size:16px}
@@ -468,27 +471,96 @@ function jellySVG(){
    <circle cx="44" cy="46" r="7" fill="#4a2c78"/><circle cx="76" cy="46" r="7" fill="#4a2c78"/>
    <path d="M52 58 q8 8 16 0" fill="none" stroke="#4a2c78" stroke-width="4" stroke-linecap="round"/></svg>`;
 }
-function chestSVG(kind){
-  const gold=kind==='gold', rb=kind==='rainbow', dr=kind==='dragon';
-  const wood = dr?'url(#dgold)' : rb?'#9b5cc9' : gold?'#c9971f' : '#c8763a';
-  const lid  = dr?'url(#dgold2)': rb?'#7b3fa8' : gold?'#a87a12' : '#a4622c';
-  const band = dr?'#fff6c8' : rb?'url(#cg)' : '#ffd23f';
-  // ลำแสงทองแผ่ออกรอบหีบมังกร
+/* ---------- หีบเพชร: ระดับตำนาน (หรูหราเป็นพิเศษ) ---------- */
+function diamondChestSVG(){
+  const id='DC';
   let rays='';
-  if(dr){ for(let i=0;i<12;i++){ const a=i*30*Math.PI/180, L=i%2?54:38;
+  for(let i=0;i<16;i++){ const a=i*22.5*Math.PI/180, L=i%2?66:44;
+    rays+='<path d="M66 64 L'+(66+Math.cos(a)*L).toFixed(1)+' '+(64+Math.sin(a)*L).toFixed(1)+'" stroke="'
+      +(i%2?'#ffffff':'#c8f4ff')+'" stroke-width="'+(i%2?8:4.5)+'" stroke-linecap="round" opacity="'+(i%2?.72:.55)+'"/>'; }
+  const stud=(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="6.5" fill="#fff"/>'
+    +'<circle cx="'+x+'" cy="'+y+'" r="4.6" fill="url(#silv)"/>'
+    +'<circle cx="'+(x-1.4)+'" cy="'+(y-1.6)+'" r="1.7" fill="#fff"/>';
+  const gem=(x,y,c)=>'<path d="M'+(x-7)+' '+y+' L'+x+' '+(y-8)+' L'+(x+7)+' '+y+' L'+x+' '+(y+9)+' Z" fill="'+c+'" stroke="#fff" stroke-width="2.8" stroke-linejoin="round"/>'
+    +'<path d="M'+(x-7)+' '+y+' L'+(x+7)+' '+y+'" stroke="#fff" stroke-width="1.6" opacity=".8"/>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="176" height="164" viewBox="-22 -34 176 164">'
+  +'<defs>'
+  +'<linearGradient id="ice1" x1="0" y1="0" x2="0.3" y2="1">'
+  +'<stop offset="0%" stop-color="#ffffff"/><stop offset="30%" stop-color="#d6f6ff"/>'
+  +'<stop offset="65%" stop-color="#7cc9f0"/><stop offset="100%" stop-color="#2f7ec2"/></linearGradient>'
+  +'<linearGradient id="ice2" x1="0" y1="0" x2="0" y2="1">'
+  +'<stop offset="0%" stop-color="#ffffff"/><stop offset="55%" stop-color="#c2efff"/><stop offset="100%" stop-color="#5fa8dd"/></linearGradient>'
+  +'<linearGradient id="silv" x1="0" y1="0" x2="0" y2="1">'
+  +'<stop offset="0%" stop-color="#ffffff"/><stop offset="35%" stop-color="#e2ecf5"/>'
+  +'<stop offset="70%" stop-color="#a8bdd0"/><stop offset="100%" stop-color="#6f8aa3"/></linearGradient>'
+  +'<linearGradient id="prism" x1="0" y1="0" x2="1" y2="0">'
+  +'<stop offset="0%" stop-color="#ff8fd8" stop-opacity=".55"/><stop offset="35%" stop-color="#ffe066" stop-opacity=".5"/>'
+  +'<stop offset="70%" stop-color="#7cffd8" stop-opacity=".5"/><stop offset="100%" stop-color="#8fb8ff" stop-opacity=".55"/></linearGradient>'
+  +'<radialGradient id="dhalo"><stop offset="0%" stop-color="#ffffff" stop-opacity=".98"/>'
+  +'<stop offset="45%" stop-color="#bff0ff" stop-opacity=".55"/><stop offset="100%" stop-color="#9fe8ff" stop-opacity="0"/></radialGradient>'
+  +'</defs>'
+  +'<circle cx="66" cy="62" r="96" fill="url(#dhalo)"/>'
+  +rays
+  /* ---- ฝาหีบ ---- */
+  +'<path d="M12 58 Q12 22 66 22 Q120 22 120 58 Z" fill="none" stroke="#fff" stroke-width="10" stroke-linejoin="round"/>'
+  +'<path d="M12 58 Q12 22 66 22 Q120 22 120 58 Z" fill="url(#ice2)" stroke="url(#silv)" stroke-width="5" stroke-linejoin="round"/>'
+  +'<path d="M66 22 L38 58 L66 58 Z" fill="#fff" opacity=".42"/>'
+  +'<path d="M66 22 L94 58 L66 58 Z" fill="#fff" opacity=".18"/>'
+  +'<path d="M12 58 Q14 32 40 25 L34 58 Z" fill="#fff" opacity=".3"/>'
+  +'<path d="M20 40 Q66 26 112 40" fill="none" stroke="url(#prism)" stroke-width="5" stroke-linecap="round"/>'
+  /* ---- ตัวหีบ ---- */
+  +'<rect x="12" y="56" width="108" height="54" rx="13" fill="none" stroke="#fff" stroke-width="10"/>'
+  +'<rect x="12" y="56" width="108" height="54" rx="13" fill="url(#ice1)" stroke="url(#silv)" stroke-width="5"/>'
+  +'<path d="M22 56 L38 56 L28 110 L16 108 Z" fill="#fff" opacity=".3"/>'
+  +'<path d="M56 56 L70 56 L62 110 L50 110 Z" fill="#fff" opacity=".16"/>'
+  +'<path d="M92 56 L104 56 L100 110 L90 110 Z" fill="#fff" opacity=".2"/>'
+  /* ---- แถบเงินกลาง + อัญมณี ---- */
+  +'<rect x="12" y="68" width="108" height="18" fill="#fff"/>'
+  +'<rect x="13" y="69.5" width="106" height="15" fill="url(#silv)"/>'
+  +'<rect x="13" y="71" width="106" height="4" fill="#fff" opacity=".65"/>'
+  +gem(30,77,'#ff7ac2')+gem(102,77,'#7ce0ff')
+  /* ---- ตัวล็อกกลาง ---- */
+  +'<path d="M55 62 L77 62 L77 92 Q66 100 55 92 Z" fill="#fff" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>'
+  +'<path d="M55 62 L77 62 L77 92 Q66 100 55 92 Z" fill="url(#silv)" stroke="url(#silv)" stroke-width="2" stroke-linejoin="round"/>'
+  +gem(66,78,'#a88cff')
+  +stud(22,62)+stud(110,62)+stud(22,104)+stud(110,104)
+  /* ---- เพชรเม็ดใหญ่บนยอด ---- */
+  +'<g transform="translate(0,-6)">'
+  +starPath(66,8,26,'#ffffff',.85)
+  +'<path d="M46 12 L56 -2 L76 -2 L86 12 L66 40 Z" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round"/>'
+  +'<path d="M46 12 L56 -2 L76 -2 L86 12 L66 40 Z" fill="url(#ice2)" stroke="#eafdff" stroke-width="2.5" stroke-linejoin="round"/>'
+  +'<path d="M46 12 L86 12 M56 -2 L60 12 M76 -2 L72 12 M60 12 L66 40 M72 12 L66 40 M46 12 L66 40 M86 12 L66 40" fill="none" stroke="#6fc2ec" stroke-width="2.2" stroke-linejoin="round" opacity=".85"/>'
+  +'<path d="M56 -2 L76 -2 L72 12 L60 12 Z" fill="#ffffff" opacity=".8"/>'
+  +'<path d="M60 12 L72 12 L66 40 Z" fill="#ffffff" opacity=".35"/>'
+  +'</g>'
+  +starPath(16,-16,13,'#ffffff',.95)+starPath(118,-12,11,'#dffaff',.9)
+  +starPath(-8,44,10,'#ffffff',.8)+starPath(140,54,9,'#dffaff',.8)
+  +starPath(4,112,9,'#ffffff',.75)+starPath(128,116,8,'#dffaff',.75)
+  +'</svg>';
+}
+
+function chestSVG(kind){
+  if(kind==='diamond') return diamondChestSVG();
+  const gold=kind==='gold', rb=kind==='rainbow', dr=kind==='diamond';
+  const wood = dr?'url(#dice1)' : rb?'#9b5cc9' : gold?'#c9971f' : '#c8763a';
+  const lid  = dr?'url(#dice2)' : rb?'#7b3fa8' : gold?'#a87a12' : '#a4622c';
+  const band = dr?'#eafcff' : rb?'url(#cg)' : '#ffd23f';
+  // ลำแสงคริสตัลแผ่ออกรอบหีบเพชร
+  let rays='';
+  if(dr){ for(let i=0;i<12;i++){ const a=i*30*Math.PI/180, L=i%2?56:40;
       rays+=`<path d="M66 62 L${(66+Math.cos(a)*L).toFixed(1)} ${(62+Math.sin(a)*L).toFixed(1)}"
-        stroke="#fff3a8" stroke-width="${i%2?7:4}" stroke-linecap="round" opacity=".55"/>`; } }
+        stroke="${i%2?'#dffaff':'#9fe8ff'}" stroke-width="${i%2?7:4}" stroke-linecap="round" opacity=".6"/>`; } }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="152" height="138" viewBox="-10 -12 152 138">
    <defs>
     <linearGradient id="cg" x1="0" y1="0" x2="1" y2="0">
      <stop offset="0%" stop-color="#ff5d94"/><stop offset="30%" stop-color="#ffd23f"/>
      <stop offset="60%" stop-color="#2fd6a0"/><stop offset="100%" stop-color="#6cc6ff"/></linearGradient>
-    <linearGradient id="dgold" x1="0" y1="0" x2="0" y2="1">
-     <stop offset="0%" stop-color="#fff0a3"/><stop offset="42%" stop-color="#ffc21f"/><stop offset="100%" stop-color="#a86f0a"/></linearGradient>
-    <linearGradient id="dgold2" x1="0" y1="0" x2="0" y2="1">
-     <stop offset="0%" stop-color="#ffe98a"/><stop offset="100%" stop-color="#d9a318"/></linearGradient>
-    <radialGradient id="dhalo"><stop offset="0%" stop-color="#fffbe0" stop-opacity=".95"/>
-     <stop offset="55%" stop-color="#ffd75e" stop-opacity=".45"/><stop offset="100%" stop-color="#ffd75e" stop-opacity="0"/></radialGradient>
+    <linearGradient id="dice1" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0%" stop-color="#ffffff"/><stop offset="40%" stop-color="#b3ecff"/><stop offset="100%" stop-color="#2f8fd6"/></linearGradient>
+    <linearGradient id="dice2" x1="0" y1="0" x2="0" y2="1">
+     <stop offset="0%" stop-color="#f5fdff"/><stop offset="100%" stop-color="#7fc8f0"/></linearGradient>
+    <radialGradient id="dhalo"><stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+     <stop offset="55%" stop-color="#9fe8ff" stop-opacity=".5"/><stop offset="100%" stop-color="#9fe8ff" stop-opacity="0"/></radialGradient>
    </defs>
    ${dr?`<circle cx="66" cy="62" r="82" fill="url(#dhalo)"/>${rays}`:''}
    <path d="M14 56 Q14 24 66 24 Q118 24 118 56 Z" fill="${lid}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
@@ -496,11 +568,15 @@ function chestSVG(kind){
    <rect x="14" y="54" width="104" height="52" rx="12" fill="${wood}" stroke="#fff" stroke-width="6"/>
    <rect x="14" y="66" width="104" height="16" fill="${band}" stroke="#fff" stroke-width="5"/>
    <rect x="56" y="60" width="20" height="30" rx="6" fill="${band}" stroke="#fff" stroke-width="5"/>
-   <circle cx="66" cy="74" r="5" fill="${dr?'#a3700f':'#8a4b16'}"/>
-   ${dr?`<circle cx="30" cy="72" r="7" fill="#ff6b9d" stroke="#fff" stroke-width="3"/>
-        <circle cx="102" cy="72" r="7" fill="#6cc6ff" stroke="#fff" stroke-width="3"/>`:''}
-   ${gold||rb||dr?starPath(24,14,13,'#fff8c8')+starPath(112,16,11,'#fff8c8'):''}
-   ${rb||dr?starPath(66,4,14,'#ffffff'):''}</svg>`;
+   <circle cx="66" cy="74" r="5" fill="${dr?'#2f8fd6':'#8a4b16'}"/>
+   ${dr?`<path d="M46 34 L66 16 L86 34 L66 54 Z" fill="#f0fdff" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M46 34 L86 34 M66 16 L56 34 L66 54 L76 34 Z" fill="none" stroke="#5fc6f0" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M56 34 L66 16 L76 34 Z" fill="#ffffff" opacity=".8"/>
+        <path d="M26 70 L34 62 L42 70 L34 80 Z" fill="#dffaff" stroke="#fff" stroke-width="3"/>
+        <path d="M90 70 L98 62 L106 70 L98 80 Z" fill="#dffaff" stroke="#fff" stroke-width="3"/>`:''}
+   ${gold||rb?starPath(24,14,13,'#fff8c8')+starPath(112,16,11,'#fff8c8'):''}
+   ${dr?starPath(22,12,13,'#ffffff')+starPath(114,14,11,'#dffaff')+starPath(66,-2,12,'#ffffff'):''}
+   ${rb?starPath(66,4,14,'#ffffff'):''}</svg>`;
 }
 function toImg(svg){ const i=new Image(); i.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); return i; }
 
@@ -1397,8 +1473,8 @@ Object.assign(BUILDERS,{kraken:krakenSVG, serpent:serpentSVG, whale:whaleSVG, tu
 const IMG=FISH.map(f=>toImg(f.build ? BUILDERS[f.build](f) : fishSVG(f)));
 const IMG_DIVER=toImg(diverSVG()), IMG_JELLY=toImg(jellySVG());
 const IMG_CHEST=toImg(chestSVG('normal')), IMG_CHESTG=toImg(chestSVG('gold'));
-const IMG_CHESTR=toImg(chestSVG('rainbow')), IMG_CHESTD=toImg(chestSVG('dragon'));
-const CHEST_IMG={normal:IMG_CHEST, gold:IMG_CHESTG, rainbow:IMG_CHESTR, dragon:IMG_CHESTD};
+const IMG_CHESTR=toImg(chestSVG('rainbow')), IMG_CHESTD=toImg(chestSVG('diamond'));
+const CHEST_IMG={normal:IMG_CHEST, gold:IMG_CHESTG, rainbow:IMG_CHESTR, diamond:IMG_CHESTD};
 
 /* =====================================================================
    4c. ไอเทมช่วยระหว่างเล่น
@@ -1464,6 +1540,8 @@ FISH.forEach((f,i)=>TIER[f.t].push(i));
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 // คะแนนต่อ 1 ตัว — ยิ่งระดับสูงยิ่งได้เยอะ
 const PTS=[0,1,2,4,8,15,30,60];
+// เก็บปลาแล้วดันแถบหีบ (มิลลิวินาที) — ตัวยิ่งใหญ่/ยิ่งหายาก ยิ่งดันแรง
+const CHEST_BOOST=[0,80,160,320,640,1200,2400,4200];
 const ptsOf=id=>PTS[FISH[id].t]||1;
 
 /* =====================================================================
@@ -1556,14 +1634,14 @@ function resize(){
 window.addEventListener('resize',resize); window.addEventListener('orientationchange',()=>setTimeout(resize,180));
 resize();
 
-const GAMEVER='v13';
+const GAMEVER='v14';
 const CHEST_MS=20000, HEART_MAX=3, FISH_PER_HEART=300;
 let G=null, running=false, paused=false, lastT=0, attract=false;
 
 function newGame(){
   G={
     t:0, chestT:0, depth:0, caught:0, score:0, rare:0, newIds:[], worldX:0, scen:[], scenT:0,
-    hearts:HEART_MAX, sinceHeart:0, deep:{}, over:false,
+    hearts:HEART_MAX, sinceHeart:0, deep:{}, over:false, meterFx:0,
     items:[], itemT:9, buff:{magnet:0,x2:0,super:0}, shield:false, unlockedNow:false,
     speed:105*SC, diver:{x:W*.24,y:H*.5,vy:0,rot:0,inv:0},
     fish:[], jelly:[], chest:null, pops:[], parts:[], bubs:[],
@@ -1575,14 +1653,14 @@ function fishSize(i){ return [0,68,78,88,98,108,124,140][FISH[i].t]*(FISH[i].szM
 // ยิ่งดำลึก ยิ่งมีโอกาสเจอปลาระดับสูงว่ายผ่าน
 function pickSpawnId(depth){
   const r=Math.random();
-  if(S.myth && depth>=500 && r<.08) return rnd(T7);   // ต้องปลดล็อกด้วยหีบมังกรสีทองก่อน
+  if(S.myth && depth>=500 && r<.08) return rnd(T7);   // ต้องปลดล็อกด้วยหีบเพชรก่อน
   if(depth>=300 && r<.15) return rnd(T5);
   if(depth>=180 && r<.30) return rnd(T4);
   if(depth>=80  && r<.44) return rnd(T3);
   if(r<.55) return rnd(T2);
   return rnd(T1);
 }
-function chestKindFor(run){ return (run>=10&&S.myth)?'god' : run>=7?'dragon' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
+function chestKindFor(run){ return (run>=10&&S.myth)?'god' : run>=7?'diamond' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
 
 function spawnFishGroup(){
   const n=2+Math.floor(Math.random()*4);
@@ -1649,6 +1727,7 @@ function update(dt){
   if(d.y>bot){ d.y=bot; d.vy=Math.min(d.vy,0); }
   d.rot += ((d.vy/(340*SC))*.6 - d.rot)*Math.min(1,dt*7);
   if(d.inv>0) d.inv-=dt;
+  if(g.meterFx>0) g.meterFx-=dt;
 
   // bubbles
   g.bubs.forEach(b=>{ b.y-=b.s*dt; b.x-=g.speed*.18*dt;
@@ -1685,6 +1764,9 @@ function update(dt){
     if(!attract && Math.hypot(f.x-d.x,f.y-d.y) < dr+f.sz*.3){
       f.gone=.01; g.caught++;
       const pt=ptsOf(f.id); g.score+=pt;
+      const ft=FISH[f.id].t;
+      g.chestT=Math.min(CHEST_MS, g.chestT + (CHEST_BOOST[ft]||0));   // ปลาใหญ่ดันแถบหีบ
+      if(ft>=3) g.meterFx=Math.max(g.meterFx,.45);
       if(FISH[f.id].t>=3) g.rare++;
       // เก็บครบ 300 ตัวได้หัวใจคืน 1 ดวง (ถ้าเต็ม 3 อยู่แล้วไม่ต้องเพิ่ม แต่ตัวนับเริ่มใหม่)
       g.sinceHeart++;
@@ -1928,12 +2010,12 @@ function draw(){
       drawImg(IMG_ITEM[o.k],o.x,o.y+bob,o.sz*pulse);
     });
     if(g.chest){ const c=g.chest;
-      ctx.save(); ctx.globalAlpha=c.kind==='dragon'?.85:.5;
-      const rg=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.sz*(c.kind==='dragon'?1.25:.85));
-      rg.addColorStop(0, c.kind==='dragon'?'rgba(255,250,210,1)':c.kind==='normal'?'rgba(255,226,150,.7)':'rgba(255,225,120,.95)');
+      ctx.save(); ctx.globalAlpha=c.kind==='diamond'?.85:.5;
+      const rg=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,c.sz*(c.kind==='diamond'?1.25:.85));
+      rg.addColorStop(0, c.kind==='diamond'?'rgba(226,250,255,1)':c.kind==='normal'?'rgba(255,226,150,.7)':'rgba(255,225,120,.95)');
       rg.addColorStop(1,'rgba(255,226,150,0)');
-      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(c.x,c.y,c.sz*(c.kind==='dragon'?1.25:.85),0,6.29); ctx.fill(); ctx.restore();
-      drawImg(CHEST_IMG[c.kind]||IMG_CHEST,c.x,c.y+Math.sin(c.ph)*5*SC,c.sz);
+      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(c.x,c.y,c.sz*(c.kind==='diamond'?1.25:.85),0,6.29); ctx.fill(); ctx.restore();
+      drawImg(CHEST_IMG[c.kind]||IMG_CHEST,c.x,c.y+Math.sin(c.ph)*5*SC,c.sz*(c.kind==='diamond'?1.2:1));
     }
     const d=g.diver;
     if(!attract){ const blink = d.inv>0 && Math.floor(d.inv*12)%2===0;
@@ -1968,6 +2050,7 @@ function paintHUD(){
   $('#hudScore').textContent=G.score;
   $('#hudDepth').textContent=Math.floor(G.depth)+' ม.';
   $('#meterFill').style.width=Math.min(100,G.chestT/CHEST_MS*100)+'%';
+  $('#meter').classList.toggle('hot', G.meterFx>0);
   let bh='';
   if(G.shield) bh+=`<span class="buff"><img src="${IMG_ITEM.shield.src}" alt="">พร้อมกัน</span>`;
   ['magnet','x2','super'].forEach(k=>{ if(G.buff[k]>0)
@@ -2024,13 +2107,13 @@ document.getElementById('startItems').innerHTML =
 
 /* ------- quiz ------- */
 let curQ=null, curOrder=[0,1], rewardFish=0, curKind='normal';
-const CHEST_LABEL={normal:'เปิดหีบสมบัติ!', gold:'✨ หีบทอง! ✨', rainbow:'🌈 หีบสายรุ้ง! 🌈', dragon:'👑 หีบมังกร! 👑', god:'🔱 หีบเทพนิยาย! 🔱'};
-const CHEST_PRIZE={normal:'ตอบถูกได้ปลา ⭐⭐⭐', gold:'ตอบถูกได้ปลา ⭐⭐⭐⭐', rainbow:'ตอบถูกได้ปลา ⭐⭐⭐⭐⭐', dragon:'ตอบถูกได้สัตว์ในตำนาน 👑', god:'ตอบถูกได้สัตว์เทพนิยาย 🔱'};
+const CHEST_LABEL={normal:'เปิดหีบสมบัติ!', gold:'✨ หีบทอง! ✨', rainbow:'🌈 หีบสายรุ้ง! 🌈', diamond:'💎 หีบเพชร! 💎', god:'🔱 หีบเทพนิยาย! 🔱'};
+const CHEST_PRIZE={normal:'ตอบถูกได้ปลา ⭐⭐⭐', gold:'ตอบถูกได้ปลา ⭐⭐⭐⭐', rainbow:'ตอบถูกได้ปลา ⭐⭐⭐⭐⭐', diamond:'ตอบถูกได้สัตว์ในตำนาน 👑', god:'ตอบถูกได้สัตว์เทพนิยาย 🔱'};
 function starStr(t){ return t>=7?'🔱':t>=6?'👑':'⭐'.repeat(t); }
 function openChest(kind){
   paused=true; holding=false; beep('chest');
   curKind=kind||'normal';
-  if(curKind==='dragon' && !S.myth){        // เก็บหีบมังกรสีทอง = ปลดล็อกสัตว์เทพนิยาย
+  if(curKind==='diamond' && !S.myth){       // เก็บหีบเพชร = ปลดล็อกสัตว์เทพนิยาย
     S.myth=true; save(); G.unlockedNow=true; beep('gold');
   }
   curQ=QS[Math.floor(Math.random()*QS.length)];
@@ -2060,11 +2143,11 @@ function answer(pick,btn){
     G.correctRun++;
     beep(curKind==='normal'?'rare':'gold');
     id = curKind==='god' ? pickReward(T7)
-       : curKind==='dragon' ? pickReward(T6)
+       : curKind==='diamond' ? pickReward(T6)
        : curKind==='rainbow' ? pickReward(T5)
        : curKind==='gold' ? pickReward(T4)
        : pickReward(T3);
-    if(curKind==='god'||curKind==='dragon') G.correctRun=0;
+    if(curKind==='god'||curKind==='diamond') G.correctRun=0;
     G.rare++;
     say([[curQ.o[curQ.a],lang]]);
   }else{
@@ -2095,7 +2178,7 @@ function showReward(ok,id){
     show('scrReward'); return;
   }
   $('#rwTag').textContent = ok
-    ? (nk!=='normal' ? 'ตอบถูก '+G.correctRun+' ข้อติด! หีบหน้าเป็น'+({gold:'หีบทอง ✨',rainbow:'หีบสายรุ้ง 🌈',dragon:'หีบมังกร 👑',god:'หีบเทพนิยาย 🔱'}[nk])
+    ? (nk!=='normal' ? 'ตอบถูก '+G.correctRun+' ข้อติด! หีบหน้าเป็น'+({gold:'หีบทอง ✨',rainbow:'หีบสายรุ้ง 🌈',diamond:'หีบเพชร 💎',god:'หีบเทพนิยาย 🔱'}[nk])
                      : 'เก็บลงสมุดปลาแล้ว · ตอบถูก 3 ข้อติดจะได้หีบทอง')
     : 'คำที่ถูกคือ "'+curQ.o[curQ.a]+'" · ลองใหม่หีบหน้านะ';
   show('scrReward');
@@ -2116,7 +2199,7 @@ function openDex(){
   $('#dexHead').textContent='เก็บได้แล้ว '+S.dex.length+' จาก '+FISH.length+' ชนิด';
   $('#dexHint').innerHTML = S.myth
     ? 'ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>🔱 ปลดล็อกสัตว์เทพนิยายแล้ว — ดำลึกเกิน 500 ม. จะเจอ'
-    : 'ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>🔱 สัตว์เทพนิยายยังล็อกอยู่ — เก็บ 👑 หีบมังกรสีทอง (ตอบถูก 7 ข้อติด) เพื่อปลดล็อก';
+    : 'ยิ่งดำลึก ยิ่งเจอปลาดาวเยอะ<br>🔱 สัตว์เทพนิยายยังล็อกอยู่ — เก็บ 💎 หีบเพชร (ตอบถูก 7 ข้อติด) เพื่อปลดล็อก';
   FISH.forEach((f,i)=>{
     const got=S.dex.includes(i), fr=FRAME[f.t];
     const d=document.createElement('div'); d.className='slot';
