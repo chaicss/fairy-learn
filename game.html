@@ -599,6 +599,22 @@ const FISH=[
  {n:'นางเงือก',t:6,build:'mermaid',grad:['#7ef9d0','#3dc9ff','#6b8fff','#a86bff','#ff8fd8'],glow:'#8fe8ff',hair:'#7a3dd6',top:'#ff6bb5',skin:'#ffcf9e',szMul:1.05},
  {n:'มังกรทะเล',t:6,build:'dragon',grad:['#c8ff9e','#3de08f','#1fb5b5','#2f6bd6','#8f3dd6'],glow:'#5fe8b0',crest:'#ffd23f',wing:'#dfffe8',szMul:1.25},
  {n:'ฉลามราชา',t:6,build:'shark',grad:['#e8f4ff','#a8c8e8','#5c8fc9','#2f5c99','#1f3a6b'],glow:'#9fd0ff',szMul:1.3},
+ /* ---------- 🔱 สัตว์เทพนิยาย (15) ---------- */
+ {n:'คราเคน',t:7,build:'kraken',grad:['#8f5cff','#5c2fb5','#2a1160','#3d1f8c','#c98cff'],glow:'#b08cff',ray:'#c9a0ff',szMul:1.45},
+ {n:'หมึกยักษ์เรืองแสง',t:7,build:'kraken',grad:['#00ffd0','#00c8ff','#2f6bff','#a03dff','#ff3db5'],glow:'#4df0ff',ray:'#8cffe8',szMul:1.4},
+ {n:'พญานาค',t:7,build:'serpent',grad:['#fff0a3','#7ce88f','#1fb56b','#0f8c7a','#ffd23f'],glow:'#ffe066',ray:'#ffd23f',szMul:1.5},
+ {n:'ลีไวอาธาน',t:7,build:'serpent',grad:['#c8f0ff','#3d9ee0','#1f4d99','#122a5c','#5c8fd6'],glow:'#6fc2ff',ray:'#9fd8ff',szMul:1.5},
+ {n:'งูทะเลสามหัว',t:7,build:'serpent',heads:3,grad:['#ffd6b8','#ff8a3d','#e02f4d','#8c1f5c','#ffb03d'],glow:'#ff9a5e',ray:'#ffc26b',szMul:1.45},
+ {n:'วาฬดวงดาว',t:7,build:'whale',grad:['#1a1f5c','#3d3dab','#6b5cd6','#b08cff','#ffe8a3'],glow:'#a89cff',ray:'#dfd0ff',szMul:1.5},
+ {n:'วาฬสายรุ้ง',t:7,build:'whale',grad:['#ff5c94','#ffb03d','#5ce08f','#3dc9ff','#a35cff'],glow:'#ffc26b',ray:'#ffe066',szMul:1.5},
+ {n:'เต่าโลก',t:7,build:'turtle',shell:'#2f7a52',grad:['#ffe8a3','#c9a33d','#8c6b1f','#5c4a12','#ffd23f'],glow:'#ffd75e',ray:'#ffe8a3',szMul:1.45},
+ {n:'เต่าคริสตัล',t:7,build:'turtle',shell:'#7fd8ff',grad:['#ffffff','#c8f0ff','#7fb8e8','#5c8fc9','#dff4ff'],glow:'#b8e8ff',ray:'#dff4ff',szMul:1.45},
+ {n:'ม้าน้ำเทพ',t:7,build:'seahorse',grad:['#fff6c8','#ffd23f','#e0a31f','#a86b0f','#fff0a3'],glow:'#ffd75e',crest:'#fff3a8',ray:'#ffe066',szMul:1.4},
+ {n:'ยูนิคอร์นทะเล',t:7,build:'narwhal',grad:['#ffffff','#ffe0f0','#d6b8ff','#a88cff','#8fd4ff'],glow:'#e0c8ff',ray:'#ffd6f5',szMul:1.45},
+ {n:'นาร์วาลทองคำ',t:7,build:'narwhal',grad:['#fff8d0','#ffd23f','#e0a31f','#c98a12','#fff0a3'],glow:'#ffd75e',ray:'#ffe8a3',szMul:1.45},
+ {n:'ราชินีแมงกะพรุน',t:7,build:'jellyqueen',tent:'#ffd6f5',grad:['#fff0fa','#ffb3e0','#c96bff','#7a3dd6','#ffd6f5'],glow:'#e08cff',ray:'#ffc2e8',szMul:1.5},
+ {n:'ดาวจักรวาล',t:7,build:'starbeast',grad:['#fff8c8','#ffd23f','#ff6bb5','#8f5cff','#3dc9ff'],glow:'#ffc26b',ray:'#ffe066',szMul:1.4},
+ {n:'เทพเจ้าสมุทร',t:7,build:'triton',skin:'#e8b98c',hair:'#eaf2ff',grad:['#c8fff0','#3de0d6','#1f8fc9','#2f4dc9','#7a3dd6'],glow:'#5fe8e8',ray:'#a3f0ff',szMul:1.5},
 ];
 
 /* =====================================================================
@@ -734,6 +750,268 @@ function mermaidSVG(f){
 }
 const BUILDERS={shark:sharkSVG, dragon:dragonSVG, mermaid:mermaidSVG};
 
+/* =====================================================================
+   4d. สัตว์เทพนิยาย (ระดับ 7) — เหนือกว่าตำนาน
+   ===================================================================== */
+function mythDefs(id,f){
+  const g=f.grad, glowC=f.glow||'#ffe8a3';
+  const stops=g.map((c,i)=>`<stop offset="${Math.round(i/(g.length-1)*100)}%" stop-color="${c}"/>`).join('');
+  return `<defs>
+    <linearGradient id="b${id}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient>
+    <linearGradient id="d${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${g[0]}"/><stop offset="100%" stop-color="${g[g.length-1]}"/></linearGradient>
+    <radialGradient id="g${id}"><stop offset="0%" stop-color="${glowC}" stop-opacity="1"/>
+      <stop offset="45%" stop-color="${glowC}" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="${glowC}" stop-opacity="0"/></radialGradient>
+  </defs>`;
+}
+// รัศมีเทพ: ลำแสงแผ่ออกรอบตัว — มีเฉพาะระดับ 7
+function mythRays(f){
+  const c=f.ray||f.glow||'#ffe8a3'; let r='';
+  for(let i=0;i<16;i++){ const a=i*22.5*Math.PI/180, L=i%2?86:60;
+    r+=`<path d="M100 52 L${(100+Math.cos(a)*L).toFixed(1)} ${(52+Math.sin(a)*L).toFixed(1)}"
+      stroke="${c}" stroke-width="${i%2?9:5}" stroke-linecap="round" opacity=".4"/>`; }
+  return `<g>${r}</g>`;
+}
+function mythSparks(){
+  return [[190,-22,14],[6,110,12],[110,-34,12],[196,110,11],[46,120,10],[6,4,11],[168,-6,9],[86,124,9],[152,116,8]]
+    .map(([x,y,r],i)=>starPath(x,y,r,i%2?'#ffffff':'#fff6c0',.95)).join('');
+}
+function halo(cx,cy,rx){
+  return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${rx*.3}" fill="none"
+    stroke="#fff3a8" stroke-width="7" opacity=".9"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${rx*.3}" fill="none"
+    stroke="#fff" stroke-width="3" opacity=".65"/>`;
+}
+const MYTH_OPEN='<svg xmlns="http://www.w3.org/2000/svg" width="220" height="190" viewBox="-10 -50 220 190">';
+function mythWrap(id,f,body,haloAt){
+  return MYTH_OPEN + mythDefs(id,f)
+    + `<ellipse cx="100" cy="52" rx="124" ry="96" fill="url(#g${id})"/>`
+    + mythRays(f) + body
+    + (haloAt?halo(haloAt[0],haloAt[1],haloAt[2]):'')
+    + mythSparks() + '</svg>';
+}
+
+/* ---------- คราเคน / หมึกยักษ์ ---------- */
+function krakenSVG(f){
+  const id='K'+(uid++), B=`url(#b${id})`;
+  let arms='';
+  const legs=[[-46,52,120],[-22,66,132],[4,74,128],[30,66,120],[52,50,104]];
+  legs.forEach(([dx,dy,len],i)=>{
+    const x0=76+dx*.55, y0=86, x1=x0+dx*.9, y1=y0+dy, x2=x1+(dx>0?26:-26), y2=y1-16;
+    arms+=`<path d="M${x0-13} ${y0} Q${x0+dx*.5} ${y0+dy*.6} ${x1} ${y1} Q${x2} ${y2} ${x1+(dx>0?10:-10)} ${y1+10}
+      Q${x0+dx*.5+8} ${y0+dy*.6} ${x0+13} ${y0} Z" fill="${B}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>`;
+    for(let k=1;k<=2;k++){ const t=k/3;
+      arms+=`<circle cx="${x0+(x1-x0)*t+4}" cy="${y0+(y1-y0)*t}" r="4.6" fill="#fff" opacity=".6"/>`; }
+  });
+  return mythWrap(id,f,`
+   ${arms}
+   <path d="M28 52 Q28 2 76 -2 Q124 2 124 52 Q124 84 76 90 Q28 84 28 52 Z"
+     fill="${B}" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+   <ellipse cx="70" cy="26" rx="30" ry="16" fill="#fff" opacity=".22"/>
+   <circle cx="52" cy="52" r="16" fill="#fff"/><circle cx="48" cy="54" r="9" fill="#12324a"/>
+   <circle cx="45" cy="49" r="3.4" fill="#fff"/>
+   <circle cx="100" cy="52" r="13" fill="#fff"/><circle cx="97" cy="54" r="7.4" fill="#12324a"/>
+   <path d="M62 74 Q76 82 92 74" fill="none" stroke="#12324a" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+  `,[76,-14,40]);
+}
+
+/* ---------- พญานาค / งูทะเล ---------- */
+function serpentSVG(f){
+  const id='N'+(uid++), B=`url(#b${id})`;
+  const BODY='M62 58 Q102 14 140 52 Q170 84 196 68';
+  const hood = f.hood!==false ? `<path d="M62 60 Q28 44 22 6 Q56 -8 84 8 Q104 22 100 54 Z"
+      fill="${B}" stroke="#fff" stroke-width="6.5" stroke-linejoin="round"/>
+    <path d="M56 44 Q40 32 38 14 Q56 8 70 20" fill="#fff" opacity=".24"/>` : '';
+  let heads='';
+  if(f.heads===3){
+    heads=`<g transform="translate(-16,-26) rotate(-16 60 40) scale(.72)">
+       <path d="M20 60 Q24 40 46 38 Q70 36 76 56 Q78 74 54 78 Q30 80 20 60 Z" fill="${B}" stroke="#fff" stroke-width="7"/>
+       <circle cx="40" cy="54" r="8" fill="#fff"/><circle cx="37" cy="55" r="4.4" fill="#12324a"/></g>
+     <g transform="translate(-4,-46) rotate(10 60 40) scale(.66)">
+       <path d="M20 60 Q24 40 46 38 Q70 36 76 56 Q78 74 54 78 Q30 80 20 60 Z" fill="${B}" stroke="#fff" stroke-width="7"/>
+       <circle cx="40" cy="54" r="8" fill="#fff"/><circle cx="37" cy="55" r="4.4" fill="#12324a"/></g>`;
+  }
+  return mythWrap(id,f,`
+   <path d="${BODY}" fill="none" stroke="#fff" stroke-width="42" stroke-linecap="round"/>
+   <path d="${BODY}" fill="none" stroke="${B}" stroke-width="32" stroke-linecap="round"/>
+   <path d="M194 66 Q214 40 216 52 Q206 66 214 86 Q198 90 190 78 Z" fill="${B}" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
+   ${hood}${heads}
+   <path d="M22 58 Q26 34 52 32 Q80 30 86 54 Q88 76 58 80 Q30 82 22 58 Z"
+     fill="${B}" stroke="#fff" stroke-width="6.5" stroke-linejoin="round"/>
+   <path d="M22 54 Q4 50 -2 60 Q8 68 22 68" fill="${B}" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
+   <path d="M-2 62 Q-16 70 -14 84" fill="none" stroke="#ff5c7a" stroke-width="5" stroke-linecap="round"/>
+   <g stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round"><path d="M52 30 Q52 8 68 0"/></g>
+   <g stroke="#ffd23f" stroke-width="6" fill="none" stroke-linecap="round"><path d="M52 30 Q52 8 68 0"/></g>
+   <circle cx="42" cy="50" r="11" fill="#fff"/><circle cx="39" cy="51" r="6" fill="#12324a"/>
+   <circle cx="37" cy="47" r="2.2" fill="#fff"/>
+  `,[54,-18,34]);
+}
+
+/* ---------- วาฬ ---------- */
+function whaleSVG(f){
+  const id='W'+(uid++), B=`url(#b${id})`;
+  return mythWrap(id,f,`
+   <g stroke="#fff" stroke-width="7" stroke-linejoin="round">
+     <path d="M166 52 Q198 14 214 26 Q196 44 204 54 Q196 64 214 84 Q198 96 166 58 Z" fill="${B}"/>
+     <path d="M70 92 Q52 122 84 124 Q106 108 100 88 Z" fill="${B}"/>
+     <path d="M6 54 Q6 6 70 2 Q136 -2 166 44 L170 54 L166 66 Q136 108 70 104 Q6 102 6 54 Z" fill="${B}"/>
+   </g>
+   <path d="M8 70 Q76 116 168 60 L166 66 Q136 108 70 104 Q8 102 8 70 Z" fill="#fff" opacity=".3"/>
+   <g stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".5">
+     <path d="M16 78 Q60 100 104 96"/><path d="M22 88 Q60 106 96 102"/><path d="M32 96 Q62 110 90 106"/>
+   </g>
+   <path d="M4 62 Q34 86 82 80" fill="none" stroke="#12324a" stroke-width="6" stroke-linecap="round" opacity=".55"/>
+   <circle cx="92" cy="6" r="7" fill="#12324a" opacity=".45"/>
+   <g stroke="#dff4ff" stroke-width="9" fill="none" stroke-linecap="round" opacity=".95">
+     <path d="M92 -2 Q84 -28 96 -42"/><path d="M92 -2 Q110 -22 128 -28"/><path d="M92 -2 Q78 -20 62 -24"/>
+   </g>
+   <circle cx="36" cy="46" r="13" fill="#fff"/><circle cx="32" cy="48" r="7" fill="#12324a"/>
+   <circle cx="30" cy="43" r="2.6" fill="#fff"/>
+  `,[88,-46,44]);
+}
+
+/* ---------- เต่ายักษ์ ---------- */
+function turtleSVG(f){
+  const id='T'+(uid++), B=`url(#b${id})`, sh=f.shell||'#3d8c5c';
+  let plates='';
+  [[100,16],[136,30],[64,30],[100,50],[140,62],[60,62],[100,80]].forEach(([x,y])=>{
+    plates+=`<path d="M${x} ${y-16} L${x+18} ${y} L${x} ${y+16} L${x-18} ${y} Z"
+      fill="#fff" opacity=".2" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/>`; });
+  return mythWrap(id,f,`
+   <g stroke="#fff" stroke-width="6.5" stroke-linejoin="round">
+     <path d="M60 84 Q28 116 12 104 Q22 84 46 74 Z" fill="${B}"/>
+     <path d="M140 86 Q170 110 182 98 Q172 82 150 76 Z" fill="${B}"/>
+     <path d="M78 92 Q66 118 86 120 Q98 106 96 90 Z" fill="${B}"/>
+     <path d="M132 92 Q146 116 128 118 Q116 104 118 90 Z" fill="${B}"/>
+     <path d="M30 44 Q30 -6 100 -8 Q170 -6 170 44 Q170 90 100 94 Q30 90 30 44 Z" fill="${sh}"/>
+     <path d="M38 44 Q38 4 100 2 Q162 4 162 44 Q162 82 100 86 Q38 82 38 44 Z" fill="${B}" opacity=".45" stroke="none"/>
+   </g>
+   ${plates}
+   <path d="M34 58 Q100 84 166 56 Q160 90 100 94 Q40 90 34 58 Z" fill="#000" opacity=".14"/>
+   <path d="M30 56 Q14 46 -2 54 Q-12 66 -2 78 Q14 88 32 78 Z"
+     fill="${B}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M-8 68 Q6 76 22 72" fill="none" stroke="#12324a" stroke-width="4.5" stroke-linecap="round" opacity=".55"/>
+   <circle cx="8" cy="60" r="9.5" fill="#fff"/><circle cx="5" cy="61" r="5.2" fill="#12324a"/>
+   <circle cx="3" cy="58" r="2" fill="#fff"/>
+  `,[100,-26,44]);
+}
+
+/* ---------- ม้าน้ำเทพ ---------- */
+function seahorseSVG(f){
+  const id='H'+(uid++), B=`url(#b${id})`;
+  let fin='';
+  for(let i=0;i<5;i++){ const y=18+i*17;
+    fin+=`<path d="M104 ${y} Q126 ${y+6} 122 ${y+16} Q104 ${y+14} 100 ${y+6} Z" fill="${f.crest||'#ffd23f'}" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>`; }
+  return mythWrap(id,f,`
+   ${fin}
+   <path d="M74 8 Q104 12 102 46 Q100 78 78 92 Q60 104 66 122 Q74 136 92 130
+            Q78 142 60 134 Q40 122 46 96 Q56 70 74 56 Q84 44 78 30 Q72 18 54 20
+            Q40 24 38 40 Q26 36 30 20 Q38 4 60 2 Z"
+     fill="${B}" stroke="#fff" stroke-width="6.5" stroke-linejoin="round"/>
+   <path d="M32 22 Q14 20 6 32 Q20 40 34 36" fill="${B}" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
+   <g stroke="#fff" stroke-width="4" fill="none" opacity=".5">
+     <path d="M78 44 Q92 50 94 62"/><path d="M70 62 Q84 70 84 84"/><path d="M60 82 Q72 92 70 106"/>
+   </g>
+   <circle cx="52" cy="26" r="10" fill="#fff"/><circle cx="49" cy="27" r="5.4" fill="#12324a"/>
+   <circle cx="47" cy="24" r="2" fill="#fff"/>
+  `,[58,-14,32]);
+}
+
+/* ---------- นาร์วาล / ยูนิคอร์นทะเล ---------- */
+function narwhalSVG(f){
+  const id='U'+(uid++), B=`url(#b${id})`;
+  let twist='';
+  for(let i=0;i<9;i++){ const t=i/9, x=-16+t*76, w=3+t*9;
+    twist+=`<path d="M${x} ${40-w*.5} q5 ${w*.55} 9 0" fill="none" stroke="#e8c98a" stroke-width="3" opacity=".9"/>`; }
+  return mythWrap(id,f,`
+   <g stroke="#fff" stroke-width="7" stroke-linejoin="round">
+     <path d="M158 52 Q190 16 206 28 Q188 44 196 54 Q188 64 206 86 Q190 98 158 58 Z" fill="${B}"/>
+     <path d="M84 90 Q68 118 98 120 Q116 104 110 86 Z" fill="${B}"/>
+     <path d="M52 54 Q56 12 108 8 Q152 6 162 44 L166 54 L162 64 Q152 100 108 100 Q56 96 52 54 Z" fill="${B}"/>
+   </g>
+   <path d="M54 68 Q106 108 164 60 L162 64 Q152 100 108 100 Q56 96 54 68 Z" fill="#fff" opacity=".32"/>
+   <path d="M60 36 L-20 30 L-20 42 L60 52 Z" fill="#fff6d8" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
+   ${twist}
+   <path d="M56 62 Q80 78 106 72" fill="none" stroke="#12324a" stroke-width="4.5" stroke-linecap="round" opacity=".45"/>
+   <circle cx="76" cy="44" r="11.5" fill="#fff"/><circle cx="73" cy="45" r="6.2" fill="#12324a"/>
+   <circle cx="71" cy="41" r="2.2" fill="#fff"/>
+  `,[110,-24,44]);
+}
+
+/* ---------- ราชินีแมงกะพรุน ---------- */
+function jellyQueenSVG(f){
+  const id='J'+(uid++), B=`url(#b${id})`;
+  let tent='';
+  for(let i=0;i<7;i++){ const x=34+i*22, sw=(i%2?9:6);
+    tent+=`<path d="M${x} 76 q${i%2?-16:16} 30 ${i%2?6:-6} 52 q${i%2?14:-14} 22 ${i%2?-4:4} 40"
+      fill="none" stroke="${f.tent||'#ffd6f5'}" stroke-width="${sw}" stroke-linecap="round" opacity=".95"/>`; }
+  let frill='';
+  for(let i=0;i<8;i++){ const x=22+i*22;
+    frill+=`<path d="M${x} 70 q11 16 22 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>`; }
+  return mythWrap(id,f,`
+   ${tent}
+   <path d="M16 70 Q16 -4 100 -4 Q184 -4 184 70 Q142 88 100 74 Q58 88 16 70 Z"
+     fill="${B}" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+   ${frill}
+   <ellipse cx="72" cy="24" rx="32" ry="16" fill="#fff" opacity=".28"/>
+   <circle cx="72" cy="44" r="13" fill="#fff"/><circle cx="69" cy="46" r="7" fill="#4a2c78"/>
+   <circle cx="122" cy="44" r="11" fill="#fff"/><circle cx="119" cy="46" r="6" fill="#4a2c78"/>
+   <path d="M86 60 q14 12 28 0" fill="none" stroke="#4a2c78" stroke-width="4.5" stroke-linecap="round"/>
+  `,[100,-22,48]);
+}
+
+/* ---------- ดาวจักรวาล ---------- */
+function starBeastSVG(f){
+  const id='A'+(uid++), B=`url(#b${id})`;
+  const pts=[]; for(let i=0;i<10;i++){ const a=(-90+i*36)*Math.PI/180, r=i%2?32:74;
+    pts.push([(100+Math.cos(a)*r).toFixed(1),(48+Math.sin(a)*r).toFixed(1)]); }
+  const d='M'+pts.map(p=>p.join(' ')).join(' L')+' Z';
+  return mythWrap(id,f,`
+   <path d="${d}" fill="${B}" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+   <path d="${d}" fill="#fff" opacity=".16" transform="scale(.62) translate(62,30)"/>
+   <circle cx="84" cy="44" r="13" fill="#fff"/><circle cx="81" cy="46" r="7" fill="#12324a"/>
+   <circle cx="79" cy="41" r="2.6" fill="#fff"/>
+   <circle cx="122" cy="44" r="11" fill="#fff"/><circle cx="119" cy="46" r="6" fill="#12324a"/>
+   <path d="M92 62 q14 12 28 0" fill="none" stroke="#12324a" stroke-width="4.5" stroke-linecap="round"/>
+   <circle cx="72" cy="58" r="6" fill="#ff9ec4" opacity=".55"/><circle cx="132" cy="58" r="6" fill="#ff9ec4" opacity=".55"/>
+  `,[100,-30,40]);
+}
+
+/* ---------- เทพเจ้าสมุทร (เงือกชายถือตรีศูล) ---------- */
+function tritonSVG(f){
+  const id='P'+(uid++), B=`url(#b${id})`;
+  const skin=f.skin||'#e8b98c', hair=f.hair||'#dfe8f5';
+  return mythWrap(id,f,`
+   <g stroke="#ffd23f" stroke-width="9" stroke-linecap="round" fill="none">
+     <path d="M150 -18 L150 96"/></g>
+   <g stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none">
+     <path d="M132 -14 L132 12 M150 -22 L150 10 M168 -14 L168 12 M130 10 L170 10"/></g>
+   <g stroke="#ffd23f" stroke-width="7" stroke-linecap="round" fill="none">
+     <path d="M132 -14 L132 12 M150 -22 L150 10 M168 -14 L168 12 M130 10 L170 10"/></g>
+   <path d="M52 -4 Q104 -12 118 26 Q130 62 106 84 Q100 56 82 40 Q62 24 52 -4 Z"
+     fill="${hair}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M92 64 Q130 66 152 92" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round"/>
+   <path d="M92 64 Q130 66 152 92" fill="none" stroke="${B}" stroke-width="34" stroke-linecap="round"/>
+   <path d="M150 90 Q184 62 204 68 Q184 94 204 122 Q176 128 148 100 Z"
+     fill="${B}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M62 26 Q86 22 94 48 Q102 66 96 76 Q74 82 62 66 Z"
+     fill="${skin}" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M78 50 Q96 62 118 44" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
+   <path d="M78 50 Q96 62 118 44" fill="none" stroke="${skin}" stroke-width="11" stroke-linecap="round"/>
+   <circle cx="54" cy="14" r="21" fill="${skin}" stroke="#fff" stroke-width="6"/>
+   <path d="M34 8 Q34 -18 58 -18 Q84 -18 86 8 Q70 -4 52 0 Q40 3 34 8 Z"
+     fill="${hair}" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+   <path d="M40 26 Q54 44 72 26 Q64 38 54 38 Q44 38 40 26 Z" fill="${hair}" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+   <circle cx="46" cy="14" r="4.4" fill="#12324a"/><circle cx="62" cy="14" r="4.4" fill="#12324a"/>
+   <circle cx="44.6" cy="12.6" r="1.6" fill="#fff"/><circle cx="60.6" cy="12.6" r="1.6" fill="#fff"/>
+  `,[54,-24,32]);
+}
+
+Object.assign(BUILDERS,{kraken:krakenSVG, serpent:serpentSVG, whale:whaleSVG, turtle:turtleSVG,
+  seahorse:seahorseSVG, narwhal:narwhalSVG, jellyqueen:jellyQueenSVG, starbeast:starBeastSVG, triton:tritonSVG});
+
+
 const IMG=FISH.map(f=>toImg(f.build ? BUILDERS[f.build](f) : fishSVG(f)));
 const IMG_DIVER=toImg(diverSVG()), IMG_JELLY=toImg(jellySVG());
 const IMG_CHEST=toImg(chestSVG('normal')), IMG_CHESTG=toImg(chestSVG('gold'));
@@ -799,8 +1077,8 @@ function itemSVG(it){
 }
 const IMG_ITEM={}; ITEMS.forEach(it=>IMG_ITEM[it.k]=toImg(itemSVG(it)));
 
-const T1=[],T2=[],T3=[],T4=[],T5=[],T6=[];
-const TIER=[null,T1,T2,T3,T4,T5,T6];
+const T1=[],T2=[],T3=[],T4=[],T5=[],T6=[],T7=[];
+const TIER=[null,T1,T2,T3,T4,T5,T6,T7];
 FISH.forEach((f,i)=>TIER[f.t].push(i));
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -908,17 +1186,18 @@ function newGame(){
   };
   for(let i=0;i<14;i++) G.bubs.push({x:Math.random()*W,y:Math.random()*H,r:(3+Math.random()*7)*SC,s:(14+Math.random()*22)*SC});
 }
-function fishSize(i){ return [0,68,78,88,98,108,124][FISH[i].t]*(FISH[i].szMul||1)*SC; }
+function fishSize(i){ return [0,68,78,88,98,108,124,140][FISH[i].t]*(FISH[i].szMul||1)*SC; }
 // ยิ่งดำลึก ยิ่งมีโอกาสเจอปลาระดับสูงว่ายผ่าน
 function pickSpawnId(depth){
   const r=Math.random();
+  if(depth>=500 && r<.08) return rnd(T7);
   if(depth>=300 && r<.15) return rnd(T5);
   if(depth>=180 && r<.30) return rnd(T4);
   if(depth>=80  && r<.44) return rnd(T3);
   if(r<.55) return rnd(T2);
   return rnd(T1);
 }
-function chestKindFor(run){ return run>=7?'dragon' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
+function chestKindFor(run){ return run>=10?'god' : run>=7?'dragon' : run>=5?'rainbow' : run>=3?'gold' : 'normal'; }
 
 function spawnFishGroup(){
   const n=2+Math.floor(Math.random()*4);
@@ -1271,9 +1550,9 @@ document.getElementById('startItems').innerHTML =
 
 /* ------- quiz ------- */
 let curQ=null, curOrder=[0,1], rewardFish=0, curKind='normal';
-const CHEST_LABEL={normal:'เปิดหีบสมบัติ!', gold:'✨ หีบทอง! ✨', rainbow:'🌈 หีบสายรุ้ง! 🌈', dragon:'👑 หีบมังกร! 👑'};
-const CHEST_PRIZE={normal:'ตอบถูกได้ปลา ⭐⭐⭐', gold:'ตอบถูกได้ปลา ⭐⭐⭐⭐', rainbow:'ตอบถูกได้ปลา ⭐⭐⭐⭐⭐', dragon:'ตอบถูกได้ปลามังกรสายรุ้ง 👑'};
-function starStr(t){ return t>=6?'👑':'⭐'.repeat(t); }
+const CHEST_LABEL={normal:'เปิดหีบสมบัติ!', gold:'✨ หีบทอง! ✨', rainbow:'🌈 หีบสายรุ้ง! 🌈', dragon:'👑 หีบมังกร! 👑', god:'🔱 หีบเทพนิยาย! 🔱'};
+const CHEST_PRIZE={normal:'ตอบถูกได้ปลา ⭐⭐⭐', gold:'ตอบถูกได้ปลา ⭐⭐⭐⭐', rainbow:'ตอบถูกได้ปลา ⭐⭐⭐⭐⭐', dragon:'ตอบถูกได้สัตว์ในตำนาน 👑', god:'ตอบถูกได้สัตว์เทพนิยาย 🔱'};
+function starStr(t){ return t>=7?'🔱':t>=6?'👑':'⭐'.repeat(t); }
 function openChest(kind){
   paused=true; holding=false; beep('chest');
   curKind=kind||'normal';
@@ -1303,11 +1582,12 @@ function answer(pick,btn){
   if(ok){
     G.correctRun++;
     beep(curKind==='normal'?'rare':'gold');
-    id = curKind==='dragon' ? pickReward(T6)
+    id = curKind==='god' ? pickReward(T7)
+       : curKind==='dragon' ? pickReward(T6)
        : curKind==='rainbow' ? pickReward(T5)
        : curKind==='gold' ? pickReward(T4)
        : pickReward(T3);
-    if(curKind==='dragon') G.correctRun=0;
+    if(curKind==='god'||curKind==='dragon') G.correctRun=0;
     G.rare++;
     say([[curQ.o[curQ.a],lang]]);
   }else{
@@ -1332,7 +1612,7 @@ function showReward(ok,id){
   $('#rwName').textContent=FISH[id].n;
   const nk=chestKindFor(G.correctRun);
   $('#rwTag').textContent = ok
-    ? (nk!=='normal' ? 'ตอบถูก '+G.correctRun+' ข้อติด! หีบหน้าเป็น'+({gold:'หีบทอง ✨',rainbow:'หีบสายรุ้ง 🌈',dragon:'หีบมังกร 👑'}[nk])
+    ? (nk!=='normal' ? 'ตอบถูก '+G.correctRun+' ข้อติด! หีบหน้าเป็น'+({gold:'หีบทอง ✨',rainbow:'หีบสายรุ้ง 🌈',dragon:'หีบมังกร 👑',god:'หีบเทพนิยาย 🔱'}[nk])
                      : 'เก็บลงสมุดปลาแล้ว · ตอบถูก 3 ข้อติดจะได้หีบทอง')
     : 'คำที่ถูกคือ "'+curQ.o[curQ.a]+'" · ลองใหม่หีบหน้านะ';
   show('scrReward');
@@ -1346,7 +1626,8 @@ const FRAME={
   3:['linear-gradient(180deg,#4a3a86,#2a2560)','#c3a2ff','0 0 16px rgba(180,140,255,.8)'],
   4:['linear-gradient(135deg,#0f6b6b,#1b4a86 50%,#4a2f8c)','#5fe8d8','0 0 20px rgba(95,232,216,.85)'],
   5:['linear-gradient(135deg,#8c2f6b,#b5471f 35%,#2f7bb5 75%,#5b2fb5)','#ffe066','0 0 26px rgba(255,190,120,.95)'],
-  6:['linear-gradient(135deg,#7a4a1f,#a8721f 45%,#6b3f8c)','#ffd23f','0 0 30px rgba(255,200,80,1)']};
+  6:['linear-gradient(135deg,#7a4a1f,#a8721f 45%,#6b3f8c)','#ffd23f','0 0 30px rgba(255,200,80,1)'],
+  7:['linear-gradient(135deg,#5c2f8c,#a8721f 30%,#c93f7a 60%,#2f5cb5)','#fff3a8','0 0 38px rgba(255,240,170,1), 0 0 0 3px rgba(255,255,255,.45)']};
 function openDex(){
   const gr=$('#dexGrid'); gr.innerHTML='';
   $('#dexHead').textContent='เก็บได้แล้ว '+S.dex.length+' จาก '+FISH.length+' ชนิด';
